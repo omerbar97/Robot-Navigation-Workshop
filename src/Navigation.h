@@ -8,6 +8,7 @@
 #include <string>
 #include "Route.h"
 #include "libplayerc++/playerc++.h"
+#include "Room.h"
 
 class Navigation {
 private:

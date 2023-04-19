@@ -19,4 +19,4 @@ add_executable(Robot-Navigation main.cpp
         src/Route.h)
 
 # Link the playerc++ library
-target_link_libraries(robot ${PLAYERCXX_LIBRARIES})
+target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES})

@@ -13,7 +13,7 @@ struct Pixel {
     bool isWall;
     bool visited;
 
-    Pixel(int x, int y, int distance, bool canPass) : x(x), y(y), distance(distance), canPass(canPass) {}
+    Pixel(int x, int y, int distance, bool isWall) : x(x), y(y), distance(distance), isWall(isWall) {}
 
     bool operator<(const Pixel& other) const {
         if(!this->isWall && !other.isWall) {

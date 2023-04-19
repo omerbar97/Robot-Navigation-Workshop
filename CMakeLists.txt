@@ -4,6 +4,7 @@ project(Robot-Navigation-Workshop)
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(OpenCV_DIR /usr/include/opencv2)
 
 # Find playerc++ library and headers
 find_package(playerc++ REQUIRED)

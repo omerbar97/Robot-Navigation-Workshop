@@ -14,13 +14,13 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 
 # Add the executable
-add_executable(Robot-Navigation main.cpp src/Route.cpp)
-#        src/Navigation.cpp
-#        src/Navigation.h
-#        src/Room.cpp
-#        src/Room.h
-#        src/Route.cpp
-#        src/Route.h src/DataStructure.h)
+add_executable(Robot-Navigation main.cpp src/Route.cpp
+        src/Navigation.cpp
+        src/Navigation.h
+        src/Room.cpp
+        src/Room.h
+        src/Route.cpp
+        src/Route.h src/DataStructure.h)
 
 
 

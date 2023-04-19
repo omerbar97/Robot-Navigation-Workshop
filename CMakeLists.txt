@@ -10,9 +10,7 @@ find_package(playerc++ REQUIRED)
 include_directories(${PLAYERCXX_INCLUDE_DIRS})
 
 # Add the executable
-add_executable(Robot-Navigation main.cpp
-        src/Navigation.cpp
-        src/Navigation.h src/Route.cpp src/Route.h)
+add_executable(robot main.cpp)
 
 # Link the playerc++ library
 target_link_libraries(robot ${PLAYERCXX_LIBRARIES})

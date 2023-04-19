@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(robot)
+project(Robot-Navigation-Workshop)
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

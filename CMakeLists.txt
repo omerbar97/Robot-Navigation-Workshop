@@ -9,14 +9,20 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(playerc++ REQUIRED)
 include_directories(${PLAYERCXX_INCLUDE_DIRS})
 
-# Add the executable
-add_executable(Robot-Navigation main.cpp
-        src/Navigation.cpp
-        src/Navigation.h
-        src/Room.cpp
-        src/Room.h
-        src/Route.cpp
-        src/Route.h)
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
-# Link the playerc++ library
+
+# Add the executable
+add_executable(Robot-Navigation main.cpp src/Route.cpp)
+#        src/Navigation.cpp
+#        src/Navigation.h
+#        src/Room.cpp
+#        src/Room.h
+#        src/Route.cpp
+#        src/Route.h src/DataStructure.h)
+
+
+
 target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES})
+target_link_libraries(Robot-Navigation ${OpenCV_LIBS})

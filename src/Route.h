@@ -94,6 +94,9 @@ public:
      */
     std::pair<float, float> getEndPosition();
 
+
+    Map* getMap();
+
 };
 
 

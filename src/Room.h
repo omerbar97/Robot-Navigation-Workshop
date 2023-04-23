@@ -13,7 +13,7 @@
 class Room {
 private:
     /// The entry point to the room.
-    std::pair<double, double> entryPoint;
+    std::pair<float, float> entryPoint;
     /// The room's ID.
     int roomId;
 

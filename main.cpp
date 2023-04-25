@@ -1,7 +1,17 @@
 #include <iostream>
 #include <libplayerc++/playerc++.h>
+#include <opencv2/core/matx.hpp>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
+
+
+
 
 int main(int argc, char **argv) {
+
+    cv::Mat image = cv::imread("map.bmp",cv::ImreadModes::IMREAD_COLOR);
+
     // Set up the PlayerClient object
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);

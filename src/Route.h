@@ -8,7 +8,11 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <array>
+#include "DataStructure.h"
+#include <queue>
 
+#define WALL 0
 class Route {
 
 private:
@@ -18,8 +22,7 @@ private:
     std::pair<float, float> startPosition;
     std::pair<float, float> endPosition;
     std::pair<float, float> algorithmCurrentPosition;
-    std::vector<std::pair<float, float>> directions;
-
+    std::vector<std::pair<int, int>> directions;
 
     // private methods
 
@@ -34,10 +37,21 @@ private:
      */
     std::pair<float, float> calculateNextPoint();
 
+    void initPriorityQueue(std::priority_queue<Pixel> &min_heap, Pixel &startPixel);
+
+    void relaxNeighbors(Pixel &parent, Pixel &neighbor);
+
+
+    template <typename T, size_t WIDTH, size_t HEIGHT>
+    std::vector<Pixel*> getNeighbors(Pixel &parent, std::array<std::array<T, WIDTH>, HEIGHT> &routeMap);
+
+    void addNeighborsToQueue(std::vector<Pixel *> neighbors, std::priority_queue<Pixel> &minHeap);
+
 public:
 
 
     Route(std::string pathToBmpMap);
+
     ~Route();
 
     /**
@@ -79,6 +93,9 @@ public:
      * @return  std::pair<float, float>
      */
     std::pair<float, float> getEndPosition();
+
+
+    Map* getMap();
 
 };
 

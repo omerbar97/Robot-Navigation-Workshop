@@ -13,11 +13,16 @@
 class Navigation {
 private:
     // variables
+    int mapWidth;
+    int mapHeight;
+    int blockPixels;
+    int numOfBlocksWidth;
+    int numOfBlocksHeight;
     std::vector<Room> rooms;
     Route* route;
     std::vector<short> roomsIdToGo;
     PlayerCc::PlayerClient* robot;
-
+    PlayerCc::Position2dProxy* robotPosition;
 
     //private methods
     /**
@@ -37,6 +42,32 @@ private:
      * @param id short
      */
     void setRoomToCurrentNavigation(short id);
+
+    /**
+     * convert the given stage coordinates to pixel coordinates.
+     * @param x double
+     * @param y double
+     * @param pixel_x int
+     * @param pixel_y int
+     * @param scale double
+     */
+    void stageToPixel(double x, double y, int& pixel_x, int& pixel_y, double scale);
+
+    /**
+     * convert the given pixel coordinates to stage coordinates.
+     * @param pixel_x int
+     * @param pixel_y int
+     * @param x double
+     * @param y double
+     * @param scale double
+     */
+    void pixelToStage(int pixel_x, int pixel_y, double& x, double& y, double scale);
+
+    /**
+     * travel to the given points. each point is a pair of doubles. the first is the x coordinate and the second is the y coordinate.
+     * @param points std::vector<std::pair<double, double>>
+     */
+    void travelToPoints(std::vector<std::pair<double, double>> points);
 
 public:
 
@@ -63,6 +94,7 @@ public:
      * start the navigation.
      */
     void start();
+
 };
 
 

@@ -12,6 +12,7 @@
 #include "DataStructure.h"
 #include <queue>
 
+#define WALL 0
 class Route {
 
 private:
@@ -22,7 +23,6 @@ private:
     std::pair<float, float> endPosition;
     std::pair<float, float> algorithmCurrentPosition;
     std::vector<std::pair<int, int>> directions;
-    std::array<std::array<Pixel, int>, int> routeMap;
 
     // private methods
 
@@ -41,7 +41,11 @@ private:
 
     void relaxNeighbors(Pixel &parent, Pixel &neighbor);
 
-    std::vector<Pixel*> getNeighbors(Pixel &parent, std::array<std::array<Pixel, int>, int> routeMap);
+
+    template <typename T, size_t WIDTH, size_t HEIGHT>
+    std::vector<Pixel*> getNeighbors(Pixel &parent, std::array<std::array<T, WIDTH>, HEIGHT> &routeMap);
+
+    void addNeighborsToQueue(std::vector<Pixel *> neighbors, std::priority_queue<Pixel> &minHeap);
 
 public:
 
@@ -89,6 +93,9 @@ public:
      * @return  std::pair<float, float>
      */
     std::pair<float, float> getEndPosition();
+
+
+    Map* getMap();
 
 };
 

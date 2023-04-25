@@ -10,12 +10,12 @@ set(OpenCV_DIR /usr/include/opencv2)
 find_package(playerc++ REQUIRED)
 include_directories(${PLAYERCXX_INCLUDE_DIRS})
 
+
+# Find OpenCV library
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-
-
-# Add the executable
-add_executable(Robot-Navigation main.cpp src/Route.cpp
+# Add the executables
+add_executable(Robot-Navigation main.cpp
         src/Navigation.cpp
         src/Navigation.h
         src/Room.cpp
@@ -25,5 +25,9 @@ add_executable(Robot-Navigation main.cpp src/Route.cpp
 
 
 
-target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES})
-target_link_libraries(Robot-Navigation ${OpenCV_LIBS})
+add_executable(robot main.cpp MapGenrator.cpp MapGenrator.h)
+
+# Link the playerc++ and OpenCV libraries
+target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(robot ${OpenCV_LIBS})
+

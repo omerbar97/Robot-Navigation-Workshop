@@ -2,12 +2,12 @@
 // Created by shilopadael on 4/19/23.
 //
 
-#ifndef ROBOT_NAVIGATION_WORKSHOP_MAPGENRATOR_H
-#define ROBOT_NAVIGATION_WORKSHOP_MAPGENRATOR_H
+#ifndef ROBOT_NAVIGATION_WORKSHOP_MAPGENERATOR_H
+#define ROBOT_NAVIGATION_WORKSHOP_MAPGENERATOR_H
 #include <string>
 #include <opencv2/core/mat.hpp>
 
-class MapGenrator {
+class MapGenerator {
 private:
     std::string room_map;
     cv::Mat binaryMatrix;
@@ -53,7 +53,7 @@ public:
     // Output: None
     void binaryStrToBmp(std::string binaryString, std::string path);
 
-    // Constructor for MapGenrator class
+    // Constructor for MapGenerator class
     // Parameters:
     // - pngImage: Path to the PNG image file used for generating the map
     // - defaultArg: Optional argument with default value of 1
@@ -62,7 +62,7 @@ public:
     // - Sets the sail size to 1
     // - Calls setImage() to load and resize the image
     // - Calls pngToMatrix() to convert the image to a binary matrix
-    MapGenrator(std::string pngImage , int sailSIze);
+    MapGenerator(std::string pngImage , int sailSIze);
 
     // Getter for room_map
     std::string getRoomMap() const;
@@ -90,4 +90,4 @@ public:
 
 
 
-#endif //ROBOT_NAVIGATION_WORKSHOP_MAPGENRATOR_H
+#endif //ROBOT_NAVIGATION_WORKSHOP_MAPGENERATOR_H

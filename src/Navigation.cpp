@@ -58,7 +58,7 @@ void Navigation::travelToPoints(std::vector<std::pair<double, double>> points) {
         std::cout << "Moving to point: " << x << ", " << y << std::endl;
 
         // Calculate the angle to the point
-        robot.Read();
+        robot->Read();
         double angle = atan2(y - this->robotPosition->GetYPos(), x - this->robotPosition->GetXPos());
 
         // Turn the robot towards the point

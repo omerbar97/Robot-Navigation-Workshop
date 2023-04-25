@@ -6,7 +6,7 @@
 #include "Route.h"
 
 Route::Route(std::string pathToBmpMap) {
-    this->map = new Map(pathToBmpMap);
+    this->map = new MapGenerator(pathToBmpMap, 1);
     this->startPosition = std::make_pair(0, 0);
     this->endPosition = std::make_pair(0, 0);
     this->algorithmCurrentPosition = std::make_pair(0, 0);
@@ -34,48 +34,50 @@ std::vector<std::pair<float, float>> Route::createRoute(std::pair<float, float> 
     int endX = (int)end.first;
     int endY = (int)end.second;
 
-    const int width = Map.matrix.getWidth;
-    const int height = Map.matrix.getHeight;
+    this->WIDTH = this->map->getBinaryMatrix().cols;
+    this->HEIGHT = this->map->getBinaryMatrix().rows;
 
     // initializing the new route
-    std::array<std::array<Pixel*, width>, height>* routeMap = new std::array<std::array<Pixel*, width>, height>;
+    Pixel** routeMap = new Pixel*[this->WIDTH];
+
+    // allocating memory for each row
+    for (int i = 0; i < this->WIDTH; i++) {
+        routeMap[i] = new Pixel[this->HEIGHT];
+    }
 
     // creating priority queue
-    auto *minHeap = new std::priority_queue<Pixel *>;
+    auto *minHeap = new std::priority_queue<Pixel*>;
 
     // initializing the routeMap
     bool wall;
-    for (int i = 0; i < width; i++) {
-        for (int j = 0; j < height; j++) {
-            if (Map.matrix[i][j] == WALL) {
+    for (int i = 0; i < this->WIDTH; i++) {
+        for (int j = 0; j < this->HEIGHT; j++) {
+            if (this->map->getBinaryMatrix().at<uchar>(i, j)== WALL) {
                 wall = true;
             } else {
                 wall = false;
             }
-            Pixel *t = new Pixel(i, j, INT32_MAX, wall);
-            t->visited = false;
-            t->parent = nullptr;
-
-            // adding to routeMap
-            routeMap[i][j] = t;
+            routeMap[i][j].x = i;
+            routeMap[i][j].y = j;
+            routeMap[i][j].isWall= wall;
         }
     }
 
     // initializing the start point
-    Pixel *startPixel = routeMap[startX][startY];
-    Pixel *endPixel = routeMap[endX][endY];
+    Pixel &startPixel = routeMap[startX][startY];
+    Pixel &endPixel = routeMap[endX][endY];
 
     // setting the start point distance to 0
-    startPixel->distance = 0;
+    startPixel.distance = 0;
 
     // adding the start point to the priority queue
-    minHeap->push(startPixel);
+    minHeap->push(&startPixel);
 
     // while the priority queue is not empty
     while (!minHeap->empty()) {
         // adding all the neighbors of the top pixel to the priority queue
-        Pixel *t = dynamic_cast<Pixel *>(minHeap->top());
-        if(t == endPixel) {
+        Pixel* t = minHeap->top();
+        if(*t == endPixel) {
             // reached to the end
             break;
         }
@@ -90,16 +92,15 @@ std::vector<std::pair<float, float>> Route::createRoute(std::pair<float, float> 
     }
 
     // restoring the route
-    Pixel* nextPixal = endPixel;
-    while(nextPixal->parent != startPixel) {
-        this->directions.push_back(std::make_pair(nextPixal->x, nextPixal->y));
-        nextPixal = nextPixal->parent;
+    Pixel* nextPixel = &endPixel;
+    while(nextPixel->parent == &startPixel) {
+        this->directions.push_back(std::make_pair(nextPixel->x, nextPixel->y));
+        nextPixel = nextPixel->parent;
     }
 
     // releasing the memory
-    for(Pixel* pixel : routeMap) {
-        delete pixel;
-        pixel == nullptr;
+    for (int i = 0; i < this->WIDTH; i++) {
+        delete[] routeMap[i];
     }
     delete routeMap;
     delete minHeap;
@@ -127,8 +128,8 @@ void Route::addNeighborsToQueue(std::vector<Pixel*> neighbors, std::priority_que
 }
 
 
-template<typename T, size_t WIDTH, size_t HEIGHT>
-std::vector<Pixel*> Route::getNeighbors(Pixel &parent, std::array<std::array<T, WIDTH>, HEIGHT> &routeMap) {
+//template<typename T, size_t WIDTH, size_t HEIGHT>
+std::vector<Pixel*> Route::getNeighbors(Pixel &parent, Pixel** routeMap) {
     std::vector<Pixel *> neighbors;
     int x = parent.x;
     int y = parent.y;
@@ -138,15 +139,15 @@ std::vector<Pixel*> Route::getNeighbors(Pixel &parent, std::array<std::array<T, 
      * 6 7 8
      */
      // getting number 2
-     if(x + 1 < WIDTH && !routeMap[x + 1][y + 1]->visited && y + 1 < HEIGHT && !routeMap[x + 1][y + 1].isWall) {
+     if(x + 1 < this->WIDTH && !routeMap[x + 1][y + 1].visited && y + 1 < HEIGHT && !routeMap[x + 1][y + 1].isWall) {
          neighbors.push_back(&routeMap[x + 1][y + 1]);
      }
     // getting number 1
-    if(y + 1 < HEIGHT && !routeMap[x][y + 1]->visited && !routeMap[x][y + 1].isWall) {
+    if(y + 1 < HEIGHT && !routeMap[x][y + 1].visited && !routeMap[x][y + 1].isWall) {
         neighbors.push_back(&routeMap[x][y + 1]);
     }
     // getting number 0
-    if(x - 1 >= 0 && !routeMap[x - 1][y + 1]->visited && y + 1 < HEIGHT && !routeMap[x - 1][y + 1].isWall) {
+    if(x - 1 >= 0 && !routeMap[x - 1][y + 1].visited && y + 1 < HEIGHT && !routeMap[x - 1][y + 1].isWall) {
         neighbors.push_back(&routeMap[x - 1][y + 1]);
     }
     // getting number 3
@@ -154,7 +155,7 @@ std::vector<Pixel*> Route::getNeighbors(Pixel &parent, std::array<std::array<T, 
         neighbors.push_back(&routeMap[x - 1][y]);
     }
     // getting number 5
-    if(x + 1 < WIDTH && !routeMap[x + 1][y].visited &&!routeMap[x + 1][y].isWall) {
+    if(x + 1 < this->WIDTH && !routeMap[x + 1][y].visited &&!routeMap[x + 1][y].isWall) {
         neighbors.push_back(&routeMap[x + 1][y]);
     }
     // getting number 6
@@ -166,7 +167,7 @@ std::vector<Pixel*> Route::getNeighbors(Pixel &parent, std::array<std::array<T, 
         neighbors.push_back(&routeMap[x][y - 1]);
     }
     // getting number 8
-    if(x + 1 < WIDTH && y - 1 >= 0 && !routeMap[x + 1][y - 1].visited && !routeMap[x + 1][y - 1].isWall) {
+    if(x + 1 < this->WIDTH && y - 1 >= 0 && !routeMap[x + 1][y - 1].visited && !routeMap[x + 1][y - 1].isWall) {
         neighbors.push_back(&routeMap[x + 1][y - 1]);
     }
     // returning the neighbors

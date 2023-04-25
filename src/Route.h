@@ -11,14 +11,16 @@
 #include <array>
 #include "DataStructure.h"
 #include <queue>
+#include "MapGenerator.h"
 
 #define WALL 0
 class Route {
 
 private:
     // private variables
-
-    Map *map;
+    int WIDTH;
+    int HEIGHT;
+    MapGenerator *map;
     std::pair<float, float> startPosition;
     std::pair<float, float> endPosition;
     std::pair<float, float> algorithmCurrentPosition;
@@ -42,8 +44,8 @@ private:
     void relaxNeighbors(Pixel &parent, Pixel &neighbor);
 
 
-    template <typename T, size_t WIDTH, size_t HEIGHT>
-    std::vector<Pixel*> getNeighbors(Pixel &parent, std::array<std::array<T, WIDTH>, HEIGHT> &routeMap);
+//    template <typename T, size_t WIDTH, size_t HEIGHT>
+    std::vector<Pixel*> getNeighbors(Pixel &parent, Pixel** routeMap);
 
     void addNeighborsToQueue(std::vector<Pixel *> neighbors, std::priority_queue<Pixel> &minHeap);
 
@@ -95,7 +97,7 @@ public:
     std::pair<float, float> getEndPosition();
 
 
-    Map* getMap();
+    MapGenerator* getMap();
 
 };
 

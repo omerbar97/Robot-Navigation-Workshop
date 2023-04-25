@@ -21,13 +21,14 @@ add_executable(Robot-Navigation main.cpp
         src/Room.cpp
         src/Room.h
         src/Route.cpp
-        src/Route.h src/DataStructure.h)
+        src/Route.h
+        src/DataStructure.h
+        src/MapGenerator.cpp
+        src/MapGenerator.h)
 
 
-
-add_executable(robot main.cpp MapGenrator.cpp MapGenrator.h)
 
 # Link the playerc++ and OpenCV libraries
 target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS})
-target_link_libraries(robot ${OpenCV_LIBS})
+target_link_libraries(Robot-Navigation ${OpenCV_LIBS})
 

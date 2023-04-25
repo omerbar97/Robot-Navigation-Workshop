@@ -6,20 +6,19 @@
 #include <iostream>
 #include <opencv2/imgproc.hpp>
 #include <fstream>
-#include "MapGenrator.h"
+#include "MapGenerator.h"
 
 
 
-MapGenrator::MapGenrator(std::string pngImage , int defaultArg = 1) {
+MapGenerator::MapGenerator(std::string pngImage , int defaultArg = 1) {
 
     this->setRoomMap(pngImage);
-    this->sailSIze = 1;
+    this->sailSIze = defaultArg;
     setImage();
     pngToMatrix();
-
 }
 
-void MapGenrator::pngToMatrix() {
+void MapGenerator::pngToMatrix() {
     // Convert the image to a binary matrix
     cv::Mat binaryMatrix;
     cv::threshold(getImage(), binaryMatrix, 2, 255, cv::THRESH_BINARY_INV); // Use THRESH_BINARY_INV to invert the binary matrix
@@ -30,7 +29,7 @@ void MapGenrator::pngToMatrix() {
     this->setBinaryMatrix(binaryMatrix);
 }
 
-void MapGenrator::matrixToText(std::string pathToSave) {
+void MapGenerator::matrixToText(std::string pathToSave) {
     // Save matrix values to a text file
     std::ofstream outFile(pathToSave);
     if (outFile.is_open()) {
@@ -49,7 +48,7 @@ void MapGenrator::matrixToText(std::string pathToSave) {
 
 
 
-std::string MapGenrator::textToStr(std::string filename) {
+std::string MapGenerator::textToStr(std::string filename) {
 // Read binary string text from file
     std::ifstream inFile(filename);
     if (!inFile.is_open()) {
@@ -66,7 +65,7 @@ std::string MapGenrator::textToStr(std::string filename) {
 
 }
 
-void MapGenrator::binaryStrToBmp(std::string binaryString, std::string path) {
+void MapGenerator::binaryStrToBmp(std::string binaryString, std::string path) {
 
 // Create image matrix
     cv::Mat image2(image.rows, image.cols, CV_8UC1);
@@ -86,37 +85,37 @@ void MapGenrator::binaryStrToBmp(std::string binaryString, std::string path) {
 
 }
 
-std::string MapGenrator::getRoomMap() const {
+std::string MapGenerator::getRoomMap() const {
     return this->room_map;
 }
 
-void MapGenrator::setRoomMap(const std::string &map) {
+void MapGenerator::setRoomMap(const std::string &map) {
     this->room_map = map;
 
 }
 
-void MapGenrator::setBinaryMatrix(const cv::Mat &matrix) {
+void MapGenerator::setBinaryMatrix(const cv::Mat &matrix) {
     this->binaryMatrix = matrix;
 
 }
 
-cv::Mat MapGenrator::getBinaryMatrix() const {
+cv::Mat MapGenerator::getBinaryMatrix() const {
     return this->binaryMatrix;
 }
 
-int MapGenrator::getSailSize() const {
+int MapGenerator::getSailSize() const {
     return this->sailSIze;
 }
 
-void MapGenrator::setSailSize(int size) {
+void MapGenerator::setSailSize(int size) {
     this->sailSIze = size;
 }
 
-cv::Mat MapGenrator::getImage() const {
+cv::Mat MapGenerator::getImage() const {
     return this->image;
 }
 
-int MapGenrator::setImage() {
+int MapGenerator::setImage() {
     this->image = cv::imread(getRoomMap(), cv::IMREAD_GRAYSCALE);
     // Check if the image was loaded successfully
     if (image.empty()) {

@@ -75,7 +75,7 @@ public:
     void setRoomMap(const std::string& map);
 
     // Getter for binaryMatrix
-    cv::Mat getBinaryMatrix() const;
+    cv::Mat& getBinaryMatrix();
 
     // Setter for binaryMatrix
     void setBinaryMatrix(const cv::Mat& matrix);
@@ -85,7 +85,7 @@ public:
     // Setter for sailSIze
     void setSailSize(int size);
     // Getter for image
-    cv::Mat getImage() const;
+    cv::Mat& getImage();
 
     // Setter for image
     int setImage();

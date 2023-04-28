@@ -94,7 +94,7 @@ void MapGenerator::setBinaryMatrix(const cv::Mat &matrix) {
 
 }
 
-cv::Mat MapGenerator::getBinaryMatrix() const {
+cv::Mat& MapGenerator::getBinaryMatrix() {
     return this->binaryMatrix;
 }
 
@@ -106,7 +106,7 @@ void MapGenerator::setSailSize(int size) {
     this->sailSIze = size;
 }
 
-cv::Mat MapGenerator::getImage() const {
+cv::Mat& MapGenerator::getImage() {
     return this->image;
 }
 

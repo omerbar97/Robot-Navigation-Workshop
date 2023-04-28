@@ -93,3 +93,7 @@ void Navigation::travelToPoints(std::vector<std::pair<double, double>> points) {
     }
 }
 
+Navigation::Navigation(std::string pathToRooms, PlayerCc::PlayerClient *robot) {
+
+}
+

@@ -6,6 +6,10 @@
 #define ROBOT_NAVIGATION_WORKSHOP_MAPGENERATOR_H
 #include <string>
 #include <opencv2/core/mat.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <iostream>
+#include <opencv2/imgproc.hpp>
+#include <fstream>
 
 class MapGenerator {
 private:
@@ -62,7 +66,7 @@ public:
     // - Sets the sail size to 1
     // - Calls setImage() to load and resize the image
     // - Calls pngToMatrix() to convert the image to a binary matrix
-    MapGenerator(std::string pngImage , int sailSIze);
+    MapGenerator(std::string pngImage , int sailSIze = 1);
 
     // Getter for room_map
     std::string getRoomMap() const;

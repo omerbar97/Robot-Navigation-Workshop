@@ -4,7 +4,7 @@ project(Robot-Navigation-Workshop)
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-set(OpenCV_DIR /usr/include/opencv2)
+
 
 # Find playerc++ library and headers
 find_package(playerc++ REQUIRED)
@@ -12,8 +12,11 @@ include_directories(${PLAYERCXX_INCLUDE_DIRS})
 
 
 # Find OpenCV library
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
+# Find OpenCV library
+set(OpenCV_DIR /usr/local/lib)
+
+
+
 # Add the executables
 add_executable(Robot-Navigation main.cpp
         src/Navigation.cpp
@@ -27,8 +30,11 @@ add_executable(Robot-Navigation main.cpp
         src/MapGenerator.h)
 
 
-
 # Link the playerc++ and OpenCV libraries
+find_package(OpenCV CONFIG REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS})
-target_link_libraries(Robot-Navigation ${OpenCV_LIBS})
+
+
 

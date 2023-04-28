@@ -2,18 +2,15 @@
 // Created by shilopadael on 4/19/23.
 //
 
-#include <opencv2/imgcodecs.hpp>
-#include <iostream>
-#include <opencv2/imgproc.hpp>
-#include <fstream>
+
 #include "MapGenerator.h"
 
 
 
-MapGenerator::MapGenerator(std::string pngImage , int defaultArg = 1) {
+MapGenerator::MapGenerator(std::string pngImage , int sailSize) {
 
     this->setRoomMap(pngImage);
-    this->sailSIze = defaultArg;
+    this->sailSIze = sailSize;
     setImage();
     pngToMatrix();
 }
@@ -80,7 +77,6 @@ void MapGenerator::binaryStrToBmp(std::string binaryString, std::string path) {
 
 // Save image to BMP
     cv::imwrite(path, image2);
-
     std::cout << "Image saved to" << path << " : " << std::endl;
 
 }
@@ -91,7 +87,6 @@ std::string MapGenerator::getRoomMap() const {
 
 void MapGenerator::setRoomMap(const std::string &map) {
     this->room_map = map;
-
 }
 
 void MapGenerator::setBinaryMatrix(const cv::Mat &matrix) {

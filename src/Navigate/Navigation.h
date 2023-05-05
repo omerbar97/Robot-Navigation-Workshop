@@ -6,9 +6,9 @@
 #define ROBOT_NAVIGATION_WORKSHOP_NAVIGATION_H
 #include <vector>
 #include <string>
-#include "Route.h"
+#include "../PathPlanning/Route.h"
 #include "libplayerc++/playerc++.h"
-#include "Room.h"
+#include "../Resources/Room.h"
 
 class Navigation {
 private:

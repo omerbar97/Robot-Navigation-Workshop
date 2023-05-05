@@ -9,9 +9,8 @@
 #include <vector>
 #include <string>
 #include <array>
-#include "DataStructure.h"
 #include <queue>
-#include "MapGenerator.h"
+#include "../Resources/MapGenerator.h"
 
 #define WALL 0
 class Route {

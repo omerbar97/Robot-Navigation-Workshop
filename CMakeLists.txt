@@ -15,19 +15,16 @@ include_directories(${PLAYERCXX_INCLUDE_DIRS})
 # Find OpenCV library
 set(OpenCV_DIR /usr/local/lib)
 
-
-
 # Add the executables
 add_executable(Robot-Navigation main.cpp
-        src/Navigation.cpp
-        src/Navigation.h
-        src/Room.cpp
-        src/Room.h
-        src/Route.cpp
-        src/Route.h
-        src/DataStructure.h
-        src/MapGenerator.cpp
-        src/MapGenerator.h)
+        src/Navigate/Navigation.cpp
+        src/Navigate/Navigation.h
+        src/Resources/Room.cpp
+        src/Resources/Room.h
+        src/PathPlanning/Route.cpp
+        src/PathPlanning/Route.h
+        src/Resources/MapGenerator.cpp
+        src/Resources/MapGenerator.h)
 
 
 # Link the playerc++ and OpenCV libraries

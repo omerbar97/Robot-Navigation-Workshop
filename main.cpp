@@ -4,8 +4,8 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
-#include "src/MapGenerator.h"
-#include "src/Navigation.h"
+#include "src/Resources/MapGenerator.h"
+#include "src/Navigate/Navigation.h"
 
 
 void stageToPixel(double x, double y, int &pixel_x, int &pixel_y, double scale) {
@@ -62,47 +62,45 @@ void drawNewColor(cv::Mat &pngImage, cv::Mat &binaryMatrix) {
 
 int main(int argc, char **argv) {
 
-//    cv::Mat image = cv::imread("map.bmp",cv::ImreadModes::IMREAD_COLOR);
+    // creating RobotWrapper
+//    RobotWrapper robotWrapper = new RobotWrapper(double GorundSpeed, double rotataionSpeed);
 //
-//    // Set up the PlayerClient object
-//    PlayerCc::PlayerClient client("localhost", 6665);
-//    PlayerCc::Position2dProxy position(&client, 0);
+//    // navigation
+//    Navigation navigation = new Navigation(Navigatable* robotWrapper,char* pathToMap, char* pathToDataRoom)
 //
-//    // Attempt to connect to the server
-//    std::cout << "Connecting to Player/Stage server..." << std::endl;
-//    std::cout << "Successfully connected to Player/Stage server." << std::endl;
+//    Mission* mission = navigation
+//    /**
+//     * navigation creates the Route, vector, Room
+//     */
 //
-//    // Wait for data to be available
-//    while(true) {
-//        client.Read();
-//        position.SetSpeed(0.2, 0);
-//        // Wait for a few seconds
-//        sleep(2);
+//    std::cin >> x // string of rooms. 1, 5, 10
+//    // 1
+//    // 5
+//    // 10
 //
-//        // Print the robot's position
-//        std::cout << "Robot position: (" << position.GetXPos() << ", " << position.GetYPos() << ")" << std::endl;
+//
+//
+//
+//    Assignment assignment[]; // 1, 5, 10
+//    while(assignment != NULL) {
+//        // do the assignment
+//        // set the mission
+//        // do the mission
+//        // set the next mission
+//    }
+//        // do the assignment
+//        // set the mission
+//        // do the mission
+//        // set the next mission
+//    }
+//
+//    // break x to integers
+//
+//    for() {
+//        mission.setMission(x)
+//        // setMission(1) -> setMission(5) -> setMission(10)
+//        //
+//        mission.doMission();
 //    }
 
-
-    //checking the mapgenerator and naviagation class
-    // Create a MapGenerator object
-    MapGenerator mapGenerator("/usr/local/share/stage/worlds/bitmaps/889_05.png", 1);
-    cv::Mat& image = mapGenerator.getBinaryMatrix();
-    cv::Mat& pngImage = mapGenerator.getImage();
-    std::cout << "image size: " << image.size() << std::endl;
-
-    double x = -18;
-    double y = 3;
-
-    int pixel_x;
-    int pixel_y;
-
-    drawNewColor(pngImage, image);
-
-    cv::imshow("pngImage", pngImage);
-    cv::imshow("binaryImage", image);
-//    mapGenerator.textToStr("/usr/local/share/stage/worlds/bitmaps/889_05.png");
-    mapGenerator.matrixToText("../maps/str.txt");
-    cv::waitKey(0);
-    return 0;
 }

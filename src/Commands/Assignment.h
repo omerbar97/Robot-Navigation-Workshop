@@ -1,0 +1,14 @@
+//
+// Created by omer on 5/5/23.
+//
+
+#ifndef ROBOT_NAVIGATION_WORKSHOP_ASSIGNMENT_H
+#define ROBOT_NAVIGATION_WORKSHOP_ASSIGNMENT_H
+
+
+class Assignment {
+
+};
+
+
+#endif //ROBOT_NAVIGATION_WORKSHOP_ASSIGNMENT_H

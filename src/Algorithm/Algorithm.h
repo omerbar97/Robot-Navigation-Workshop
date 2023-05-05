@@ -1,0 +1,14 @@
+//
+// Created by omer on 5/5/23.
+//
+
+#ifndef ROBOT_NAVIGATION_WORKSHOP_ALGORITHM_H
+#define ROBOT_NAVIGATION_WORKSHOP_ALGORITHM_H
+
+
+class Algorithm {
+
+};
+
+
+#endif //ROBOT_NAVIGATION_WORKSHOP_ALGORITHM_H

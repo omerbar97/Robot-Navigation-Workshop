@@ -13,12 +13,12 @@ void Navigation::navigate(short roomId) {
     startPoint.second = this->robotPosition->GetYPos();
 
     // generating path to end point
-    std::vector<std::pair<float, float>> currentRoute = this->route->createRoute(startPoint, endPoint);
+//    std::vector<std::pair<float, float>> currentRoute = this->route->createRoute(startPoint, endPoint);
 
     // navigation to end point
-    for (std::pair<float, float> point : currentRoute) {
-        this->robotPosition->SetSpeed(point.first, point.second);
-    }
+//    for (std::pair<float, float> point : currentRoute) {
+//        this->robotPosition->SetSpeed(point.first, point.second);
+//    }
 }
 
 void Navigation::stageToPixel(double x, double y, int &pixel_x, int &pixel_y, double scale) {

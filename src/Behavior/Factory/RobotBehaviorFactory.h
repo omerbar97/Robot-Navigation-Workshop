@@ -6,7 +6,7 @@
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTCOMMANDFACTORY_H
 
 
-class RobotCommandFactory {
+class RobotBehaviorFactory {
 
 };
 

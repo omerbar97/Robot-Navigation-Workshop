@@ -24,7 +24,7 @@ add_executable(Robot-Navigation main.cpp
         src/PathPlanning/Route.cpp
         src/PathPlanning/Route.h
         src/Resources/MapGenerator.cpp
-        src/Resources/MapGenerator.h)
+        src/Resources/MapGenerator.h src/PathPlanning/GridMap.h)
 
 
 # Link the playerc++ and OpenCV libraries

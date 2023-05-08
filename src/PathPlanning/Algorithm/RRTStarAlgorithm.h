@@ -4,10 +4,18 @@
 
 #ifndef ROBOT_NAVIGATION_WORKSHOP_RRTSTARALGORITHM_H
 #define ROBOT_NAVIGATION_WORKSHOP_RRTSTARALGORITHM_H
+#include "Algorithm.h"
 
+class RRTStarAlgorithm : public Algorithm{
+public:
 
-class RRTStarAlgorithm {
+    // constructor
+    RRTStarAlgorithm(GridMap* gridMap);
+    ~RRTStarAlgorithm();
+
+    // override
+    void calculate() override;
+
 };
-
 
 #endif //ROBOT_NAVIGATION_WORKSHOP_RRTSTARALGORITHM_H

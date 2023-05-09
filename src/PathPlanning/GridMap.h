@@ -30,7 +30,7 @@ private:
 
     /**
      * for now, each pixel is just a normal pixel in the future we will implement the scale. such that each pixel in the matrix
-     * will corospond to the kind of measure in the real world, for example each pixel will be 20x20 cm so the matrix will
+     * will correspond to the kind of measure in the real world, for example each pixel will be 20x20 cm so the matrix will
      * be much smaller.
      */
     int scale;

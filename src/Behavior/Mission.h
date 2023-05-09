@@ -23,7 +23,7 @@ public:
     Mission() = default;
 
     /**
-     * vitual destructor for the mission. (for the polymorphism)
+     * virtual destructor for the mission. (for the polymorphism)
      */
     virtual ~Mission() = default;
 

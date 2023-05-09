@@ -9,11 +9,20 @@
 class AStarAlgorithm : public Algorithm{
 public:
 
-    // constructor
+    /**
+     * constructor for the AStarAlgorithm class.
+     * @param gridMap - the grid map to navigate on. (the map is not owned by the class) it will be deleted by the user.
+     */
     AStarAlgorithm(GridMap* gridMap);
+
+    /**
+     * destructor for the AStarAlgorithm class.
+     */
     ~AStarAlgorithm();
 
-    // override
+    /**
+     * calculating the path from the start point to the end point. using the AStarAlgorithm.
+     */
     void calculate() override;
 
 };

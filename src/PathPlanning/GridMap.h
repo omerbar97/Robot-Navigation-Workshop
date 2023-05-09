@@ -17,15 +17,28 @@ class GridMap : public ompl::base::RealVectorStateSpace {
 private:
 
     // private members
+    /**
+     * the bounds of the grid map, the bounds are the size of the matrix. it is used when starting the algorithm.
+     */
     const ompl::base::RealVectorBounds bounds;
+
+    /**
+     * girdMap members
+     */
     int width;
     int height;
-    int scale; // in case each pixel going to be more than one pixel in the map
+
+    /**
+     * for now, each pixel is just a normal pixel in the future we will implement the scale. such that each pixel in the matrix
+     * will corospond to the kind of measure in the real world, for example each pixel will be 20x20 cm so the matrix will
+     * be much smaller.
+     */
+    int scale;
 
     /**
      * creating the gridMap by different scale if needed.
-     * @param gridMatrix
-     * @param scale
+     * @param gridMatrix - the matrix of the grid map
+     * @param scale default value is 1
      */
     void initGridMap(const cv::Mat* gridMatrix, int scale=1);
 
@@ -38,6 +51,10 @@ public:
      * @param dim
      */
     GridMap(cv::Mat* pixelMap, std::size_t dim, int scale=1);
+
+    /**
+     * destructor for the gridMap, deleting all the members.
+     */
     ~GridMap();
 
     // getters
@@ -45,12 +62,17 @@ public:
     int getHeight() const;
     int getScale() const;
 
-    // setters
-    void setWidth(int width);
-    void setHeight(int height);
+    // setters, cannot set the width and height it is given by the gridMatrix Mat*
     void setScale(int scale);
 
-    //override
+    /**
+     * setter for a new gridMatrix, the gridMatrix is the matrix of the grid map. need to delete the old ones and basically
+     * create a new one.
+     * @param gridMatrix
+     */
+    void setGridMatrix(cv::Mat* gridMatrix);
+
+    //override this method is an override of the ompl::base::StateSpace::StateType::operator== method
     bool isValid(const ompl::base::State *state) const;
 
 

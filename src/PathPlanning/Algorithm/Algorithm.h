@@ -42,7 +42,7 @@ public:
     void setGoal(std::pair<int ,int> goal);
     void setGridMap(GridMap* gridMap);
 
-    // virtual function
+    // virtual function that calculate teh path from start to goal and setting the pathInMatrix vector.
     virtual void calculate() = 0;
 };
 

@@ -7,91 +7,79 @@
 #include <vector>
 #include <string>
 #include "../PathPlanning/Route.h"
-#include "libplayerc++/playerc++.h"
 #include "../Resources/Room.h"
+#include "Navigatable.h"
+#include "../Behavior/Mission.h"
 
-class Navigation {
+class Navigation : public Mission{
 private:
-    // variables
-    int mapWidth;
-    int mapHeight;
-    int blockPixels;
-    int numOfBlocksWidth;
-    int numOfBlocksHeight;
-    std::vector<Room> rooms;
+
+    // new members
+    Navigatable* navigatable;
     Route* route;
-    std::vector<short> roomsIdToGo;
-    PlayerCc::PlayerClient* robot;
-    PlayerCc::Position2dProxy* robotPosition;
+    std::pair<double, double> currentPosition;
+    std::pair<double, double> destination;
+    Behavior* behavior;
 
-    //private methods
-    /**
-     * initlizing the rooms vector from the given file path.
-     * @param filePath
-     */
-    void initRooms(std::string filePath);
-
-    /**
-     * navigate to the given room id.
-     * @param roomId short
-     */
-    void navigate(short roomId);
-
-    /**
-     * set the current room to the given id.
-     * @param id short
-     */
-    void setRoomToCurrentNavigation(short id);
-
-    /**
-     * convert the given stage coordinates to pixel coordinates.
-     * @param x double
-     * @param y double
-     * @param pixel_x int
-     * @param pixel_y int
-     * @param scale double
-     */
-    void stageToPixel(double x, double y, int& pixel_x, int& pixel_y, double scale);
-
-    /**
-     * convert the given pixel coordinates to stage coordinates.
-     * @param pixel_x int
-     * @param pixel_y int
-     * @param x double
-     * @param y double
-     * @param scale double
-     */
-    void pixelToStage(int pixel_x, int pixel_y, double& x, double& y, double scale);
-
-    /**
-     * travel to the given points. each point is a pair of doubles. the first is the x coordinate and the second is the y coordinate.
-     * @param points std::vector<std::pair<double, double>>
-     */
-    void travelToPoints(std::vector<std::pair<double, double>> points);
 
 public:
 
     /**
      * constructor.
-     * @param pathToRooms
-     * @param robot
+     * @param navigatable - the navigatable object that will be navigated.
      */
-    Navigation(std::string pathToRooms, PlayerCc::PlayerClient* robot);
+    Navigation(Navigatable* navigatable);
+
+    /**
+     * constructor. (with behavior) the behavior is the logic that the navigatable object will execute
+     * will navigate the object to the given destination.
+     * @param navigatable
+     * @param behavior
+     * @param currentPosition
+     * @param destination
+     */
+    Navigation(Navigatable* navigatable, Behavior* behavior, Algorithm* algorithm,std::pair<double, double> currentPosition,
+               std::pair<double, double> destination);
 
     /**
      * destructor.
      */
     ~Navigation();
 
-    // public methods
+    // setters
     /**
-     * set the rooms to go to the given vector of rooms id.
-     * @param roomsId  std::vector<short>
+     * set the algorithm that will be used to calculate the path. in the route class
+     * @param algorithm
      */
-    void setRoomsToRoute(std::vector<short> roomsId);
+    void setRouteAlgorithm(Algorithm* algorithm);
 
     /**
-     * start the navigation.
+     * set the map generator that will be used to create the gridMap. in the route class.
+     * @param mapGenerator
+     */
+    void setMapGenerator(MapGenerator* mapGenerator);
+
+    /**
+     * set the behavior that will be executed when the navigatable object is navigating.
+     * @param behavior
+     */
+    void setBehavior(Behavior* behavior);
+
+    /**
+     * set the current position of the navigatable object.
+     * @param currentPosition
+     */
+    void setCurrentPosition(std::pair<double, double> currentPosition);
+
+    /**
+     * set the destination of the navigatable object.
+     * @param destination
+     */
+    void setDestination(std::pair<double, double> destination);
+
+
+    /**
+     * start the navigation. the navigation will start the behavior and the navigatable object will start to navigate.
      */
     void start();
 

@@ -11,7 +11,7 @@
 #include "Navigatable.h"
 #include "../Behavior/Mission.h"
 
-class Navigation : public Mission{
+class Navigation : public Mission {
 private:
 
     // new members
@@ -20,6 +20,13 @@ private:
     std::pair<double, double> currentPosition;
     std::pair<double, double> destination;
     Behavior* behavior;
+
+    /**
+     * set the behavior that will be executed when the navigatable object is navigating.
+     * this is private going to call it from the setMission method.
+     * @param behavior
+     */
+    void setBehavior(Behavior* behavior);
 
 
 public:
@@ -59,11 +66,7 @@ public:
      */
     void setMapGenerator(MapGenerator* mapGenerator);
 
-    /**
-     * set the behavior that will be executed when the navigatable object is navigating.
-     * @param behavior
-     */
-    void setBehavior(Behavior* behavior);
+
 
     /**
      * set the current position of the navigatable object.
@@ -82,6 +85,19 @@ public:
      * start the navigation. the navigation will start the behavior and the navigatable object will start to navigate.
      */
     void start();
+
+    // override method
+    /**
+     * set the mission of the navigatable object.
+     * @param mission
+     */
+    void setMission(Behavior *behavior);
+
+    /**
+     * do the mission of the navigatable object.
+     * @return
+     */
+     void doMission();
 
 };
 

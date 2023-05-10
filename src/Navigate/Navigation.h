@@ -7,93 +7,62 @@
 #include <vector>
 #include <string>
 #include "../PathPlanning/Route.h"
-#include "libplayerc++/playerc++.h"
 #include "../Resources/Room.h"
+#include "Navigatable.h"
+#include "../Behavior/Mission.h"
 
-class Navigation {
+class Navigation : public Mission {
 private:
-    // variables
-    int mapWidth;
-    int mapHeight;
-    int blockPixels;
-    int numOfBlocksWidth;
-    int numOfBlocksHeight;
-    std::vector<Room> rooms;
-    Route* route;
-    std::vector<short> roomsIdToGo;
-    PlayerCc::PlayerClient* robot;
-    PlayerCc::Position2dProxy* robotPosition;
 
-    //private methods
-    /**
-     * initlizing the rooms vector from the given file path.
-     * @param filePath
-     */
-    void initRooms(std::string filePath);
-
-    /**
-     * navigate to the given room id.
-     * @param roomId short
-     */
-    void navigate(short roomId);
-
-    /**
-     * set the current room to the given id.
-     * @param id short
-     */
-    void setRoomToCurrentNavigation(short id);
-
-    /**
-     * convert the given stage coordinates to pixel coordinates.
-     * @param x double
-     * @param y double
-     * @param pixel_x int
-     * @param pixel_y int
-     * @param scale double
-     */
-    void stageToPixel(double x, double y, int& pixel_x, int& pixel_y, double scale);
-
-    /**
-     * convert the given pixel coordinates to stage coordinates.
-     * @param pixel_x int
-     * @param pixel_y int
-     * @param x double
-     * @param y double
-     * @param scale double
-     */
-    void pixelToStage(int pixel_x, int pixel_y, double& x, double& y, double scale);
-
-    /**
-     * travel to the given points. each point is a pair of doubles. the first is the x coordinate and the second is the y coordinate.
-     * @param points std::vector<std::pair<double, double>>
-     */
-    void travelToPoints(std::vector<std::pair<double, double>> points);
+    // new members
+    Behavior* behavior;
 
 public:
 
+
     /**
      * constructor.
-     * @param pathToRooms
-     * @param robot
+     * @param navigatable - the navigatable object that will be navigated.
      */
-    Navigation(std::string pathToRooms, PlayerCc::PlayerClient* robot);
+    Navigation(Navigatable* navigatable);
+
+    /**
+     * constructor. (with behavior) the behavior is the logic that the navigatable object will execute
+     * will navigate the object to the given destination.
+     * @param navigatable
+     * @param behavior
+     * @param currentPosition
+     * @param destination
+     */
+    Navigation(Navigatable* navigatable, Behavior* behavior);
 
     /**
      * destructor.
      */
     ~Navigation();
 
-    // public methods
     /**
-     * set the rooms to go to the given vector of rooms id.
-     * @param roomsId  std::vector<short>
+     * set the behavior that will be executed when the navigatable object is navigating.
+     * this is private going to call it from the setMission method.
+     * @param behavior
      */
-    void setRoomsToRoute(std::vector<short> roomsId);
+    void setBehavior(Behavior* behavior);
+
+
+    // override method
+    /**
+     * set the mission of the navigatable object.
+     * @param mission
+     */
+    void setMission(Behavior *behavior);
 
     /**
-     * start the navigation.
+     * do the mission of the navigatable object.
+     * @return
      */
-    void start();
+     int doMission() {
+        behavior->execute();
+     }
 
 };
 

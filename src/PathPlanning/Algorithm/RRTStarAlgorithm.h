@@ -9,8 +9,15 @@
 class RRTStarAlgorithm : public Algorithm{
 public:
 
-    // constructor
+    /**
+     * constructor for the RRTStarAlgorithm class. (RRT* algorithm) - Rapidly-exploring Random Tree
+     * @param gridMap - the grid map to navigate on. (the map is not owned by the class) it will be deleted by the user.
+     */
     RRTStarAlgorithm(GridMap* gridMap);
+
+    /**
+     * destructor for the RRTStarAlgorithm class.
+     */
     ~RRTStarAlgorithm();
 
     // override

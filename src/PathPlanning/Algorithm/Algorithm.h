@@ -18,17 +18,51 @@
 class Algorithm {
 protected:
     // private members
+    /**
+     * @brief gridMap is a pointer to the grid map that the algorithm will work on. it includes
+     * the OMPL library that does all the calculation for us.
+     */
     GridMap* gridMap;
-    std::shared_ptr<ompl::base::Planner> planner;
-    std::pair<int ,int> start;
-    std::pair<int ,int> goal;
-    std::vector<std::pair<int ,int>> pathInMatrix;
 
+    /**
+     * @brief planner is a pointer to the planner that the algorithm will use to calculate the path.
+     */
+    std::shared_ptr<ompl::base::Planner> planner;
+
+    /**
+     * @brief start is the start point of the path.
+     */
+    std::pair<int ,int> start;
+
+    /**
+     * @brief goal is the goal point of the path.
+     */
+    std::pair<int ,int> goal;
+
+    /**
+     * @brief pathInMatrix is a vector of pairs that represents the path in the matrix. each pair is a point x,y in the
+     * matrix! the route class need to convert it to the real world coordinates.
+     */
+    std::vector<std::pair<int ,int>>* pathInMatrix;
+
+    /**
+     * @brief pathInVector the OMPL library return the path as ompl::geometric::PathGeometric we will convert it
+     * to a matrix path, and save it in the pathInMatrix vector.
+     * @param solutionPath
+     */
     void transferPathToVector(ompl::geometric::PathGeometric* solutionPath);
 
 public:
 
+    /**
+     * @brief Algorithm constructor. it gets a grid map
+     * @param gridMap
+     */
     Algorithm(GridMap* gridMap);
+
+    /**
+     * @brief Algorithm destructor. it deletes the pathInMatrix vector. (after use) and all the allocation
+     */
     virtual ~Algorithm();
 
     // getters
@@ -42,7 +76,7 @@ public:
     void setGoal(std::pair<int ,int> goal);
     void setGridMap(GridMap* gridMap);
 
-    // virtual function
+    // virtual function that calculate the path from start to goal and setting the pathInMatrix vector.
     virtual void calculate() = 0;
 };
 

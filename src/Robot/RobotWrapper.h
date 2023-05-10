@@ -7,6 +7,7 @@
 
 
 class RobotWrapper {
+    // pairs of path
 
 };
 

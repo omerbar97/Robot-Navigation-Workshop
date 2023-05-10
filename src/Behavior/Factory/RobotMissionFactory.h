@@ -29,7 +29,7 @@ public:
      * @param stagePointToNavigate - the point that the robot will navigate to
      * @return Mission* - the mission that was created
      */
-    Mission* createNavigationMission(RobotBehavior* behavior, std::pair<double, double> stagePointToNavigate);
+    Mission* createNavigationMission(RobotBehavior* behavior, std::vector<std::pair<double, double>> path);
 
     /**
      * this will create a mission that will message the messageTo with the message, using the behavior.

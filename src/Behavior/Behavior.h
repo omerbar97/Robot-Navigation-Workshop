@@ -25,7 +25,7 @@ public:
     virtual ~Behavior() = default;
 
     // each behavior should implement this method
-    virtual void execute() = 0;
+    virtual int execute() = 0;
 };
 
 #endif //ROBOT_NAVIGATION_WORKSHOP_BEHAVIOR_H

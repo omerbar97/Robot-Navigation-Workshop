@@ -42,7 +42,7 @@ public:
      * The constructor of the factory.
      * @param robot the robot object that will be used by the behaviors.
      */
-    RobotBehaviorFactory(RobotWrapper* robot);
+    RobotBehaviorFactory(RobotWrapper* robot, std::pair<double, double> goalPoint);
 
     /**
      * The destructor of the factory, need to delete all the behaviors that were created.

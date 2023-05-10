@@ -29,8 +29,11 @@ public:
 
     /**
      * this method executes the mission.
+     * return 0 mission accomplished
+     * return 1 robot encounter obstacle
+     * return 2 robot encounter wall
      */
-    virtual void doMission() = 0;
+    virtual int doMission() = 0;
 
     /**
      * each mission has a behavior, this method sets the behavior for the mission.

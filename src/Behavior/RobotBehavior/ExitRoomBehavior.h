@@ -18,7 +18,7 @@ public:
     /**
      * navigation logic to navigate the robot when exiting the room
      */
-    void execute() override;
+    int execute() override;
 };
 
 

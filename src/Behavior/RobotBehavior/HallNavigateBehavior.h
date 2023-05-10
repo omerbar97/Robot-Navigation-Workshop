@@ -18,7 +18,7 @@ public:
     /**
      * navigation logic to navigate the robot inside the hall
      */
-    void execute() override;
+    int execute() override;
 };
 
 

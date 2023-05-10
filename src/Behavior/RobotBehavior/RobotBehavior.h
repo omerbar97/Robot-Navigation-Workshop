@@ -15,13 +15,15 @@
 class RobotBehavior : public Behavior {
 protected:
     RobotWrapper* robot;
+    std::pair<double, double> goalPoint;
+
 
 public:
     RobotBehavior(RobotWrapper* robot);
     virtual ~RobotBehavior();
 
     // the virtual method is still virtual
-    virtual void execute() = 0;
+    virtual int execute() = 0;
 
 };
 

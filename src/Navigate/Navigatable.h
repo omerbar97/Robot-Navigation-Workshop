@@ -37,6 +37,13 @@ public:
     virtual void setBehavior(Behavior* behavior) = 0;
 
 
+    /**
+     * set the path of the navigatable object.
+     * @param path
+     */
+    virtual void setPath(std::vector<std::pair<double, double>> path) = 0;
+
+
 
 };
 

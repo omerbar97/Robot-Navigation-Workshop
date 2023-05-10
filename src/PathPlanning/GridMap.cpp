@@ -12,7 +12,16 @@ GridMap::GridMap(cv::Mat *pixelMap, int scale) {
 
     // setting ompl state space
     setName("2dGridMap");
-    setBounds(0, 255); // matrix value can be 0 or 255
+    this->bounds = new ompl::base::RealVectorBounds(2);
+
+    // Set the bounds for the x dimension (width)
+    bounds->setLow(0, 0.0);         // Minimum x value
+    bounds->setHigh(0, width - 1);  // Maximum x value
+
+    // Set the bounds for the y dimension (height)
+    bounds->setLow(1, 0.0);          // Minimum y value
+    bounds->setHigh(1, height - 1);  // Maximum y value
+
     addDimension("x", 0, width - 1);
     addDimension("y", 0, height - 1);
 }
@@ -51,4 +60,8 @@ GridMap::GridMap(const GridMap &gridMap) {
 
 cv::Mat *GridMap::getGridMatrix() const {
     return this->gridMatrix;
+}
+
+ompl::base::RealVectorBounds* GridMap::getBounds() {
+    return this->bounds;
 }

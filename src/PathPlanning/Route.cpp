@@ -7,8 +7,8 @@ Route::Route(Algorithm *algorithm, MapGenerator *mapGenerator) {
     this->gridMap = new GridMap(cvMap, 1);
     this->matrixWidth = gridMap->getWidth();
     this->matrixHeight = gridMap->getHeight();
-    this->numOfBlocksWidth = 40;
-    this->numOfBlocksHeight = 18;
+    this->numOfBlocksWidth = 34;
+    this->numOfBlocksHeight = 54;
     initGridMapToAlgorithm();
 }
 
@@ -19,8 +19,8 @@ Route::Route(MapGenerator *mapGenerator) {
     this->gridMap = new GridMap(cvMap, 1);
     this->matrixWidth = gridMap->getWidth();
     this->matrixHeight = gridMap->getHeight();
-    this->numOfBlocksWidth = 40;
-    this->numOfBlocksHeight = 18;
+    this->numOfBlocksWidth = 34;
+    this->numOfBlocksHeight = 54;
 }
 
 void Route::initGridMapToAlgorithm() {
@@ -34,17 +34,18 @@ void Route::initGridMapToAlgorithm() {
 
 std::pair<int, int> Route::stageToMatrix(std::pair<double, double> point) const {
     // The dimensions of the stage map
+    // The dimensions of the stage map
     const int blockWidthHeight = this->matrixWidth / this->numOfBlocksWidth;
     const int blockWidthHeightPixel = this->matrixHeight / this->numOfBlocksHeight;
 
-    int x = static_cast<int>(point.first);
-    int y = static_cast<int>(point.second);
+    // getting the point
+    double x = point.first;
+    double y = point.second;
 
     // Convert the x-coordinate to pixel coordinate
     int pixel_x = static_cast<int>((x + this->numOfBlocksWidth / 2) * blockWidthHeight);
     // Convert the y-coordinate to pixel coordinate
     int pixel_y = static_cast<int>((this->numOfBlocksHeight / 2 - y) * blockWidthHeightPixel);
-
     return std::pair<int, int>(pixel_x, pixel_y);
 }
 
@@ -53,18 +54,19 @@ std::pair<double, double> Route::matrixToStage(std::pair<int, int> point) const 
     const int blockWidthHeight = this->matrixWidth / this->numOfBlocksWidth;
     const int blockWidthHeightPixel = this->matrixHeight / this->numOfBlocksHeight;
 
-    int pixel_x = static_cast<int>(point.first);
-    int pixel_y = static_cast<int>(point.second);
+    // getting the point
+    int pixel_x = point.first;
+    int pixel_y = point.second;
 
     // Convert the pixel x-coordinate to stage coordinate
-    double x = (static_cast<double>(this->numOfBlocksWidth / 2) * blockWidthHeight - static_cast<double>(pixel_x)) /
-        (-blockWidthHeight);
+    double x = (static_cast<double>(this->numOfBlocksWidth / 2) * blockWidthHeight - static_cast<double>(pixel_x)) / (-blockWidthHeight);
     // Convert the pixel y-coordinate to stage coordinate
-    double y = (static_cast<double>(this->numOfBlocksHeight / 2) * blockWidthHeightPixel - static_cast<double>(pixel_y)) /
-        blockWidthHeightPixel;
+    double y = (static_cast<double>(this->numOfBlocksHeight / 2)* blockWidthHeightPixel - static_cast<double>(pixel_y)) / blockWidthHeightPixel;
 
     return std::pair<double, double>(x, y);
 }
+
+
 
 void Route::setGridMap(GridMap *gridMap) {
     if(gridMap == nullptr) {
@@ -137,7 +139,13 @@ void Route::setGoalPoint(std::pair<double, double> goal) {
 
 std::vector<std::pair<double, double>> Route::getStagePath() const {
     // in the algorithm the path is in matrix coordinates
+
     std::vector<std::pair<int, int>>* matrixPath = this->algorithm->getPath();
+    if(matrixPath == nullptr) {
+        // error
+        std::cout << "couldn't find a path" << std::endl;
+        return {};
+    }
 
     std::vector<std::pair<double, double>> stagePath;
     // converting the path to stage coordinates
@@ -161,5 +169,8 @@ std::vector<std::pair<double, double>> Route::getLatestPath() const {
 }
 
 std::vector<std::pair<int, int>> Route::matrixPoint() {
-    return *this->algorithm->getPath();
+    if(this->algorithm->getPath() != nullptr) {
+        return *this->algorithm->getPath();
+    }
+    return {};
 }

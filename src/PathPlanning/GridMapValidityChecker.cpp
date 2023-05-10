@@ -5,23 +5,29 @@
 #include "GridMapValidityChecker.h"
 
 GridMapValidityChecker::GridMapValidityChecker(const ompl::base::SpaceInformationPtr &si, GridMap *gridMap)
-                        : ompl::base::StateValidityChecker(si), gridMap(gridMap) {
+        : ompl::base::StateValidityChecker(si), gridMap(gridMap) {
 }
 
 bool GridMapValidityChecker::isValid(const ompl::base::State *state) const {
+    return this->clearance(state, 12);
+}
+
+double GridMapValidityChecker::clearance(const ompl::base::State *state, int radius) const {
+
     const auto *stateType = state->as<ompl::base::RealVectorStateSpace::StateType>();
+    // getting the state coordinate
     int x = static_cast<int>(stateType->values[0]);
     int y = static_cast<int>(stateType->values[1]);
 
-    if (x < 0 || x >= gridMap->getWidth() || y < 0 || y >= gridMap->getHeight())
-        return false; // State is out of bounds
-
-    // Retrieve the value from the grid matrix at the specified coordinates
-    int value = gridMap->getGridMatrix()->at<uchar>(y, x);
-
-    // Check if the cell is occupied
-    if (value == 255)
-        return false;
-
+    for (int i = x - radius; i <= x + radius; ++i) {
+        for (int j = y - radius; j <= y + radius; ++j) {
+            // Check if the cell is occupied
+            int value = gridMap->getGridMatrix()->at<uchar>(j, i);
+            if (value == 255) {
+                return false;
+            }
+        }
+    }
     return true;
+
 }

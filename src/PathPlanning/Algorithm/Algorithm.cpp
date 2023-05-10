@@ -33,7 +33,7 @@ Algorithm::Algorithm(GridMap *gridMap) {
 }
 
 GridMap *Algorithm::getGridMap() const {
-    return this->getGridMap();
+    return this->gridMap;
 }
 
 std::pair<int, int> Algorithm::getStart() const {

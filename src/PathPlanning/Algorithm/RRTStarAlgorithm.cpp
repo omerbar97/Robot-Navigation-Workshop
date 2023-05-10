@@ -23,9 +23,18 @@ void RRTStarAlgorithm::calculate() {
         return;
     }
 
+    // printing the start and goal value in the gridmap
+    auto val1 = this->gridMap->getGridMatrix()->at<uchar>(this->start.second, this->start.first);
+    auto val2 = this->gridMap->getGridMatrix()->at<uchar>(this->goal.second, this->goal.first);
+
+    std::cout << "start value: " << val1 << "\n";
+    std::cout << "goal value: " << val2 << "\n";
+
     // else calculating the path from the starting point to the end
     // the StateSpace is in the gridMap
     ompl::base::StateSpacePtr space(this->gridMap);
+
+    space->as<ompl::base::RealVectorStateSpace>()->setBounds(*this->getGridMap()->getBounds());
 
     // creating the space information
     ompl::base::SpaceInformationPtr spaceInformation(std::make_shared<ompl::base::SpaceInformation>(space));
@@ -52,7 +61,7 @@ void RRTStarAlgorithm::calculate() {
     ompl::geometric::RRTstar* planner = new ompl::geometric::RRTstar(spaceInformation);
 
     planner->setProblemDefinition(problemDefinition);
-    ompl::base::PlannerTerminationCondition ptc = ompl::base::timedPlannerTerminationCondition(15.0);
+    ompl::base::PlannerTerminationCondition ptc = ompl::base::timedPlannerTerminationCondition(10.0);
 
     ompl::base::PlannerStatus status = planner->solve(ptc);
 

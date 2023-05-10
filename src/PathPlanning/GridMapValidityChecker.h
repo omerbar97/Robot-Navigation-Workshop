@@ -11,6 +11,10 @@ class GridMapValidityChecker : public ompl::base::StateValidityChecker {
 private:
     GridMap* gridMap;
 
+    // Returns the distance from the given state's position to the
+    // boundary of the circular obstacle.
+    double clearance(const ompl::base::State* state, int radios) const;
+
 public:
     GridMapValidityChecker(const ompl::base::SpaceInformationPtr& si, GridMap* gridMap);
 

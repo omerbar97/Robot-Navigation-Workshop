@@ -17,6 +17,7 @@ class GridMap : public ompl::base::RealVectorStateSpace {
 private:
 
     cv::Mat* gridMatrix;
+    ompl::base::RealVectorBounds* bounds;
 
     /**
      * girdMap members
@@ -63,6 +64,7 @@ public:
     int getWidth() const;
     int getHeight() const;
     int getScale() const;
+    ompl::base::RealVectorBounds *getBounds();
     cv::Mat* getGridMatrix() const;
 
     // setters, cannot set the width and height it is given by the gridMatrix Mat*

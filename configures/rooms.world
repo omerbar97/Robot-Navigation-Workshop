@@ -32,10 +32,10 @@ window
 # load an environment bitmap
 floorplan
 ( 
-  bitmap "bitmaps/hospital_section.png" 
+  bitmap "bitmaps/csMap.png" 
   map_resolution 0.02
-  size [40.000 18.000 0.600] 
-  name "hospital"
+  size [33.600 53.400 5.000] 
+  name "cs Map"
   color "gray50"
   gui_grid 1
   gui_outline 1
@@ -46,7 +46,9 @@ pioneer2dx
 (		  
   # can refer to the robot by this name
   name "r0"
-  pose [ -18 -4 0 45.000 ] 
+  pose [ -14 -3 0 45.000 ] 
+  
+  size [0.4 0.4 0.4]
 
   # pioneer2dx's sonars	will be ranger:0 and the laser will be ranger:1
   sicklaser( pose [ 0 0 0 0 ] ) 

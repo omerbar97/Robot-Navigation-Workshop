@@ -34,15 +34,15 @@ void printToFile(std::string filename, cv::Mat& map) {
 int main(int argc, char **argv) {
 
     // creating mapGenerator
-    MapGenerator* map = new MapGenerator("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/room_map.png");
+    MapGenerator* map = new MapGenerator("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
     auto mapMatrix = map->getBinaryMatrix();
     // creating Route
     Route* route = new Route(new RRTStarAlgorithm(), map);
 
     // room 1 -18.2 3.5
     // room 10 13.5 3.5
-    route->setStartingPoint(std::make_pair(-18, 3.5));
-    route->setGoalPoint(std::make_pair(13.5, -5));
+    route->setStartingPoint(std::make_pair(-13, 19));
+    route->setGoalPoint(std::make_pair(14, 13));
 
     // creating Navigation
     route->createPath();
@@ -58,13 +58,13 @@ int main(int argc, char **argv) {
     }
 
 
-    for (auto point : route->getLatestPath()) {
-        // drawing to the mapMatrix the values
-        std::cout << point.first << " " << point.second << std::endl;
-    }
+//    for (auto point : route->getLatestPath()) {
+//        // drawing to the mapMatrix the values
+//        std::cout << point.first << " " << point.second << std::endl;
+//    }
 
     // printing to file
-    printToFile("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/matrix.txt", mapMatrix);
+//    printToFile("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/matrix.txt", mapMatrix);
 
     cv::imshow("map", map->getBinaryMatrix());
     cv::waitKey(0);

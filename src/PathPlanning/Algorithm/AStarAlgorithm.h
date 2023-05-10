@@ -5,6 +5,8 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ASTARALGORITHM_H
 #define ROBOT_NAVIGATION_WORKSHOP_ASTARALGORITHM_H
 #include "Algorithm.h"
+#include <ompl/geometric/planners/astar/AStar.h>
+
 
 class AStarAlgorithm : public Algorithm{
 public:

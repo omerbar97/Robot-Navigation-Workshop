@@ -16,11 +16,7 @@ class GridMap : public ompl::base::RealVectorStateSpace {
 
 private:
 
-    // private members
-    /**
-     * the bounds of the grid map, the bounds are the size of the matrix. it is used when starting the algorithm.
-     */
-    const ompl::base::RealVectorBounds bounds;
+    cv::Mat* gridMatrix;
 
     /**
      * girdMap members
@@ -40,7 +36,7 @@ private:
      * @param gridMatrix - the matrix of the grid map
      * @param scale default value is 1
      */
-    void initGridMap(const cv::Mat* gridMatrix, int scale=1);
+    void initGridMap(const cv::Mat* gridMatrix, int scale);
 
 public:
 
@@ -50,7 +46,13 @@ public:
      * @param pixelMap
      * @param dim
      */
-    GridMap(cv::Mat* pixelMap, std::size_t dim, int scale=1);
+    GridMap(cv::Mat* pixelMap, int scale);
+
+    /**
+     * copy constructor
+     * @param gridMap
+     */
+    GridMap(const GridMap& gridMap);
 
     /**
      * destructor for the gridMap, deleting all the members.
@@ -61,6 +63,7 @@ public:
     int getWidth() const;
     int getHeight() const;
     int getScale() const;
+    cv::Mat* getGridMatrix() const;
 
     // setters, cannot set the width and height it is given by the gridMatrix Mat*
     void setScale(int scale);
@@ -72,8 +75,6 @@ public:
      */
     void setGridMatrix(cv::Mat* gridMatrix);
 
-    //override this method is an override of the ompl::base::StateSpace::StateType::operator== method
-    bool isValid(const ompl::base::State *state) const;
 
 
 };

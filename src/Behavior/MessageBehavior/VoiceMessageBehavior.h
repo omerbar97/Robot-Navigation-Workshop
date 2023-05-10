@@ -14,7 +14,7 @@ class VoiceMessageBehavior : public MessageBehavior{
 public:
 
     VoiceMessageBehavior(std::string message, std::string messageTo);
-    void execute() override;
+    int execute() override;
 };
 
 

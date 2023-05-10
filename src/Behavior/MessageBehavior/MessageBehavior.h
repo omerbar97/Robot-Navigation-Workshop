@@ -28,7 +28,7 @@ public:
      * @param messageTo the name of the person to send the message to.
      */
     MessageBehavior(std::string message, std::string messageTo);
-    void execute() = 0;
+    int execute() = 0;
 };
 
 #endif //ROBOT_NAVIGATION_WORKSHOP_MESSAGEBEHAVIOR_H

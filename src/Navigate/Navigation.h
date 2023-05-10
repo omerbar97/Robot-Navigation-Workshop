@@ -60,7 +60,7 @@ public:
      * do the mission of the navigatable object.
      * @return
      */
-     void doMission() {
+     int doMission() {
         behavior->execute();
      }
 

@@ -17,7 +17,8 @@ Our second-year Computer Science project focuses on developing a robot navigatio
 <h2>Dependencies</h2>
 <p>To successfully run and utilize the robot navigation project, the following dependencies are required:</p>
 <ul>
-   <li>Player/Stage: The Player/Stage platform provides the foundation for our robot navigation system. Ensure that Player/Stage is properly installed and configured on your system.</li>
+   <li>Player/Stage: The Player/Stage platform provides the foundation for our robot navigation system. Ensure that Player/Stage is properly installed and configured on your system. can download <a href="https://playerstage.sourceforge.net/doc/Stage-3.2.1/install.html">here</li>
   <li>C++ Compiler: A compatible C++ compiler is needed to compile and build the project code. We recommend using a recent version of GCC or Clang.</li>
-  <li>Open Motion Planning Library (OMPL): OMPL is a key component of our project, providing state-of-the-art motion planning algorithms. Install the OMPL library and its dependencies according to the official documentation for your system.</li>
+  <li>Open Motion Planning Library (OMPL): OMPL is a key component of our project, providing state-of-the-art motion planning algorithms. Install the OMPL library and its dependencies according to the official documentation for your system. can download <a href="https://github.com/ompl/ompl">here</a> </li>
 </ul>
+<p>Ensure that all the necessary dependencies are installed and configured correctly on your system before attempting to run the project. This will ensure a smooth execution and enable you to explore the capabilities of our robot navigation system effectively.</p>

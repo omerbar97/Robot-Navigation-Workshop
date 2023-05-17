@@ -36,7 +36,10 @@ add_executable(Robot-Navigation
         src/PathPlanning/Algorithm/Algorithm.cpp
         src/PathPlanning/Algorithm/RRTStarAlgorithm.cpp
         src/PathPlanning/Algorithm/RRTStarAlgorithm.h
-        src/Resources/Room.cpp)
+        src/Resources/Room.cpp
+        src/Resources/Room.h
+        src/Resources/RoomsHandler.h
+        src/Resources/RoomsHandler.cpp)
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)

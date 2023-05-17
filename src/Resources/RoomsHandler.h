@@ -4,9 +4,12 @@
 
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROOMSHANDLER_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROOMSHANDLER_H
+#include "Room.h"
 #include <vector>
 #include <string>
-#include "Room.h"
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 
 
 /**
@@ -23,6 +26,9 @@ private:
 public:
     RoomsHandler(std::string roomConfigPath, std::vector<int> roomsIds);
 
+    std::vector<Room> getRooms() const;
+
+    std::vector<int> getRoomsId() const;
     // public methods
 };
 

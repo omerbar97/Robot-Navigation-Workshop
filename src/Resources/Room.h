@@ -21,6 +21,7 @@ private:
     std::pair<float, float> exitPoint;
     /// The room's ID.
     int roomId;
+    std::string roomName;
 
 public:
     /**
@@ -56,6 +57,9 @@ public:
      * @return The room's ID.
      */
     int getRoomId() const;
+
+
+    std::string getRoomName() const;
 };
 
 

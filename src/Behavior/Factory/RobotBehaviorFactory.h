@@ -19,6 +19,8 @@
 class RobotBehaviorFactory {
 private:
 
+    RobotBehavior *currentBehavior;
+
     /**
      * The robot object that will be used by the behaviors.
      */
@@ -36,7 +38,18 @@ private:
     RobotBehavior* exitRoomBehavior;
     RobotBehavior* enterRoomBehavior;
 
+    std::pair<double, double> startPoint;
+    std::pair<double, double> goalPoint;
+
+    /**
+     * This method will classify the start point and the goal point and will return the appropriate behavior.
+     * @return RobotBehavior* - the behavior that was classified.
+     */
+    RobotBehavior* classifyAndReturnBehavior();
+
 public:
+// TODO: This class takes a robot pointer, a start point, and a goal point. By classifying these two points, we will decide which kind of behavior to return. If there is doubt about which behavior to return, we prioritize the harder one. Additionally, based on the type of path (e.g., hallway, exit, etc.), we will return the appropriate behavior.
+
 
     /**
      * The constructor of the factory.
@@ -49,6 +62,20 @@ public:
      * at the end just looping through the vector and delete all the behaviors.
      */
     ~RobotBehaviorFactory();
+
+    /**
+     * This method will set the start point for the behaviors.
+     * @param startPoint - the start point that the behaviors will use.
+     */
+    void setStartPoint(std::pair<double, double> startPoint);
+
+    /**
+     * This method will set the goal point for the behaviors.
+     * @param goalPoint - the goal point that the behaviors will use.
+     */
+    void setGoalPoint(std::pair<double, double> goalPoint);
+
+    RobotBehavior* createBehavior();
 
     /**
      * This method will create the hall navigate behavior.

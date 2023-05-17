@@ -11,12 +11,15 @@
 #include <opencv2/imgproc.hpp>
 #include <fstream>
 #include "../PathPlanning/GridMap.h"
+#include "../PathPlanning/Algorithm/AStarAlgorithm.h"
+#include "GlobalsDefines.h"
 
 class MapGenerator {
 private:
     std::string room_map;
     cv::Mat binaryMatrix;
     cv::Mat image;
+    cv::Mat classifiedMatrix;  // Assuming int data type for bit and classification
 
     // Converts the loaded image to a binary matrix
     // Functionality:
@@ -26,6 +29,9 @@ private:
     // - Sets the binary matrix using setBinaryMatrix() function
     void pngToMatrix();
     int sailSIze;
+
+    int classifyCell(int row, int col);
+
 
 
 
@@ -90,6 +96,8 @@ public:
 
     // Setter for image
     int setImage();
+
+
 
 };
 

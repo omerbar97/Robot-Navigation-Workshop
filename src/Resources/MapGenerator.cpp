@@ -13,6 +13,36 @@ MapGenerator::MapGenerator(std::string pngImage , int sailSize) {
     this->sailSIze = sailSize;
     setImage();
     pngToMatrix();
+    this->classifiedMatrix = cv::Mat(this->binaryMatrix.size(), CV_32SC2);
+    for (int row = 0; row < this->binaryMatrix.rows; ++row) {
+        for (int col = 0; col < this->binaryMatrix.cols; ++col) {
+            this->classifiedMatrix.at<cv::Vec2i>(row, col)[0] = this->binaryMatrix.at<uchar>(row, col);
+            this->classifiedMatrix.at<cv::Vec2i>(row, col)[1] = classifyCell(row, col);
+        }
+    }
+}
+int MapGenerator::classifyCell(int row, int col) {
+
+
+// TODO: Define the function to classify the scopes in the map Classify the cell based on the binary matrix
+    // Functionality:
+    // - Check if the cell is a wall
+    // - Check if the cell is a door
+    // - Check if the cell is an exit
+    // - Check if the cell is an entry
+    // - Check if the cell is a hallway
+    // - Return the classification
+    if (this->binaryMatrix.at<uchar>(row, col) == WALL) {
+        return WALL;
+    } else if (this->binaryMatrix.at<uchar>(row, col) == DOOR) {
+        return DOOR;
+    } else if (this->binaryMatrix.at<uchar>(row, col) == EXIT_POINT) {
+        return EXIT_POINT;
+    } else if (this->binaryMatrix.at<uchar>(row, col) == ENTRY_POINT) {
+        return ENTRY_POINT;
+    } else {
+        return HALLWAY;
+    }
 }
 
 void MapGenerator::pngToMatrix() {

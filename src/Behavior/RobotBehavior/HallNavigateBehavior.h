@@ -13,7 +13,9 @@ public:
      * constructor
      * @param robot
      */
-    HallNavigateBehavior(RobotWrapper* robot);
+    HallNavigateBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
+
+    ~HallNavigateBehavior();
 
     /**
      * navigation logic to navigate the robot inside the hall

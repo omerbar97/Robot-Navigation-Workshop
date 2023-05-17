@@ -51,3 +51,11 @@ void RobotWrapper::initRobot(std::string robotIp, int robotPort) {
     this->laserProxy = new PlayerCc::LaserProxy(&this->robot, 0);
     std::cout << "connection to robot laser proxy" << std::endl;
 }
+
+int RobotWrapper::getGroundSpeed() {
+    return this->robotGroundSpeed;
+}
+
+int RobotWrapper::getTurnSpeed() {
+    return this->robotTurnSpeed;
+}

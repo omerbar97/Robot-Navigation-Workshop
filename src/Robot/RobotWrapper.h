@@ -33,6 +33,9 @@ public:
     void setRobotSpeed(int speed);
     void setRobotTurnSpeed(int speed);
 
+    int getGroundSpeed();
+    int getTurnSpeed();
+
     // getRobot Extensions
     PlayerCc::Position2dProxy* getPos();
     PlayerCc::LaserProxy* getLaser();

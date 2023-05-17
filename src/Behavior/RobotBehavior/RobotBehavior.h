@@ -19,7 +19,7 @@ protected:
 
 
 public:
-    RobotBehavior(RobotWrapper* robot);
+    RobotBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
     virtual ~RobotBehavior();
 
     // the virtual method is still virtual

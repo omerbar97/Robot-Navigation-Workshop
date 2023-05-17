@@ -7,6 +7,7 @@
 #include <ompl/base/SpaceInformation.h>
 #include <ompl/base/Planner.h>
 #include <ompl/geometric/SimpleSetup.h>
+#include "../GridMapValidityChecker.h"
 #include "../GridMap.h"
 
 /**
@@ -23,11 +24,6 @@ protected:
      * the OMPL library that does all the calculation for us.
      */
     GridMap* gridMap;
-
-    /**
-     * @brief planner is a pointer to the planner that the algorithm will use to calculate the path.
-     */
-    std::shared_ptr<ompl::base::Planner> planner;
 
     /**
      * @brief start is the start point of the path.
@@ -50,15 +46,19 @@ protected:
      * to a matrix path, and save it in the pathInMatrix vector.
      * @param solutionPath
      */
-    void transferPathToVector(ompl::geometric::PathGeometric* solutionPath);
+    void transferPathToVector(ompl::geometric::PathGeometricPtr solutionPath);
 
 public:
+
+    Algorithm();
 
     /**
      * @brief Algorithm constructor. it gets a grid map
      * @param gridMap
      */
     Algorithm(GridMap* gridMap);
+
+    Algorithm(GridMap* gridMap, std::pair<int ,int> start, std::pair<int ,int> goal);
 
     /**
      * @brief Algorithm destructor. it deletes the pathInMatrix vector. (after use) and all the allocation
@@ -69,7 +69,7 @@ public:
     GridMap* getGridMap() const;
     std::pair<int ,int> getStart() const;
     std::pair<int ,int> getGoal() const;
-    std::vector<std::pair<int ,int>> getPath() const;
+    std::vector<std::pair<int ,int>>* getPath() const;
 
     // setters
     void setStart(std::pair<int ,int> start);

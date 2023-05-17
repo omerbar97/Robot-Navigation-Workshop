@@ -10,6 +10,7 @@
 #include <iostream>
 #include <opencv2/imgproc.hpp>
 #include <fstream>
+#include "../PathPlanning/GridMap.h"
 
 class MapGenerator {
 private:
@@ -57,7 +58,7 @@ public:
     // Output: None
     void binaryStrToBmp(std::string binaryString, std::string path);
 
-    // Constructor for MapGenerator class
+    /** Constructor for MapGenerator class
     // Parameters:
     // - pngImage: Path to the PNG image file used for generating the map
     // - defaultArg: Optional argument with default value of 1
@@ -65,7 +66,7 @@ public:
     // - Sets the room map by calling setRoomMap() with pngImage parameter
     // - Sets the sail size to 1
     // - Calls setImage() to load and resize the image
-    // - Calls pngToMatrix() to convert the image to a binary matrix
+    // - Calls pngToMatrix() to convert the image to a binary matrix */
     MapGenerator(std::string pngImage , int sailSIze = 1);
 
     // Getter for room_map
@@ -75,10 +76,10 @@ public:
     void setRoomMap(const std::string& map);
 
     // Getter for binaryMatrix
-    cv::Mat& getBinaryMatrix();
+    cv::Mat getBinaryMatrix();
 
     // Setter for binaryMatrix
-    void setBinaryMatrix(const cv::Mat& matrix);
+    void setBinaryMatrix(cv::Mat matrix);
     // Getter for sailSIze
     int getSailSize() const;
 

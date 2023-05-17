@@ -6,7 +6,7 @@
 #define ROBOT_NAVIGATION_WORKSHOP_ROUTE_H
 #include <vector>
 #include "../Resources/MapGenerator.h"
-#include "Algorithm/Algorithm.h"
+#include "Algorithm/RRTStarAlgorithm.h"
 #include "GridMap.h"
 
 /**
@@ -21,10 +21,14 @@ private:
      * the route class has the gridMap inside it, the gridMap is created in this class.
      */
     GridMap* gridMap;
+    cv::Mat* cvMap;
     MapGenerator* mapGenerator;
     Algorithm* algorithm;
+    std::vector<std::pair<double, double>> latestPath;
     int matrixWidth;
     int matrixHeight;
+    int numOfBlocksWidth;
+    int numOfBlocksHeight;
 
     /**
      * this method insert the gridMap pointer to the algorithm, and delete the old gridMap.
@@ -44,6 +48,10 @@ private:
      * @return - the point in the stage coordinates.
      */
     std::pair<double, double> matrixToStage(std::pair<int, int> point) const;
+
+    // get the path, doing the conversion from the gridMap to the real world coordinates, the answer of the algorithm
+    // is in the algorithm attributes called pathInMatrix, converting it to the real world coordinates and saving it
+    std::vector<std::pair<double ,double>> getStagePath() const;
 
 public:
 
@@ -72,16 +80,18 @@ public:
     void setMapGenerator(MapGenerator* mapGenerator);
     void setAlgorithm(Algorithm* algorithm);
 
+    //getters
+    std::vector<std::pair<double ,double>> getLatestPath() const;
+
+    // for test:
+    std::vector<std::pair<int ,int>> matrixPoint();
+
     // algorithm setter, setting the point as it is in the stageMap, then transforming it to the matrix coordinates
     void setStartingPoint(std::pair<double ,double> start);
     void setGoalPoint(std::pair<double ,double> goal);
 
     // do the calculation
     void createPath();
-
-    // get the path, doing the conversion from the gridMap to the real world coordinates, the answer of the algorithm
-    // is in the algorithm attributes called pathInMatrix, converting it to the real world coordinates and saving it
-    std::vector<std::pair<double ,double>> getStagePath() const;
 
 
 

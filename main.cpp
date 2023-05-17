@@ -6,101 +6,67 @@
 #include <opencv2/opencv.hpp>
 #include "src/Resources/MapGenerator.h"
 #include "src/Navigate/Navigation.h"
+#include "src/PathPlanning/Route.h"
+#include "src/PathPlanning/Algorithm/RRTStarAlgorithm.h"
 
-
-void stageToPixel(double x, double y, int &pixel_x, int &pixel_y, double scale) {
-    // The dimensions of the stage map
-    const int blockWidthHeight = 1086 / 40;
-    const int blockWidthHeightPixel = 443 / 18;
-
-    // Convert the x-coordinate to pixel coordinate
-    pixel_x = static_cast<int>((x + 40 / 2) * blockWidthHeight);
-
-    // Convert the y-coordinate to pixel coordinate
-    pixel_y = static_cast<int>((18 / 2 - y) * blockWidthHeightPixel);
-}
-
-void pixelToStage(int pixel_x, int pixel_y, double &x, double &y, double scale) {
-    // The dimensions of the stage map
-    const int blockWidthHeight = 1086 / 40;
-    const int blockWidthHeightPixel = 443 / 18;
-
-    // Convert the pixel x-coordinate to stage coordinate
-    x = (static_cast<double>(40 / 2) * blockWidthHeight - static_cast<double>(pixel_x)) / (-blockWidthHeight);
-    // Convert the pixel y-coordinate to stage coordinate
-    y = (static_cast<double>(18 / 2)* blockWidthHeightPixel - static_cast<double>(pixel_y)) / blockWidthHeightPixel;
-}
-
-void drawBlock(cv::Mat &image, int x, int y, int width, int height) {
-    // Draw the block
-    for(int i = 0; i < width; i++) {
-        for (int j = 0; j < height; j++) {
-            image.at<uchar>(y + j, x + i) = 100;
+void drawBlock(cv::Mat& map, int x, int y, int blockSize) {
+    for (int i = x; i < x + blockSize; i++) {
+        for (int j = y; j < y + blockSize; j++) {
+            map.at<uchar>(j, i) = 255; // Set to a higher value (255) for better visibility
         }
     }
 }
 
-void drawNewColor(cv::Mat &pngImage, cv::Mat &binaryMatrix) {
-    // Draw the block
-    for(int i = 0; i < pngImage.rows; i++) {
-        for (int j = 0; j < pngImage.cols; j++) {
-            // getting the color from pngImage
-            cv::Vec3b color = pngImage.at<cv::Vec3b>(i, j);  // get color vector
-//            std::cout << "color: " << color << std::endl;
-            if(color[0] == 255 && color[1] == 255 && color[2] == 255) {
-                // the matrix is white
-                // checking if the binary matrix value is not 0
-                if(binaryMatrix.at<uchar>(i, j) != 0) {
-                    // the binary matrix value is not 0
-                    // setting the color to red
-                    drawBlock(pngImage, j, i, 1, 1);
-                }
-            }
+void printToFile(std::string filename, cv::Mat& map) {
+    std::ofstream file;
+    file.open(filename);
+    for (int i = 0; i < map.rows; i++) {
+        for (int j = 0; j < map.cols; j++) {
+            file << (int)map.at<uchar>(i, j) << " ";
         }
+        file << std::endl;
     }
+    file.close();
 }
+
+
 
 int main(int argc, char **argv) {
 
-    // creating RobotWrapper
-//    RobotWrapper robotWrapper = new RobotWrapper(double GorundSpeed, double rotataionSpeed);
-//
-//    // navigation
-//    Navigation navigation = new Navigation(Navigatable* robotWrapper,char* pathToMap, char* pathToDataRoom)
-//
-//    Mission* mission = navigation
-//    /**
-//     * navigation creates the Route, vector, Room
-//     */
-//
-//    std::cin >> x // string of rooms. 1, 5, 10
-//    // 1
-//    // 5
-//    // 10
-//
-//
-//
-//
-//    Assignment assignment[]; // 1, 5, 10
-//    while(assignment != NULL) {
-//        // do the assignment
-//        // set the mission
-//        // do the mission
-//        // set the next mission
+    // creating mapGenerator
+    MapGenerator* map = new MapGenerator("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
+    auto mapMatrix = map->getBinaryMatrix();
+    // creating Route
+    Route* route = new Route(new RRTStarAlgorithm(), map);
+
+    // room 1 -18.2 3.5
+    // room 10 13.5 3.5
+    route->setStartingPoint(std::make_pair(-13, 19));
+    route->setGoalPoint(std::make_pair(14, 13));
+
+    // creating Navigation
+    route->createPath();
+
+    // getting route
+    auto matrixPath = route->matrixPoint();
+
+    // drawing the path in the matrix
+    for (auto point : matrixPath) {
+        // drawing to the mapMatrix the values
+        drawBlock(mapMatrix, point.first, point.second, 3);
+        std::cout << "drawing the path: " <<point.first << " , " << point.second << std::endl;
+    }
+
+
+//    for (auto point : route->getLatestPath()) {
+//        // drawing to the mapMatrix the values
+//        std::cout << point.first << " " << point.second << std::endl;
 //    }
-//        // do the assignment
-//        // set the mission
-//        // do the mission
-//        // set the next mission
-//    }
-//
-//    // break x to integers
-//
-//    for() {
-//        mission.setMission(x)
-//        // setMission(1) -> setMission(5) -> setMission(10)
-//        //
-//        mission.doMission();
-//    }
+
+    // printing to file
+//    printToFile("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/matrix.txt", mapMatrix);
+
+    cv::imshow("map", map->getBinaryMatrix());
+    cv::waitKey(0);
 
 }

@@ -5,6 +5,8 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_RRTSTARALGORITHM_H
 #define ROBOT_NAVIGATION_WORKSHOP_RRTSTARALGORITHM_H
 #include "Algorithm.h"
+#include <ompl/geometric/planners/rrt/RRTstar.h>
+
 
 class RRTStarAlgorithm : public Algorithm{
 public:
@@ -14,6 +16,8 @@ public:
      * @param gridMap - the grid map to navigate on. (the map is not owned by the class) it will be deleted by the user.
      */
     RRTStarAlgorithm(GridMap* gridMap);
+
+    RRTStarAlgorithm();
 
     /**
      * destructor for the RRTStarAlgorithm class.

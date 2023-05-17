@@ -89,12 +89,12 @@ void MapGenerator::setRoomMap(const std::string &map) {
     this->room_map = map;
 }
 
-void MapGenerator::setBinaryMatrix(const cv::Mat &matrix) {
+void MapGenerator::setBinaryMatrix(cv::Mat matrix) {
     this->binaryMatrix = matrix;
 
 }
 
-cv::Mat& MapGenerator::getBinaryMatrix() {
+cv::Mat MapGenerator::getBinaryMatrix() {
     return this->binaryMatrix;
 }
 

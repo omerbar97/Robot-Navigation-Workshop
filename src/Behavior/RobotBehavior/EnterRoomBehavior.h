@@ -13,7 +13,7 @@ public:
      * constructor
      * @param robot
      */
-    EnterRoomBehavior(RobotWrapper* robot);
+    EnterRoomBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
 
     /**
      * navigation logic to navigate the robot when entering the room

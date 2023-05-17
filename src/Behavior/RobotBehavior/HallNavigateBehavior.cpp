@@ -26,7 +26,6 @@ int HallNavigateBehavior::execute() {
     // sense -> think -> act
 
     double distance = sqrt(pow(this->goalPoint.first - pos->GetXPos(), 2) + pow(this->goalPoint.second - pos->GetYPos(), 2));
-
     while(distance < 0.2) {
         // sense
         client.Read();
@@ -39,7 +38,8 @@ int HallNavigateBehavior::execute() {
         pos->SetSpeed(this->robot->getGroundSpeed(), 0);
         sleep(10);
 
-        
+        client.Read();
+        // calculating the distance
+        distance = sqrt(pow(this->goalPoint.first - pos->GetXPos(), 2) + pow(this->goalPoint.second - pos->GetYPos(), 2));
     }
-
 }

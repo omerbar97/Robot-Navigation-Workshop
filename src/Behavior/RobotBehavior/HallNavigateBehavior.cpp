@@ -50,3 +50,7 @@ int HallNavigateBehavior::execute() {
 HallNavigateBehavior::~HallNavigateBehavior() {
 
 }
+
+void HallNavigateBehavior::avoidObstacles(double forwardSpeed, double turnSpeed) {
+
+}

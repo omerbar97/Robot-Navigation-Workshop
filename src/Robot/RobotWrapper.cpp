@@ -10,8 +10,8 @@
 //    this->robotTurnSpeed = turnSpeed;
 //}
 
-RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy) : robot(robot) , positionProxy(positionProxy) {
-//    this->initRobot(robot.GetHostname(), robot.GetPort());
+RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy) :
+            robot(robot) , positionProxy(positionProxy) {
     this->robotTurnSpeed = 0.03;
     this->robotGroundSpeed = 0.02;
 }

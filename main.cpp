@@ -82,6 +82,7 @@ int main(int argc, char **argv) {
 //    PlayerCc::Position2dProxy position2DProxy(client);
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);
+//    PlayerCc::LaserProxy laser(&client, 0);
     RobotWrapper* robotWrapper = new RobotWrapper(client, position);
 
     // create path

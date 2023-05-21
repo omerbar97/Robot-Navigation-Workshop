@@ -13,6 +13,10 @@ RotationBehavior::~RotationBehavior() {
 
 }
 
+void RotationBehavior::avoidObstacles(double forwardSpeed, double turnSpeed) {
+    // TODO: implement this function
+}
+
 int RotationBehavior::execute() {
     // this function will rotation the robot Yaw to the goal point.
     // getting robot instance
@@ -28,6 +32,7 @@ int RotationBehavior::execute() {
     double robotAngle = pos.GetYaw();
     double angleDiff = std::abs(goalPointAngle - robotAngle);
     double rotationSpeed = this->robot->getTurnSpeed();
+//    rotationSpeed = PlayerCc::dtor(rotationSpeed);
 
     std::cout <<"robot angle " << robotAngle << "\n";
 
@@ -47,12 +52,12 @@ int RotationBehavior::execute() {
         }
         robotAngle = pos.GetYaw();
         angleDiff = std::abs(goalPointAngle - robotAngle);
-        usleep(100);
+        usleep(80);
     }
     pos.SetSpeed(0, 0);
     rotationSpeed = rotationSpeed / 2;
     // more accurate slow speed
-    while(angleDiff > 0.03) {
+    while(angleDiff > 0.05) {
         if (robotAngle < 0) {
             rotationSpeed = -rotationSpeed;
         }

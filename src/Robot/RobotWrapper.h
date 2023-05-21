@@ -15,7 +15,7 @@ private:
 
     // robot extensions
     PlayerCc::Position2dProxy& positionProxy;
-//    PlayerCc::LaserProxy* laserProxy;
+//    PlayerCc::LaserProxy& laserProxy;
 
     double robotGroundSpeed;
     double robotTurnSpeed;

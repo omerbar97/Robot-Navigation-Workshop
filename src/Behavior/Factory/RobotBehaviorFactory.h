@@ -48,9 +48,10 @@ private:
     RobotBehavior* classifyAndReturnBehavior();
 
 public:
-// TODO: This class takes a robot pointer, a start point, and a goal point. By classifying these two points, we will decide which kind of behavior to return. If there is doubt about which behavior to return, we prioritize the harder one. Additionally, based on the type of path (e.g., hallway, exit, etc.), we will return the appropriate behavior.
-
-
+// TODO: This class takes a robot pointer, a start point, and a goal point.
+//  By classifying these two points, we will decide which kind of behavior to return.
+//  If there is doubt about which behavior to return, we prioritize the harder one.
+//  Additionally, based on the type of path (e.g., hallway, exit, etc.), we will return the appropriate behavior.
     /**
      * The constructor of the factory.
      * @param robot the robot object that will be used by the behaviors.

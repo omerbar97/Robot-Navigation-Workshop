@@ -54,7 +54,7 @@ void RobotPlanner::goToPoint(std::pair<double, double> point) {
         //set start point of the factory
         //TODO:: update the position after merge with omer branch.
         robotPosition=  std::make_pair(this->robotWrapper->getPos()->GetXPos(), this->robotWrapper->getPos()->GetYPos());
-        this->robotBehaviorFactory->setGoalPoint(robotPosition);
+        this->robotBehaviorFactory->setStartPoint(robotPosition);
         //set the end point of the factory
         this->robotBehaviorFactory->setGoalPoint(point);
         //execute the behavior

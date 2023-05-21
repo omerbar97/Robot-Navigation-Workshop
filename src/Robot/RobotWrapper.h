@@ -11,14 +11,14 @@ class RobotWrapper {
 private:
 
     // robot instance
-    PlayerCc::PlayerClient robot;
+    PlayerCc::PlayerClient& robot;
 
     // robot extensions
-    PlayerCc::Position2dProxy* positionProxy;
-    PlayerCc::LaserProxy* laserProxy;
+    PlayerCc::Position2dProxy& positionProxy;
+//    PlayerCc::LaserProxy& laserProxy;
 
-    int robotGroundSpeed;
-    int robotTurnSpeed;
+    double robotGroundSpeed;
+    double robotTurnSpeed;
 
     std::pair<double, double> robotCurrentPath;
 
@@ -26,21 +26,25 @@ private:
 
 public:
 
-    RobotWrapper(std::string robotIp = "localhost", int robotPort = 6665, int groundSpeed = 0.5, int turnSpeed = 0.1);
+//    RobotWrapper(std::string robotIp = "localhost", int robotPort = 6665, int groundSpeed = 0.5, int turnSpeed = 0.1);
+    RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy);
     ~RobotWrapper();
 
     void setRobotPath(std::pair<double, double> path);
-    void setRobotSpeed(int speed);
-    void setRobotTurnSpeed(int speed);
+    void setRobotSpeed(double speed);
+    void setRobotTurnSpeed(double speed);
 
 
-    int getGroundSpeed();
-    int getTurnSpeed();
+    double getGroundSpeed();
+    double getTurnSpeed();
+    std::pair<double, double> getCurrentPosition();
 
     // getRobot Extensions
-    PlayerCc::Position2dProxy* getPos();
+    PlayerCc::Position2dProxy& getPos();
     PlayerCc::LaserProxy* getLaser();
     PlayerCc::PlayerClient& getClient();
+
+    void update();
 
 };
 

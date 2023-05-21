@@ -41,7 +41,14 @@ add_executable(Robot-Navigation
         src/Resources/RoomsHandler.h
         src/Resources/RoomsHandler.cpp
         src/Robot/RobotWrapper.h
-        src/Robot/RobotWrapper.cpp)
+        src/Robot/RobotWrapper.cpp
+        src/Behavior/RobotBehavior/RobotBehavior.h
+        src/Behavior/RobotBehavior/RobotBehavior.cpp
+        src/Behavior/RobotBehavior/HallNavigateBehavior.cpp
+        src/Behavior/RobotBehavior/HallNavigateBehavior.h
+        src/Behavior/RobotBehavior/RotationBehavior.h
+        src/Behavior/RobotBehavior/RotationBehavior.cpp
+        src/Behavior/Behavior.h)
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)

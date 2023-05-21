@@ -17,7 +17,7 @@ public:
     /**
      * constructor for the behavior.
      */
-    Behavior();
+    Behavior() = default;
 
     /**
      * virtual destructor for the behavior. (for the inheritance)

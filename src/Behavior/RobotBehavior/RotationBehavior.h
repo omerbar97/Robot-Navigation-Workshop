@@ -7,6 +7,9 @@
 #include "RobotBehavior.h"
 
 class RotationBehavior : public RobotBehavior{
+protected:
+    void avoidObstacles(double forwardSpeed, double turnSpeed) override;
+
 public:
 
     /**

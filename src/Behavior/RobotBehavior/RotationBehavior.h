@@ -4,11 +4,13 @@
 
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROTATIONBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROTATIONBEHAVIOR_H
+
 #include "RobotBehavior.h"
 
-class RotationBehavior : public RobotBehavior{
+class RotationBehavior : public RobotBehavior {
 protected:
-    void avoidObstacles() override;
+
+    void avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
 
 public:
 
@@ -16,7 +18,7 @@ public:
      * constructor
      * @param robot
      */
-    RotationBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
+    RotationBehavior(RobotWrapper *robot, std::pair<double, double> goalPoint);
 
     ~RotationBehavior();
 

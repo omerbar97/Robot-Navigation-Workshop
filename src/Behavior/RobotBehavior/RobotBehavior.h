@@ -16,7 +16,7 @@ class RobotBehavior : public Behavior {
 protected:
     RobotWrapper* robot;
     std::pair<double, double> goalPoint;
-    virtual void avoidObstacles() = 0;
+    virtual void avoidObstacles(double &forwardSpeed, double &turnSpeed) = 0;
 
 public:
 

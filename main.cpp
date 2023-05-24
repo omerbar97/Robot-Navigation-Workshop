@@ -68,13 +68,15 @@ int main(int argc, char **argv) {
 
     route->createPath();
     std::vector<std::pair<double, double> > path = route->getLatestPath();
-    for(int i = 1; i < path.size(); i++) {
-        std::cout << path[i].first << " , " << path[i].second << std::endl;
-    }
+//    for(int i = 1; i < path.size(); i++) {
+//        std::cout << path[i].first << " , " << path[i].second << std::endl;
+//    }
     for(int i = 1; i < path.size(); i++) {
         //     rotation to the point
+        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
         RotationBehavior rotationBehavior(robotWrapper, path[i]);
         rotationBehavior.execute();
+        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
         HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
         hallNavigateBehavior.execute();
 

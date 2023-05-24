@@ -13,8 +13,8 @@ RotationBehavior::~RotationBehavior() {
 
 }
 
-void RotationBehavior::avoidObstacles() {
-    // TODO: implement this function
+void RotationBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
+
 }
 
 int RotationBehavior::execute() {

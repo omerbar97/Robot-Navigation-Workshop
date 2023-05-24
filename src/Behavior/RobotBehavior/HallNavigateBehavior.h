@@ -9,7 +9,7 @@
 class HallNavigateBehavior : public RobotBehavior {
 protected:
 
-    void avoidObstacles() override;
+    void avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
 
 public:
 

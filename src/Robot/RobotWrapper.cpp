@@ -10,8 +10,8 @@
 //    this->robotTurnSpeed = turnSpeed;
 //}
 
-RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy) :
-            robot(robot) , positionProxy(positionProxy) {
+RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy) :
+            robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
     this->robotTurnSpeed = 0.03;
     this->robotGroundSpeed = 0.02;
 }
@@ -45,9 +45,9 @@ PlayerCc::Position2dProxy& RobotWrapper::getPos() {
     return this->positionProxy;
 }
 
-//PlayerCc::LaserProxy* RobotWrapper::getLaser() {
-//    return this->laserProxy;
-//}
+PlayerCc::RangerProxy& RobotWrapper::getLaser() {
+    return this->laserProxy;
+}
 
 PlayerCc::PlayerClient& RobotWrapper::getClient() {
     return this->robot;
@@ -75,5 +75,12 @@ std::pair<double, double> RobotWrapper::getCurrentPosition() {
 }
 
 void RobotWrapper::update() {
-    this->robot.Read();
+    try {
+        while(this->robot.Peek()) {
+            usleep(50);
+            this->robot.Read();
+        }
+    } catch (PlayerCc::PlayerError & e) {
+//        std::cerr << e << std::endl;
+    }
 }

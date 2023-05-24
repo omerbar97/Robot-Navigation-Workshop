@@ -13,7 +13,7 @@ RotationBehavior::~RotationBehavior() {
 
 }
 
-void RotationBehavior::avoidObstacles(double forwardSpeed, double turnSpeed) {
+void RotationBehavior::avoidObstacles() {
     // TODO: implement this function
 }
 
@@ -25,18 +25,19 @@ int RotationBehavior::execute() {
     PlayerCc::Position2dProxy &pos = this->robot->getPos();
 
     // getting robot current information
-    client.Read();
+    this->robot->update();
 
     // turning the robot to the goal point
     double desiredRelativeAngle = atan2(this->goalPoint.second - pos.GetYPos(), this->goalPoint.first - pos.GetXPos());
     double currentOrientation;
     double rotationSpeed = this->robot->getTurnSpeed();
+    double angleDiff;
 
     while (true) {
         // getting robot current information
-        client.Read();
+        this->robot->update();
         currentOrientation = pos.GetYaw();
-        double angleDiff = desiredRelativeAngle - currentOrientation;
+        angleDiff = desiredRelativeAngle - currentOrientation;
 
         // Handle angle wrapping
         if (angleDiff > M_PI) {
@@ -51,7 +52,7 @@ int RotationBehavior::execute() {
         // Determine rotation direction based on the sign of angleDiff
         if (angleDiff > 0) {
             pos.SetSpeed(0, rotationSpeed);  // Rotate right
-        } else {
+        } else if(angleDiff <= 0){
             pos.SetSpeed(0, -rotationSpeed);  // Rotate left
         }
 

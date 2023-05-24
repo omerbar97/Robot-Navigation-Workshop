@@ -12,10 +12,9 @@ private:
 
     // robot instance
     PlayerCc::PlayerClient& robot;
-
     // robot extensions
     PlayerCc::Position2dProxy& positionProxy;
-//    PlayerCc::LaserProxy& laserProxy;
+    PlayerCc::RangerProxy& laserProxy;
 
     double robotGroundSpeed;
     double robotTurnSpeed;
@@ -27,7 +26,7 @@ private:
 public:
 
 //    RobotWrapper(std::string robotIp = "localhost", int robotPort = 6665, int groundSpeed = 0.5, int turnSpeed = 0.1);
-    RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy);
+    RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy);
     ~RobotWrapper();
 
     void setRobotPath(std::pair<double, double> path);
@@ -41,7 +40,7 @@ public:
 
     // getRobot Extensions
     PlayerCc::Position2dProxy& getPos();
-    PlayerCc::LaserProxy* getLaser();
+    PlayerCc::RangerProxy& getLaser();
     PlayerCc::PlayerClient& getClient();
 
     void update();

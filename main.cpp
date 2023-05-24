@@ -37,61 +37,31 @@ void printToFile(std::string filename, cv::Mat &map) {
 using namespace PlayerCc;
 int main(int argc, char **argv) {
 
-//    // creating mapGenerator
+
     MapGenerator *map = new MapGenerator(
             "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
-//    auto mapMatrix = map->getBinaryMatrix();
-//    // creating Route
-//    Route* route = new Route(new RRTStarAlgorithm(), map);
-//
-//    // room 1 -18.2 3.5
-//    // room 10 13.5 3.5
-//    route->setStartingPoint(std::make_pair(-13, 19));
-//    route->setGoalPoint(std::make_pair(14, 13));
-//
-//    // creating Navigation
-//    route->createPath();
-//
-//    // getting route
-//    auto matrixPath = route->matrixPoint();
-//
-//    // drawing the path in the matrix
-//    for (auto point : matrixPath) {
-//        // drawing to the mapMatrix the values
-//        drawBlock(mapMatrix, point.first, point.second, 3);
-//        std::cout << "drawing the path: " <<point.first << " , " << point.second << std::endl;
-//    }
-//
-//
-////    for (auto point : route->getLatestPath()) {
-////        // drawing to the mapMatrix the values
-////        std::cout << point.first << " " << point.second << std::endl;
-////    }
-//
-//    // printing to file
-////    printToFile("/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/matrix.txt", mapMatrix);
-//
-//    cv::imshow("map", map->getBinaryMatrix());
-//    cv::waitKey(0);
-
 
     RoomsHandler roomHandler(
             "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/configures/room_coordinates.txt", {2});
-//    PlayerCc::PlayerClient* client = new PlayerCc::PlayerClient("localhost");
-//    RobotWrapper* robotwrapper = new RobotWrapper(client);
-//    PlayerCc::Position2dProxy position2DProxy(client);
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);
+    PlayerCc::RangerProxy laser(&client, 1);
+//    client.Read();
+
+    std::list<playerc_device_info_t> t = client.GetDeviceList();
+
+
+    for(auto i : t) {
+        std::cout << "drivername: " << i.drivername << std::endl;
+        std::cout << "index " << i.addr.index << std::endl;
+    }
     std::cout << position.GetYaw() << std::endl;
 
-//    PlayerCc::LaserProxy laser(&client, 0);
-    RobotWrapper* robotWrapper = new RobotWrapper(client, position);
+    RobotWrapper* robotWrapper = new RobotWrapper(client, position, laser);
 
     // create path
     Route *route = new Route(new RRTStarAlgorithm(), map);
 
-    // setting the starting point
-    client.Read();
     std::pair<double, double> start = robotWrapper->getCurrentPosition();
     route->setStartingPoint(start);
     route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
@@ -109,13 +79,4 @@ int main(int argc, char **argv) {
         hallNavigateBehavior.execute();
 
     }
-
-//    double x,y;
-//    while(true) {
-//        std::cout << "enter two point to rotate to";
-//        std::cin >> x >> y;
-//        RotationBehavior rotationBehavior(robotWrapper, std::make_pair(x, y));
-//        rotationBehavior.execute();
-//    }
-
 }

@@ -17,7 +17,7 @@ int HallNavigateBehavior::execute() {
     // getting robot position
     PlayerCc::Position2dProxy& pos = this->robot->getPos();
     // getting robot laser
-//    PlayerCc::LaserProxy *laser = this->robot->getLaser();
+//    PlayerCc::LaserProxy& laser = this->robot->getLaser();
 
     // getting robot current information
 
@@ -57,6 +57,8 @@ HallNavigateBehavior::~HallNavigateBehavior() {
 
 }
 
-void HallNavigateBehavior::avoidObstacles(double forwardSpeed, double turnSpeed) {
-
+void HallNavigateBehavior::avoidObstacles() {
+    // checking if the robot is close to the wall
+    // if the robot is close to the wall then it will turn right or left depending on the distance from the wall
+    PlayerCc::RangerProxy& laser = this->robot->getLaser();
 }

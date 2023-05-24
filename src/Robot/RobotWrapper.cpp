@@ -70,7 +70,7 @@ double RobotWrapper::getTurnSpeed() {
 }
 
 std::pair<double, double> RobotWrapper::getCurrentPosition() {
-    this->robot.Read();
+    this->update();
     return std::make_pair(this->positionProxy.GetXPos(), this->positionProxy.GetYPos());
 }
 

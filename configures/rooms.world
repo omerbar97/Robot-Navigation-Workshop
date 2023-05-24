@@ -50,12 +50,10 @@ pioneer2dx
   
   size [0.4 0.4 0.4]
 
-  # pioneer2dx's sonars	will be ranger:0 and the laser will be ranger:1
+ # pioneer2dx's sonars will be ranger:0
+  # the laser will be ranger:1
   sicklaser( pose [ 0 0 0 0 ] ) 
  
-  # demonstrate a plugin controller, implemented in examples/ctrl/wander.cc
-  # you probably should comment this out when using simple.cfg with Player
-  # ctrl "wander"
 
   # report error-free position in world coordinates
   localization "gps"

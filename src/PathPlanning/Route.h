@@ -27,8 +27,8 @@ private:
     std::vector<std::pair<double, double>> latestPath;
     int matrixWidth;
     int matrixHeight;
-    int numOfBlocksWidth;
-    int numOfBlocksHeight;
+    double numOfBlocksWidth;
+    double numOfBlocksHeight;
 
     /**
      * this method insert the gridMap pointer to the algorithm, and delete the old gridMap.

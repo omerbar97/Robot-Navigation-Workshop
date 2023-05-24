@@ -20,59 +20,84 @@ void RotationBehavior::avoidObstacles(double forwardSpeed, double turnSpeed) {
 int RotationBehavior::execute() {
     // this function will rotation the robot Yaw to the goal point.
     // getting robot instance
-    PlayerCc::PlayerClient& client = this->robot->getClient();
+    PlayerCc::PlayerClient &client = this->robot->getClient();
     // getting robot position
-    PlayerCc::Position2dProxy& pos = this->robot->getPos();
+    PlayerCc::Position2dProxy &pos = this->robot->getPos();
 
     // getting robot current information
     client.Read();
 
     // turning the robot to the goal point
     double goalPointAngle = atan2(this->goalPoint.second - pos.GetYPos(), this->goalPoint.first - pos.GetXPos());
-    double robotAngle = pos.GetYaw();
-    double angleDiff = std::abs(goalPointAngle - robotAngle);
+    double robotAngleDefault = pos.GetYaw();
+    double robotAngle = robotAngleDefault;
+    double angleDiff = goalPointAngle - robotAngle;
+    double angleDiffAbs = std::abs(angleDiff);
     double rotationSpeed = this->robot->getTurnSpeed();
-//    rotationSpeed = PlayerCc::dtor(rotationSpeed);
 
-    std::cout <<"robot angle " << robotAngle << "\n";
 
-    if (robotAngle < 0) {
-        rotationSpeed = -rotationSpeed;
-    }
-    while(angleDiff > 0.1) {
-        if (robotAngle < 0) {
+    while (angleDiffAbs > 0.2) {
+        // Calculate the updated robot angle
+        robotAngle = pos.GetYaw() + robotAngleDefault;
+        angleDiff = goalPointAngle - robotAngle;
+        angleDiffAbs = std::abs(angleDiff);
+        // Adjust rotation speed based on the robot's current angle
+        if (robotAngle < 0 && rotationSpeed > 0) {
+            rotationSpeed = -rotationSpeed;
+        } else if (robotAngle >= 0 && rotationSpeed < 0) {
             rotationSpeed = -rotationSpeed;
         }
-        // checking which angle is closer left or right
-        pos.SetSpeed(0, rotationSpeed);
-        client.Read();
-        if(angleDiff < 0.1) {
-            pos.SetSpeed(0, 0);
-            break;
+
+        // Check if the angle is close to 180 degrees (within a small range)
+        if (angleDiff > M_PI) {
+            angleDiff -= 2 * M_PI; // Adjust the angle difference
+        } else if (angleDiff < -M_PI) {
+            angleDiff += 2 * M_PI; // Adjust the angle difference
         }
-        robotAngle = pos.GetYaw();
-        angleDiff = std::abs(goalPointAngle - robotAngle);
-        usleep(80);
+
+        // Determine the rotation direction based on the angle difference
+        if (angleDiff > 0) {
+            pos.SetSpeed(0, -rotationSpeed); // Rotate to the right
+        } else {
+            pos.SetSpeed(0, rotationSpeed); // Rotate to the left
+        }
+
+        // Read the updated robot information and wait for a short duration
+        client.Read();
+        usleep(100);
     }
+    
+    // Stop the robot before adjusting the rotation speed
     pos.SetSpeed(0, 0);
-    rotationSpeed = rotationSpeed / 2;
-    // more accurate slow speed
-    while(angleDiff > 0.05) {
-        if (robotAngle < 0) {
-            rotationSpeed = -rotationSpeed;
-        }
-//        std::cout <<"robot angle " << robotAngle << "\n";
-        // checking which angle is closer left or right
-        pos.SetSpeed(0, rotationSpeed);
-        client.Read();
-        if(angleDiff < 0.03) {
-            pos.SetSpeed(0, 0);
-            break;
-        }
-        robotAngle = pos.GetYaw();
-        angleDiff = std::abs(goalPointAngle - robotAngle);
-        usleep(30);
-    }
+
+//    // Update rotation speed for more accurate rotation
+//    rotationSpeed = rotationSpeed / 3;
+//
+//    while (angleDiff > 0.1) {
+//        // Calculate the updated robot angle
+//        robotAngle = pos.GetYaw() + robotAngleDefault;
+//        angleDiff = std::abs(goalPointAngle - robotAngle);
+//
+//        // Adjust rotation speed based on the robot's current angle
+//        if (robotAngle < 0 && rotationSpeed > 0) {
+//            rotationSpeed = -rotationSpeed;
+//        } else if (robotAngle >= 0 && rotationSpeed < 0) {
+//            rotationSpeed = -rotationSpeed;
+//        }
+//
+//        // Check which direction (left or right) the angle is closer to
+//        if (angleDiff > M_PI) {
+//            pos.SetSpeed(0, -rotationSpeed); // Rotate to the right
+//        } else {
+//            pos.SetSpeed(0, rotationSpeed); // Rotate to the left
+//        }
+//
+//        // Read the updated robot information and wait for a short duration
+//        client.Read();
+//        usleep(30);
+//    }
+
+//    pos.SetSpeed(0, 0);
 
     return 0; // success
 }

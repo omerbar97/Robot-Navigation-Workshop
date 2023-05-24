@@ -82,49 +82,40 @@ int main(int argc, char **argv) {
 //    PlayerCc::Position2dProxy position2DProxy(client);
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);
+    std::cout << position.GetYaw() << std::endl;
+
 //    PlayerCc::LaserProxy laser(&client, 0);
     RobotWrapper* robotWrapper = new RobotWrapper(client, position);
 
-    // create path
-    Route *route = new Route(new RRTStarAlgorithm(), map);
-
-    // setting the starting point
-    client.Read();
-    std::pair<double, double> start = robotWrapper->getCurrentPosition();
-    route->setStartingPoint(start);
-    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
+//    // create path
+//    Route *route = new Route(new RRTStarAlgorithm(), map);
 //
-    route->createPath();
-    std::vector<std::pair<double, double> > path = route->getLatestPath();
-    for(int i = 1; i < path.size(); i++) {
-//     rotation to the point
-        std::cout << "rotation to point: " << path[i].first << " , " << path[i].second << std::endl;
-        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-        rotationBehavior.execute();
-        std::cout << "going to point: " << path[i].first << " , " << path[i].second << std::endl;
-        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-        hallNavigateBehavior.execute();
-        std::cout << "reached";
-
-    }
-
-
-
-
-
-    // Attempt to connect to the server
-//    std::cout << "Connecting to Player/Stage server..." << std::endl;
-//    std::cout << "Successfully connected to Player/Stage server." << std::endl;
+//    // setting the starting point
+//    client.Read();
+//    std::pair<double, double> start = robotWrapper->getCurrentPosition();
+//    route->setStartingPoint(start);
+//    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
 //
-//    // Wait for data to be available
-//    while(true) {
-//        robotWrapper.update();
-//        position.SetSpeed(0.2, 0);
-//        // Wait for a few seconds
-//        sleep(2);
-//
-//        // Print the robot's position
-//        std::cout << "Robot position: (" << position.GetXPos() << ", " << position.GetYPos() << ")" << std::endl;
+//    route->createPath();
+//    std::vector<std::pair<double, double> > path = route->getLatestPath();
+//    for(int i = 1; i < path.size(); i++) {
+//        std::cout << path[i].first << " , " << path[i].second << std::endl;
 //    }
+//    for(int i = 1; i < path.size(); i++) {
+//        //     rotation to the point
+//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+//        rotationBehavior.execute();
+//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+//        hallNavigateBehavior.execute();
+//
+//    }
+
+    double x,y;
+    while(true) {
+        std::cout << "enter two point to rotate to";
+        std::cin >> x >> y;
+        RotationBehavior rotationBehavior(robotWrapper, std::make_pair(x, y));
+        rotationBehavior.execute();
+    }
 
 }

@@ -7,8 +7,8 @@ Route::Route(Algorithm *algorithm, MapGenerator *mapGenerator) {
     this->gridMap = new GridMap(cvMap, 1);
     this->matrixWidth = gridMap->getWidth();
     this->matrixHeight = gridMap->getHeight();
-    this->numOfBlocksWidth = 34;
-    this->numOfBlocksHeight = 54;
+    this->numOfBlocksWidth = 16.8*2;
+    this->numOfBlocksHeight = 26.7*2;
     initGridMapToAlgorithm();
 }
 
@@ -19,8 +19,8 @@ Route::Route(MapGenerator *mapGenerator) {
     this->gridMap = new GridMap(cvMap, 1);
     this->matrixWidth = gridMap->getWidth();
     this->matrixHeight = gridMap->getHeight();
-    this->numOfBlocksWidth = 34;
-    this->numOfBlocksHeight = 54;
+    this->numOfBlocksWidth = 16.8*2;
+    this->numOfBlocksHeight = 26.7*2;
 }
 
 void Route::initGridMapToAlgorithm() {

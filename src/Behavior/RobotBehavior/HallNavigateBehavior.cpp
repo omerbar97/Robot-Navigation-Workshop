@@ -25,9 +25,10 @@ int HallNavigateBehavior::execute() {
     // sense -> think -> act
 
     this->robot->update();
+    double minDistance;
     double distance = sqrt(pow(this->goalPoint.first - pos.GetXPos(), 2) + pow(this->goalPoint.second - pos.GetYPos(), 2));
+    minDistance = distance;
     pos.SetSpeed(this->robot->getGroundSpeed(), 0);
-    std::cout << "distance is " << distance << "\n";
     while(distance > 0.1) {
         // sense
         this->robot->update();
@@ -41,7 +42,12 @@ int HallNavigateBehavior::execute() {
         this->robot->update();
         // calculating the distance
         distance = sqrt(pow(this->goalPoint.first - pos.GetXPos(), 2) + pow(this->goalPoint.second - pos.GetYPos(), 2));
-        std::cout << "distance is " << distance << "\n";
+        if(minDistance - distance > 0.05) {
+            break;
+        }
+        if(distance < minDistance) {
+            minDistance = distance;
+        }
     }
 
     pos.SetSpeed(0, 0);

@@ -28,45 +28,30 @@ int RotationBehavior::execute() {
     client.Read();
 
     // turning the robot to the goal point
-    double goalPointAngle = atan2(this->goalPoint.second - pos.GetYPos(), this->goalPoint.first - pos.GetXPos());
-    double robotAngleDefault = pos.GetYaw();
-    double robotAngle = robotAngleDefault;
-    double angleDiff = goalPointAngle - robotAngle;
-    double angleDiffAbs = std::abs(angleDiff);
+    double desiredRelativeAngle = atan2(this->goalPoint.second - pos.GetYPos(), this->goalPoint.first - pos.GetXPos());
+    double currentOrientation = pos.GetYaw();
+    double desiredAbsoluteAngle = desiredRelativeAngle + currentOrientation;
     double rotationSpeed = this->robot->getTurnSpeed();
 
-
-    while (angleDiffAbs > 0.2) {
-        // Calculate the updated robot angle
-        robotAngle = pos.GetYaw() + robotAngleDefault;
-        angleDiff = goalPointAngle - robotAngle;
-        angleDiffAbs = std::abs(angleDiff);
-        // Adjust rotation speed based on the robot's current angle
-        if (robotAngle < 0 && rotationSpeed > 0) {
-            rotationSpeed = -rotationSpeed;
-        } else if (robotAngle >= 0 && rotationSpeed < 0) {
-            rotationSpeed = -rotationSpeed;
-        }
-
-        // Check if the angle is close to 180 degrees (within a small range)
-        if (angleDiff > M_PI) {
-            angleDiff -= 2 * M_PI; // Adjust the angle difference
-        } else if (angleDiff < -M_PI) {
-            angleDiff += 2 * M_PI; // Adjust the angle difference
-        }
-
-        // Determine the rotation direction based on the angle difference
-        if (angleDiff > 0) {
-            pos.SetSpeed(0, -rotationSpeed); // Rotate to the right
-        } else {
-            pos.SetSpeed(0, rotationSpeed); // Rotate to the left
-        }
-
-        // Read the updated robot information and wait for a short duration
+    pos.SetSpeed(0, rotationSpeed);
+    while (true) {
+        // getting robot current information
         client.Read();
+        currentOrientation = pos.GetYaw();
+        double angleDiff = desiredRelativeAngle - currentOrientation;
+
+        // Handle angle wrapping
+        if (angleDiff > M_PI) {
+            angleDiff -= 2 * M_PI;
+        } else if (angleDiff < -M_PI) {
+            angleDiff += 2 * M_PI;
+        }
+        if (fabs(angleDiff) < 0.01) {
+            break;
+        }
         usleep(100);
     }
-    
+
     // Stop the robot before adjusting the rotation speed
     pos.SetSpeed(0, 0);
 

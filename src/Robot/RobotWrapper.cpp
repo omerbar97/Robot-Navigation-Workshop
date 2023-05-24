@@ -26,6 +26,7 @@ RobotWrapper::~RobotWrapper() {
 //        delete this->laserProxy;
 //        this->laserProxy = nullptr;  // Set the pointer to null after deleting.
 //    }
+//    this->getClient().Disconnect();
 }
 
 void RobotWrapper::setRobotPath(std::pair<double, double> path) {

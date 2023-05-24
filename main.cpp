@@ -87,35 +87,35 @@ int main(int argc, char **argv) {
 //    PlayerCc::LaserProxy laser(&client, 0);
     RobotWrapper* robotWrapper = new RobotWrapper(client, position);
 
-//    // create path
-//    Route *route = new Route(new RRTStarAlgorithm(), map);
-//
-//    // setting the starting point
-//    client.Read();
-//    std::pair<double, double> start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
-//
-//    route->createPath();
-//    std::vector<std::pair<double, double> > path = route->getLatestPath();
-//    for(int i = 1; i < path.size(); i++) {
-//        std::cout << path[i].first << " , " << path[i].second << std::endl;
-//    }
-//    for(int i = 1; i < path.size(); i++) {
-//        //     rotation to the point
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
+    // create path
+    Route *route = new Route(new RRTStarAlgorithm(), map);
 
-    double x,y;
-    while(true) {
-        std::cout << "enter two point to rotate to";
-        std::cin >> x >> y;
-        RotationBehavior rotationBehavior(robotWrapper, std::make_pair(x, y));
-        rotationBehavior.execute();
+    // setting the starting point
+    client.Read();
+    std::pair<double, double> start = robotWrapper->getCurrentPosition();
+    route->setStartingPoint(start);
+    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
+
+    route->createPath();
+    std::vector<std::pair<double, double> > path = route->getLatestPath();
+    for(int i = 1; i < path.size(); i++) {
+        std::cout << path[i].first << " , " << path[i].second << std::endl;
     }
+    for(int i = 1; i < path.size(); i++) {
+        //     rotation to the point
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
+
+    }
+
+//    double x,y;
+//    while(true) {
+//        std::cout << "enter two point to rotate to";
+//        std::cin >> x >> y;
+//        RotationBehavior rotationBehavior(robotWrapper, std::make_pair(x, y));
+//        rotationBehavior.execute();
+//    }
 
 }

@@ -21,20 +21,20 @@ int HallNavigateBehavior::execute() {
     minDistance = distance;
     double groundSpeed = this->robot->getGroundSpeed();
     double turnSpeed = 0;
+        pos.SetSpeed(groundSpeed, turnSpeed);
 //    pos.SetSpeed(this->robot->getGroundSpeed(), 0);
     while(distance > 0.1) {
         // sense
         this->robot->update();
         // think
-        avoidObstacles(groundSpeed, turnSpeed);
+//        avoidObstacles(groundSpeed, turnSpeed);
         // act
-        pos.SetSpeed(groundSpeed, turnSpeed);
 
         // calculating the distance
         distance = sqrt(pow(this->goalPoint.first - pos.GetXPos(), 2) + pow(this->goalPoint.second - pos.GetYPos(), 2));
-//        if(minDistance - distance > 0.05) {
-//            break;
-//        }
+        if(minDistance - distance > 0.05) {
+            break;
+        }
         if(distance < minDistance) {
             minDistance = distance;
         }

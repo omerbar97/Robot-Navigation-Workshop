@@ -13,6 +13,7 @@
 #include "src/Behavior/RobotBehavior/HallNavigateBehavior.h"
 #include "src/Behavior/RobotBehavior/RotationBehavior.h"
 #include "src/server/Server.h"
+#include "src/Behavior/MessageBehavior/VoiceMessageBehavior.h"
 #include <string>
 
 void drawBlock(cv::Mat &map, int x, int y, int blockSize) {
@@ -39,61 +40,62 @@ using namespace PlayerCc;
 int main(int argc, char **argv) {
 
 
-//    MapGenerator *map = new MapGenerator(
-//            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
-//
-//    RoomsHandler roomHandler(
-//            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/configures/room_coordinates.txt", {2});
-//    PlayerCc::PlayerClient client("localhost", 6665);
-//    PlayerCc::Position2dProxy position(&client, 0);
-//    PlayerCc::RangerProxy laser(&client, 1);
-////    client.Read();
-//
-//    std::list<playerc_device_info_t> t = client.GetDeviceList();
-//
-//
-//    for(auto i : t) {
-//        std::cout << "drivername: " << i.drivername << std::endl;
-//        std::cout << "index " << i.addr.index << std::endl;
-//    }
-//    std::cout << position.GetYaw() << std::endl;
-//
-//    RobotWrapper* robotWrapper = new RobotWrapper(client, position, laser);
-//
-//    // create path
-//    Route *route = new Route(new RRTStarAlgorithm(), map);
-//
-//    std::pair<double, double> start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
-//
-//    route->createPath();
-//    std::vector<std::pair<double, double> > path = route->getLatestPath();
-////    for(int i = 1; i < path.size(); i++) {
-////        std::cout << path[i].first << " , " << path[i].second << std::endl;
-////    }
-//    for(int i = 1; i < path.size(); i++) {
-//        //     rotation to the point
-//        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
+    MapGenerator *map = new MapGenerator(
+            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
 
-    Server server("localhost", 8080);
-    if(server.init()) {
-        server.acceptConnection();
-        while(true) {
-            std::string n;
-            std::cin >> n;
-            server.send(n);
-        }
+    RoomsHandler roomHandler(
+            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/configures/room_coordinates.txt", {2});
+    PlayerCc::PlayerClient client("localhost", 6665);
+    PlayerCc::Position2dProxy position(&client, 0);
+    PlayerCc::RangerProxy laser(&client, 1);
+//    client.Read();
+
+    std::list<playerc_device_info_t> t = client.GetDeviceList();
+
+
+    for(auto i : t) {
+        std::cout << "drivername: " << i.drivername << std::endl;
+        std::cout << "index " << i.addr.index << std::endl;
+    }
+    std::cout << position.GetYaw() << std::endl;
+
+    RobotWrapper* robotWrapper = new RobotWrapper(client, position, laser);
+
+    // create path
+    Route *route = new Route(new RRTStarAlgorithm(), map);
+
+    std::pair<double, double> start = robotWrapper->getCurrentPosition();
+    route->setStartingPoint(start);
+    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
+
+    route->createPath();
+    std::vector<std::pair<double, double> > path = route->getLatestPath();
+    for(int i = 1; i < path.size(); i++) {
+        //     rotation to the point
+        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
 
     }
 
+//    Server server("localhost", 8080);
+//    std::thread* serverThread;
+//    if(server.init()) {
+//        serverThread = new std::thread(&Server::acceptConnection, &server);
+//        serverThread->detach();
+//        while(true) {
+//            std::string n;
+//            std::cin >> n;
+//            server.send(n);
+//            server.recv();
+//        }
+//    }
+
+//    VoiceMessageBehavior voiceMessageBehavior("ofir ve shilo ya-manyakym", "kamika");
+//    voiceMessageBehavior.execute();
 
     return 0;
 

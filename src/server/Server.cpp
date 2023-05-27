@@ -7,6 +7,8 @@
 Server::Server(std::string ip, int port) {
     this->ip = ip;
     this->listenPort = port;
+    this->clientSocket = -1;
+    this->serverSocket = -1;
 }
 
 Server::~Server() {
@@ -58,7 +60,7 @@ bool Server::recv() {
         std::cerr << "No client connected" << std::endl;
         return false;
     }
-    if (::recv(clientSocket, &buffer, BUFFER_SIZE, 0) == -1) {
+    if (::recv(clientSocket, &buffer, BUFFER_SIZE, MSG_PEEK) == -1) {
         perror("Receiving data failed");
         return false;
     } else {

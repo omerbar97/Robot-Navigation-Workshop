@@ -13,7 +13,7 @@ RotationBehavior::~RotationBehavior() {
 
 }
 
-void RotationBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
+bool RotationBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
 
 }
 

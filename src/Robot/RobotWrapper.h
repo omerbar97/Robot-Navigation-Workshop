@@ -37,6 +37,9 @@ public:
     double getGroundSpeed();
     double getTurnSpeed();
     std::pair<double, double> getCurrentPosition();
+    bool isObstacleOnLeft();
+    bool isObstacleOnRight();
+    bool hasObstaclesOnSides();
 
     // getRobot Extensions
     PlayerCc::Position2dProxy& getPos();

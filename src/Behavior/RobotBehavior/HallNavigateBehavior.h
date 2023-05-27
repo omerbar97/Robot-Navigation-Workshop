@@ -5,11 +5,12 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #include "RobotBehavior.h"
+#include "RotationBehavior.h"
 
 class HallNavigateBehavior : public RobotBehavior {
 protected:
 
-    void avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
+    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
 
 public:
 

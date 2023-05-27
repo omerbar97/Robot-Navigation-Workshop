@@ -48,7 +48,12 @@ add_executable(Robot-Navigation
         src/Behavior/RobotBehavior/HallNavigateBehavior.h
         src/Behavior/RobotBehavior/RotationBehavior.h
         src/Behavior/RobotBehavior/RotationBehavior.cpp
-        src/Behavior/Behavior.h src/server/Server.h src/server/Server.cpp)
+        src/Behavior/Behavior.h
+        src/server/Server.h
+        src/server/Server.cpp
+        src/Behavior/MessageBehavior/MessageBehavior.h
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.h)
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)

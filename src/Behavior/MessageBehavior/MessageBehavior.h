@@ -27,7 +27,11 @@ public:
      * @param message the message to send.
      * @param messageTo the name of the person to send the message to.
      */
-    MessageBehavior(std::string message, std::string messageTo);
+    MessageBehavior(std::string message, std::string messageTo) {
+        this->message = message;
+        this->messageTo = messageTo;
+    }
+    virtual ~MessageBehavior() = default;
     int execute() = 0;
 };
 

@@ -13,7 +13,7 @@
 RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy) :
             robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
     this->robotTurnSpeed = 0.03;
-    this->robotGroundSpeed = 0.02;
+    this->robotGroundSpeed = 0.06;
 }
 
 
@@ -83,4 +83,72 @@ void RobotWrapper::update() {
     } catch (PlayerCc::PlayerError & e) {
 //        std::cerr << e << std::endl;
     }
+}
+
+bool RobotWrapper::isObstacleOnLeft() {
+    // using the rangerproxy to check if there is an obstacle on the left
+    // if there is an obstacle on the left, return true
+    // else return false
+    this->update();
+    PlayerCc::RangerProxy &ranger = this->getLaser();
+    // Get the total number of range readings
+    int numReadings = ranger.GetRangeCount();
+    // Calculate the number of readings on the left side
+    int numReadingsOnLeft = numReadings / 2;
+    // Define a threshold value for obstacle detection
+    double obstacleThreshold = 0.5; // Adjust this value as needed
+    // Check for obstacles on the left side
+    for (int i = 0; i < numReadingsOnLeft; i++) {
+        double range = ranger[i];
+        if (range < obstacleThreshold) {
+            // An obstacle is detected on the left side
+            return true;
+        }
+    }
+    // No obstacles found on the left side
+    return false;
+}
+
+bool RobotWrapper::isObstacleOnRight() {
+    // using the rangerproxy to check if there is an obstacle on the right
+    // if there is an obstacle on the right, return true
+    // else return false
+    this->update();
+    PlayerCc::RangerProxy &ranger = this->getLaser();
+    // Get the total number of range readings
+    int numReadings = ranger.GetRangeCount();
+    // Calculate the number of readings on the left side
+    int numReadingsOnLeft = numReadings / 2;
+    // Define a threshold value for obstacle detection
+    double obstacleThreshold = 0.5; // Adjust this value as needed
+    // Check for obstacles on the right side
+    for (int i = numReadingsOnLeft; i < numReadings; i++) {
+        double range = ranger[i];
+        if (range < obstacleThreshold) {
+            // An obstacle is detected on the right side
+            return true;
+        }
+    }
+    // No obstacles found on the right side
+    return false;
+}
+
+bool RobotWrapper::hasObstaclesOnSides() {
+    // Get the total number of range readings
+    this->update();
+    PlayerCc::RangerProxy &ranger = this->getLaser();
+    int numReadings = ranger.GetRangeCount();
+    // Define a threshold value for obstacle detection
+    double obstacleThreshold = 0.5; // Adjust this value as needed
+    // Check for obstacles on both sides
+    for (int i = 0; i < numReadings; i++) {
+        double range = ranger[i];
+        if (range < obstacleThreshold) {
+            // An obstacle is detected on either side
+            std::cout << "obstacle detected on side" << std::endl;
+            return true;
+        }
+    }
+    // No obstacles found on either side
+    return false;
 }

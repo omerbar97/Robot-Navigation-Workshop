@@ -1,10 +1,5 @@
 import './RobotStageForm.css'
 
-
-
-
-
-
 function RobotStageForm() {
 
 

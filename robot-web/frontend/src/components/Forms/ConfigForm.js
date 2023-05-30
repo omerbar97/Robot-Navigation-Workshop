@@ -77,15 +77,15 @@ function ConfigForm(props) {
         // sending the config file to the server
         const request = await post.newMap({map : img});
         if (request.status === 200) {
-            alert("config file sent successfully");
+            alert("map file sent successfully");
         } else {
-            alert("error sending config file");
+            alert("error sending map file");
         }
     }
 
     return (
         <form className="form scrollContainer config-form">
-            <lable htmlFor="selectScale"><b>grid scale </b></lable>
+            <label htmlFor="selectScale"><b>grid scale </b></label>
             <select className="form-select form-select-sm"
             onChange={handleScale}
             id="selectScale">

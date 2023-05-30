@@ -1,10 +1,36 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './GridMap.css'
 
+const matrixToStage = (x, y, scale, imgWidth, imgHeight) => {
+  // converting the point to stage point
+  const numOfBlockWidth = (imgWidth / 50);
+  const numOfBlockHeight = (imgHeight / 40);
+  const blockWidthHeight = (imgWidth / scale) / numOfBlockWidth;
+  const blockWidthHeightPixel = (imgHeight / scale) / numOfBlockHeight;
+
+  // Convert the pixel x-coordinate to stage coordinate
+  let xStage = (numOfBlockWidth / 2 * blockWidthHeight - x) / -blockWidthHeight;
+  // Convert the pixel y-coordinate to stage coordinate
+  let yStage = (numOfBlockHeight / 2 * blockWidthHeightPixel - y) / blockWidthHeightPixel;
+
+  // modifing the number only 2 digit after the decimal
+  xStage = xStage * 100;
+  xStage = Math.round(xStage);
+  xStage = xStage / 100;
+
+  yStage = yStage * 100;
+  yStage = Math.round(yStage);
+  yStage = yStage / 100;
+
+  return xStage + " " + yStage;
+}
+
 
 const GridMap = (props) => {
-  const { img, setExitRoom, setCenterRoom, setEnterRoom, id , scale} = props;
+  const { img, setExitRoom, setCenterRoom, setEnterRoom, id, scale } = props;
   const [grid, setGrid] = useState([]);
+  const [imgWidth, setImgWidth] = useState(0);
+  const [imgHeight, setImgHeight] = useState(0);
 
   const [centerGrid, setCenterGrid] = useState(null);
   const [enterGrid, setEnterGrid] = useState(null);
@@ -37,6 +63,9 @@ const GridMap = (props) => {
     imgElement.onload = () => {
       const imgWidth = imgElement.width;
       const imgHeight = imgElement.height;
+
+      setImgHeight(imgHeight);
+      setImgWidth(imgWidth);
 
       const blockSize = scale; // Set the desired block size default (5px by 5px)
 
@@ -81,8 +110,8 @@ const GridMap = (props) => {
         newGrid[rowIndex][colIndex] = { ...newGrid[rowIndex][colIndex], center: true, color: "green" };
         return newGrid;
       });
-
-      setCenterRoom(rowIndex + " " + colIndex);
+      let text = matrixToStage(rowIndex, colIndex, scale, imgWidth, imgHeight);
+      setCenterRoom(text);
       setCenterGrid({ rowIndex, colIndex });
     } else if (id === "enter") {
       if (enterGrid !== null) {
@@ -101,8 +130,8 @@ const GridMap = (props) => {
         newGrid[rowIndex][colIndex] = { ...newGrid[rowIndex][colIndex], enter: true, color: "blue" };
         return newGrid;
       });
-
-      setEnterRoom(rowIndex + " " + colIndex);
+      let text = matrixToStage(rowIndex, colIndex, scale, imgWidth, imgHeight);
+      setEnterRoom(text);
       setEnterGrid({ rowIndex, colIndex });
     } else if (id === "exit") {
       if (exitGrid !== null) {
@@ -121,8 +150,8 @@ const GridMap = (props) => {
         newGrid[rowIndex][colIndex] = { ...newGrid[rowIndex][colIndex], exit: true, color: "yellow" };
         return newGrid;
       });
-
-      setExitRoom(rowIndex + " " + colIndex);
+      let text = matrixToStage(rowIndex, colIndex, scale, imgWidth, imgHeight);
+      setExitRoom(text);
       setExitGrid({ rowIndex, colIndex });
     } else {
       return;

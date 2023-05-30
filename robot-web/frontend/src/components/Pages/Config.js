@@ -28,19 +28,18 @@ const ConfigPage = () => {
       <>
         <NavBar />
         <div className='container d-flex'>
-          <div className='row mt-5'>
+          <div className='row mt-2'>
             <div className='col-8'>
-              <button className='btn btn-info'
+              <button className='btn btn-info shadow'
                 onClick={handleClick}
-              >to create a new map configuration file please click here</button>
+              >to create a new map configuration file click here</button>
             </div>
           </div>
-          <div className='row mt-3'>
+          <div className='row mt-2 robot-page'>
             <div className='col-12'>
               <UploadForm />
             </div>
           </div>
-
         </div>
       </>
 

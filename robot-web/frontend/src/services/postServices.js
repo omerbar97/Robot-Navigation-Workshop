@@ -3,6 +3,7 @@ import SERVER from './api'
 // all the server post request
 const newMap = async (map) => {
     // sending the map to the server
+    console.log(map);
     const response = await fetch(SERVER + 'map', {
         method: 'POST',
         headers: {

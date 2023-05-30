@@ -21,7 +21,7 @@ function RobotConfig() {
     return (
         <> 
         <NavBar/>   
-        <div className='robot-page'>
+        <div className='robot-page mt-5'>
             <div className='row'>
                 <div className='col-6'>
                     <button className='btn btn-danger'

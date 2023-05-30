@@ -38,8 +38,40 @@ const newRoomConfig = async (config) => {
     return response;
 }
 
+const newRobotSimulatorConfig = async (config) => {
+    // {
+    //     "world": ".world file",
+    //     "cfg" : ".cfg file",
+    //     "ip": "ip address",
+    //     "port": "port number"
+    // }
+
+    // sending the data to the server
+    try {
+        const response = await fetch(SERVER + 'robot/simulator', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(config),
+        });
+    
+        if(response.ok){
+            console.log("robot simulator config files was sent to server");
+        } else {
+            console.log("failed to send robot simulator config to the server");
+        }
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+
+}
+
 const post = {
     newMap,
-    newRoomConfig
+    newRoomConfig,
+    newRobotSimulatorConfig
 }
 export default post;

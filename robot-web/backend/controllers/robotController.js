@@ -4,7 +4,7 @@ const { addIp,
     addWorld } = require('../models/robotModel');
 
 // saving the robot information from the client
-const postRobotSimulation = (req, res) => {
+const postRobotSimulation = async (req, res) => {
     // sending the following data
     // {
     //     "world": ".world file",
@@ -12,7 +12,6 @@ const postRobotSimulation = (req, res) => {
     //     "ip": "ip address",
     //     "port": "port number"
     // }
-
     // checking if data is okay
     let data = req.body;
     if(!data) {
@@ -37,9 +36,16 @@ const postRobotSimulation = (req, res) => {
     }
 
     // saving data to the database
-    addIp(data.ip);
-    addPort(data.port);
-    addCfg(data.cfg);
-    addWorld(data.world);
+    await addIp(data.ip);
+    await addPort(data.port);
+    await addCfg(data.cfg);
+    await addWorld(data.world);
+
+    // sending the response
+    res.status(200).send('OK');
     
 };
+
+module.exports = {
+    postRobotSimulation
+}

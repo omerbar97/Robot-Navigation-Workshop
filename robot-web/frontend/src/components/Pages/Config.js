@@ -1,7 +1,7 @@
 
 import React from 'react';
 import NavBar from '../Navbars/NavBar';
-import GridMap from '../GridMap';
+import GridMap from '../Map/GridMap';
 import ConfigForm from '../Forms/ConfigForm';
 import UploadForm from '../Forms/UploadForm';
 import './Config.css';

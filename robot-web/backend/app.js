@@ -62,7 +62,7 @@ app.use(express.static('public'));
 
 // setting the routes
 app.use('/map', mapRoute);
-// app.use('/robot', robotRoute);
+app.use('/robot', robotRoute);
 // app.use('/stage', stageRoute);
 
 

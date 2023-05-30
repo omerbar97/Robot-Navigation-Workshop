@@ -1,4 +1,5 @@
 import NavBar from '../Navbars/NavBar';
+import robotImg from '../../assets/robot.png';
 import './Home.css'
 
 function HomePage() {
@@ -15,6 +16,9 @@ function HomePage() {
                 <p>
                     Please implement the necessary functionality to control the robot and interact with the interface.
                 </p>
+                <div>
+                    <img className="robotImg" src={robotImg}></img>
+                </div>
             </div>
         </>
     );

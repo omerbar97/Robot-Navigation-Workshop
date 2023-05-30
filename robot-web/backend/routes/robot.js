@@ -1,10 +1,10 @@
-const robotController = require('../controllers/mapController');
+const robotController = require('../controllers/robotController');
 const express = require('express');
 const router = express.Router();
 
 router.route('/simulator')
     .get()
-    .post();
+    .post(robotController.postRobotSimulation);
 
 router.route('/physical')
     .get()

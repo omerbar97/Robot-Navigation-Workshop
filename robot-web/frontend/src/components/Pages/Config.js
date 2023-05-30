@@ -1,0 +1,82 @@
+
+import React from 'react';
+import NavBar from '../Navbars/NavBar';
+import GridMap from '../GridMap';
+import ConfigForm from '../Forms/ConfigForm';
+import UploadForm from '../Forms/UploadForm';
+import './Config.css';
+import { useState, useRef } from 'react'
+
+const ConfigPage = () => {
+  const [newConfig, setNewConfig] = useState(false);
+  const [img, setImg] = useState(null);
+  const [scale , setScale] = useState(5); // each pixel is represented by 5px
+  const [centerRoom, setCenterRoom] = useState("undefined");
+  const [enterRoom, setEnterRoom] = useState("undefined");
+  const [exitRoom, setExitRoom] = useState("undefined");
+  const [id, setId] = useState(null);
+  let inputRef = useRef(null);
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    setNewConfig(true);
+  }
+
+  if (!newConfig) {
+    // rendering only the button to add the config and map files
+    return (
+      <>
+        <NavBar />
+        <div className='container d-flex'>
+          <div className='row mt-5'>
+            <div className='col-8'>
+              <button className='btn btn-info'
+                onClick={handleClick}
+              >to create a new map configuration file please click here</button>
+            </div>
+          </div>
+          <div className='row mt-3'>
+            <div className='col-12'>
+              <UploadForm />
+            </div>
+          </div>
+
+        </div>
+      </>
+
+    )
+  } else {
+    return (
+      <div>
+        <NavBar />
+        <div className='d-flex'>
+          <div className='row'>
+            <div className='col-6 mt-5'>
+              <ConfigForm
+                setImg={setImg}
+                centerRoom={centerRoom}
+                enterRoom={enterRoom}
+                exitRoom={exitRoom}
+                setId={setId}
+                img={img} 
+                setScale={setScale}/>
+            </div>
+            <div className='col-6'>
+              <GridMap img={img}
+                setCenterRoom={setCenterRoom}
+                setEnterRoom={setEnterRoom}
+                setExitRoom={setExitRoom}
+                id={id}
+                scale={scale} />
+            </div>
+          </div>
+          <div className="row">
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+};
+
+export default ConfigPage;

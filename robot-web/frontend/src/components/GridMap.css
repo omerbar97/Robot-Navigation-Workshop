@@ -1,0 +1,45 @@
+.grid-container {
+  content: fit-content;
+  /* scale:0.6; */
+  overflow-y: auto;
+  position: absolute;
+  justify-content: center;
+  display:flex;
+  margin: auto;
+  margin-left: 1700%;
+  top:0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  /* box-sizing: content-box; */
+}
+
+.grid-block {
+  border-width: 0.1px;
+  /* border-style: solid; */
+  width: 5px;
+  height: 5px;
+  border-style: transparent;
+  border-color: rgb(0, 0, 0);
+}
+.activeCellCenter {
+  background-color: rgb(6, 187, 0);
+  border-width: 1px;
+}
+
+.activeCellEnter {
+  background-color: rgb(38, 70, 175);
+  border-width: 1px;
+}
+.activeCellExit {
+  background-color: rgb(202, 188, 35);
+  border-width: 1px;
+}
+
+.grid-block:hover {
+  background-color: rgb(0, 0, 0);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(0, 0, 0);
+  
+}

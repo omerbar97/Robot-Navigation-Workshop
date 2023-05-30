@@ -19,6 +19,8 @@ find_library(OMPL_LIBRARY
         )
 include_directories(${OMPL_INCLUDE_DIRS})
 
+find_package(jsoncpp CONFIG REQUIRED)
+
 # Add the executables
 add_executable(Robot-Navigation
         main.cpp
@@ -49,14 +51,15 @@ add_executable(Robot-Navigation
         src/Behavior/RobotBehavior/RotationBehavior.h
         src/Behavior/RobotBehavior/RotationBehavior.cpp
         src/Behavior/Behavior.h
-        src/server/Server.h
-        src/server/Server.cpp
+        server/Server.h
+        server/Server.cpp
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
-        src/Behavior/MessageBehavior/VoiceMessageBehavior.h)
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h)
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp})
 target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY})
+

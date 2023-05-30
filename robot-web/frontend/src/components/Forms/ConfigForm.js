@@ -4,14 +4,22 @@ import { useEffect, useRef, useState } from 'react';
 import post from '../../services/postServices';
 function ConfigForm(props) {
 
-    const { setImg, centerRoom, enterRoom, exitRoom, setId, img , setScale} = props;
+    const { setImg,
+        centerRoom,
+        enterRoom,
+        exitRoom,
+        setId,
+        img,
+        setScale,
+        setUploadMap,
+        setUploadConfigRooms } = props;
 
     const [text, setText] = useState({
         text: "",
     });
 
     useEffect(() => {
-        if(text.text !== ""){
+        if (text.text !== "") {
             // disabling the button
             document.getElementById("selectScale").disabled = true;
         }
@@ -63,9 +71,9 @@ function ConfigForm(props) {
     const sendConfigToServer = async (event) => {
         event.preventDefault();
         // sending the config file to the server
-        console.log(text);
         const request = await post.newRoomConfig(text);
         if (request.status === 200) {
+            setUploadConfigRooms(true);
             alert("config file sent successfully");
         } else {
             alert("error sending config file");
@@ -75,8 +83,9 @@ function ConfigForm(props) {
     const sendMapToServer = async (event) => {
         event.preventDefault();
         // sending the config file to the server
-        const request = await post.newMap({map : img});
-        if (request.status === 200) {
+        const request = await post.newMap({ map: img });
+        if (request && request.status === 200) {
+            setUploadMap(true);
             alert("map file sent successfully");
         } else {
             alert("error sending map file");
@@ -84,11 +93,11 @@ function ConfigForm(props) {
     }
 
     return (
-        <form className="form scrollContainer config-form">
+        <form className="form scrollContainer config-form config-page">
             <label htmlFor="selectScale"><b>grid scale </b></label>
             <select className="form-select form-select-sm"
-            onChange={handleScale}
-            id="selectScale">
+                onChange={handleScale}
+                id="selectScale">
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option selected="5">5</option>
@@ -104,9 +113,9 @@ function ConfigForm(props) {
                     onChange={handleImg}
                 />
                 {img && (
-                    <div className="form-group col-6">
+                    <div className="form-group col-7">
                         <button className='btn btn-danger'
-                        onClick={sendMapToServer}>send map to robot</button>
+                            onClick={sendMapToServer}>send map to robot</button>
                     </div>
                 )}
             </div>
@@ -186,12 +195,17 @@ function ConfigForm(props) {
                     </div>
 
                 </div>
-                <CodeBlock
-                    text={text.text}
-                    className="configSection"
-                    showLineNumbers={false}
-                    theme={dracula}
-                />
+                {
+                    text.text !== "" && (
+                        <CodeBlock
+                            text={text.text}
+                            className="configSection"
+                            showLineNumbers={false}
+                            theme={dracula}
+                        />
+                    )
+                }
+
             </div>
         </form>
 

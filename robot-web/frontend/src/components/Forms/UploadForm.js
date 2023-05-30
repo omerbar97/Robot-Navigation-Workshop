@@ -3,7 +3,9 @@ import { CodeBlock, dracula } from 'react-code-blocks';
 import post from '../../services/postServices';
 import './UploadForm.css'
 
-function UploadForm() {
+function UploadForm(props) {
+
+    const { setUploadMap, setUploadConfigRooms } = props;
 
     const txtRef = useRef("");
     const mapRef = useRef(null);
@@ -60,11 +62,14 @@ function UploadForm() {
             const request = await post.newMap(map);
             const request2 = await post.newRoomConfig(text);
             if (request.status === 200 && request2.status === 200) {
+                setUploadMap(true);
+                setUploadConfigRooms(true);
                 alert("map and config files uploaded successfully");
             } else {
                 alert("failed to upload map and config files");
             }
         } catch (error) {
+            alert("failed to upload map and config files");
             console.log(error);
         }
     }
@@ -99,14 +104,19 @@ function UploadForm() {
                     />
                 </div>
                 <button
-                    className='btn btn-danger'
+                    className='btn btn-danger mb-2'
                     onClick={handleSubmit}>send to server</button>
-                <CodeBlock
-                    text={text.text}
-                    className="configSection"
-                    showLineNumbers={false}
-                    theme={dracula}
-                />
+                {
+                    text.text !== "" && (
+                        <CodeBlock
+                            text={text.text}
+                            className="codeBlockSection"
+                            showLineNumbers={false}
+                            theme={dracula}
+                        />
+                    )
+                }
+
             </div>
         </>
     )

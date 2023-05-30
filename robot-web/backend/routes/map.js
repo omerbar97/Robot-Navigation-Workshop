@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 router.route('/')
-    .get()
+    .get(mapController.getMap)
     .post(mapController.postMap);
 
 router.route('/rooms')

@@ -5,7 +5,9 @@ import NavBar from '../Navbars/NavBar';
 import RobotStageForm from '../Forms/RobotStageForm';
 
 
-function RobotConfig() {
+function RobotConfig(props) {
+
+    const { setUploadRobotConfigurations, setIsStage } = props;
 
     const [forStage , setForStage] = useState(null);
 
@@ -20,7 +22,6 @@ function RobotConfig() {
 
     return (
         <> 
-        <NavBar/>   
         <div className='robot-page mt-5'>
             <div className='row'>
                 <div className='col-6'>
@@ -36,7 +37,7 @@ function RobotConfig() {
             <div className='row'>
                 {forStage && (
                     <div className='col-12'>
-                        <RobotStageForm/>
+                        <RobotStageForm setUploadRobotConfigurations={setUploadRobotConfigurations} setIsStage={setIsStage}/>
                     </div>
                 )}
             </div>

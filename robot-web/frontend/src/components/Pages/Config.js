@@ -7,7 +7,10 @@ import UploadForm from '../Forms/UploadForm';
 import './Config.css';
 import { useState, useRef } from 'react'
 
-const ConfigPage = () => {
+const ConfigPage = (props ) => {
+
+  const { setUploadMap, setUploadConfigRooms } = props;
+
   const [newConfig, setNewConfig] = useState(false);
   const [img, setImg] = useState(null);
   const [scale , setScale] = useState(5); // each pixel is represented by 5px
@@ -26,7 +29,6 @@ const ConfigPage = () => {
     // rendering only the button to add the config and map files
     return (
       <>
-        <NavBar />
         <div className='container d-flex'>
           <div className='row mt-2'>
             <div className='col-8'>
@@ -37,7 +39,7 @@ const ConfigPage = () => {
           </div>
           <div className='row mt-2 robot-page'>
             <div className='col-12'>
-              <UploadForm />
+              <UploadForm setUploadMap={setUploadMap} setUploadConfigRooms={setUploadConfigRooms}/>
             </div>
           </div>
         </div>
@@ -47,7 +49,6 @@ const ConfigPage = () => {
   } else {
     return (
       <div>
-        <NavBar />
         <div className='d-flex'>
           <div className='row'>
             <div className='col-6 mt-5'>
@@ -58,7 +59,9 @@ const ConfigPage = () => {
                 exitRoom={exitRoom}
                 setId={setId}
                 img={img} 
-                setScale={setScale}/>
+                setScale={setScale}
+                setUploadMap={setUploadMap} 
+                setUploadConfigRooms={setUploadConfigRooms}/>
             </div>
             <div className='col-6'>
               <GridMap img={img}

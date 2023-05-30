@@ -40,7 +40,17 @@ const postRooms = async (req, res) => {
     
 };
 
+const getMap = async (req, res) => {
+    let data = await getMapFromDB();
+    if(data === null) {
+        res.status(400).send('Bad Request');
+        return;
+    }
+    res.status(200).send(data);
+};
+
 module.exports = {
     postMap,
-    postRooms
+    postRooms,
+    getMap
 };

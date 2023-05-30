@@ -1,7 +1,9 @@
 import './RobotStageForm.css'
 import post from '../../services/postServices';
 import { useState , useRef } from 'react';
-function RobotStageForm() {
+function RobotStageForm(props) {
+
+    const { setUploadRobotConfigurations, setIsStage } = props;
 
     const [worldFile, setWorldFile] = useState(null);
     const [configFile, setConfigFile] = useState(null);
@@ -70,6 +72,8 @@ function RobotStageForm() {
         // sending the data to the server
         const request = await post.newRobotSimulatorConfig(data);
         if(request && request.ok){
+            setIsStage(true);
+            setUploadRobotConfigurations(true);
             alert("robot simulator config files was sent successfuly to server");
         }
         else{

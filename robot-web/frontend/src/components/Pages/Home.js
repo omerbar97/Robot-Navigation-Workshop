@@ -7,7 +7,6 @@ function HomePage() {
 
     return (
         <>
-            <NavBar></NavBar>
             <div className="home-page mt-5">
                 <h1>Welcome to the Robot Control Interface!</h1>
                 <p>

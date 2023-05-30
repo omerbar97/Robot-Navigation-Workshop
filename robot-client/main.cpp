@@ -12,7 +12,6 @@
 #include "src/Robot/RobotWrapper.h"
 #include "src/Behavior/RobotBehavior/HallNavigateBehavior.h"
 #include "src/Behavior/RobotBehavior/RotationBehavior.h"
-#include "src/server/Server.h"
 #include "src/Behavior/MessageBehavior/VoiceMessageBehavior.h"
 #include <string>
 
@@ -41,10 +40,10 @@ int main(int argc, char **argv) {
 
 
     MapGenerator *map = new MapGenerator(
-            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
+            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
 
     RoomsHandler roomHandler(
-            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/configures/room_coordinates.txt", {2});
+            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt", {2});
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);
     PlayerCc::RangerProxy laser(&client, 1);

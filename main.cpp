@@ -41,10 +41,10 @@ int main(int argc, char **argv) {
 
 
     MapGenerator *map = new MapGenerator(
-            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/maps/csMap.png");
+            "/home/ofirhelerman/CS-BIU/YearB/RoboticsSeminar/src-clion-robotics/maps/csMap.png");
 
     RoomsHandler roomHandler(
-            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/configures/room_coordinates.txt", {2});
+            "/home/ofirhelerman/CS-BIU/YearB/RoboticsSeminar/src-clion-robotics/configures/room_coordinates.txt", {2});
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);
     PlayerCc::RangerProxy laser(&client, 1);

@@ -37,6 +37,20 @@ void WebSocketServer::start() {
     serverThread = std::thread([&]() {
         serverWs.run();
     });
+
+//    // sending the postRequest to the node.js server that the server is running
+//    std::string postRequestUrl = "http://localhost:8080/robotServer/";
+//    // creating the json
+//    json jsonData;
+//    jsonData["type"] = "serverInit";
+//    jsonData["url"] = this->ip + ":" + std::to_string(this->port);
+//    std::string data = jsonData.dump();
+//    bool check = this->helper.postRequest(postRequestUrl, data);
+//    if(!check){
+//        std::cout << "Error: failed to send the post request to the node.js server" << std::endl;
+//        exit(1);
+//    }
+//    std::cout << "Server is running" << std::endl;
 }
 
 void WebSocketServer::stop() {
@@ -56,6 +70,9 @@ void WebSocketServer::onMessage(websocketpp::connection_hdl hdl, server::message
     if (message == "START_STAGE") {
         this->currentHdl = hdl;
         startStageProcess();
+    } else if (message == "START_ROBOT") {
+        this->currentHdl = hdl;
+        startRobotControllerProcess();
     }
     // Process the message as needed
 }
@@ -165,6 +182,8 @@ bool WebSocketServer::startStageProcess() {
                 jsonData["type"] = "stageInit";
                 jsonData["success"] = true;
                 std::string message = jsonData.dump();
+                // sleep for 3 seconds
+                sleep(3);
                 this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
                 return true;
             }
@@ -181,4 +200,33 @@ bool WebSocketServer::startStageProcess() {
         }
     }
 
+}
+
+bool WebSocketServer::startRobotControllerProcess() {
+    // retriving the robot information from the server
+    std::cout << "Starting the stage process\n";
+    std::string url = "http://localhost:8080/robot/config";
+
+    std::string response = helper.getResponse(url);
+    if(response.empty()) {
+        // error in handling the GET method from client
+        // sending backToTheClient the error message
+        // creating new json object
+        json jsonData;
+        jsonData["type"] = "robotInit";
+        jsonData["success"] = false;
+        jsonData["error"] = "failed to retrieve the robot information from the server";
+        std::string message = jsonData.dump();
+        this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+        return false;
+    } else {
+        // the format is json
+        // the foramt is:
+//        {
+//            "ip": "string",
+//            "port": "string",
+//            "roomConfig": string,
+//            "isStage": boolean
+//        }
+    }
 }

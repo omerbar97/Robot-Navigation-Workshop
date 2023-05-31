@@ -142,4 +142,19 @@ std::string Helper::base64Img_decode(const std::string &encoded_string) {
     return decoded_string;
 }
 
+bool Helper::postRequest(const std::string &url, const std::string &data) {
+    // using curl to post data to the server
+    CURL *curl;
+    CURLcode res;
+    curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+        return true;
+    }
+    return false;
+}
+
 

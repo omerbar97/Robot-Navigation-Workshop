@@ -42,6 +42,7 @@ public:
     void onClose(websocketpp::connection_hdl hdl);
 
     bool startStageProcess();
+    bool startRobotControllerProcess();
 
 
 

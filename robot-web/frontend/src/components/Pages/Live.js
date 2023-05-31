@@ -18,7 +18,9 @@ async function getImgFromServerAndStartRobot(setImg) {
 }
 
 
-function Live() {
+function Live(props) {
+
+    const { uploadMap, uploadConfigRooms, uploadRobotConfigurations } = props;
 
     const [isLive, setIsLive] = useState(false);
     const [img, setImg] = useState(null); // the map image
@@ -35,21 +37,41 @@ function Live() {
         if (isLive) {
             // getting the map from the server
             getImgFromServerAndStartRobot(setImg);
-            
+
         }
     }, [isLive])
 
+    if (!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations) {
+        return (
+            <div className="conatiner live-page mt-5">
+                <h4>
+                    <u><b>This is the live broadcast page, from here you can see the robot's movements in real time.</b></u>
+                </h4>
+                <div className="row"> {
+                    !isLive && (
+                        <div className='col-6 right'>
+                            <button
+                                className='btn btn-warning disabled'
+                                onClick={() => { alert("You should first upload the neccesry files!") }}>START ROBOT</button>
+                        </div>
+                    )
+                }
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="conatiner live-page mt-5">
-            <h5>
-                <u>This is the live broadcast page, from here you can see the robot's movements in real time.</u>
-            </h5>
+            <h4>
+                <u><b>This is the live broadcast page, from here you can see the robot's movements in real time.</b></u>
+            </h4>
             <div className="row"> {
                 !isLive && (
                     <div className='col-6 right'>
                         <button
                             className='btn btn-warning'
-                            onClick={handleBtn}>start robot</button>
+                            onClick={handleBtn}>START ROBOT</button>
                     </div>
                 )
             }
@@ -58,17 +80,17 @@ function Live() {
                         <div className='col-6 right'>
                             <button
                                 className='btn btn-danger'
-                                onClick={handleBtn}>stop robot</button>
+                                onClick={handleBtn}>STOP ROBOT</button>
                         </div>
                     )
                 }
             </div>
             {isLive && img && (<div className='d-flex'>
-                <div className='col-8'>
+                <div className='col-7'>
                     {/* here the map going to be */}
                     <LiveGrid img={img} />
                 </div>
-                <div className='col-4'>
+                <div className='col-5'>
                     <RobotLiveData />
                 </div>
             </div>

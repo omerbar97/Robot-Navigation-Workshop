@@ -24,6 +24,7 @@ public:
     Helper();
     ~Helper();
     std::string getResponse(const std::string&);
+    bool postRequest(const std::string& url, const std::string& data);
     std::string base64_decode(const std::string &in);
     std::string base64Img_decode(const std::string &in);
     bool saveAsPng(std::string base64Data, const std::string& filePath);

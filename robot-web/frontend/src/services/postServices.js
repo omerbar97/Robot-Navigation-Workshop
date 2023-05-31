@@ -1,4 +1,4 @@
-import SERVER from './api'
+import {SERVER} from './api'
 
 // all the server post request
 const newMap = async (map) => {

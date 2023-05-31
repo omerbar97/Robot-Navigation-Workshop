@@ -1,17 +1,20 @@
 import './Live.css';
 import get from '../../services/getServices';
+import post from '../../services/postServices';
 import LiveGrid from '../Map/LiveGrid';
+import RobotLiveData from '../Info/RobotLiveData';
 import { useEffect, useState } from 'react';
 
-async function getImgFromServer(setImg) {
+async function getImgFromServerAndStartRobot(setImg) {
     let res = await get.Map();
+    console.log(res);
     if (res === null) {
         // failed to retrive the map
         alert("failed to retrive the map, try again later");
         return;
     }
-    console.log(res);
     setImg(res);
+    post.startRobotSimulator();
 }
 
 
@@ -21,19 +24,20 @@ function Live() {
     const [img, setImg] = useState(null); // the map image
     const handleBtn = (event) => {
         event.preventDefault();
-        if(img === null){
-            alert("problem with loading the map from the server, try again later")
-            return;
-        }
+        // if(img === null){
+        //     alert("problem with loading the map from the server, try again later")
+        //     return;
+        // }
         setIsLive(!isLive);
     }
 
     useEffect(() => {
         if (isLive) {
             // getting the map from the server
-            getImgFromServer(setImg);
+            getImgFromServerAndStartRobot(setImg);
+            
         }
-    }, [])
+    }, [isLive])
 
     return (
         <div className="conatiner live-page mt-5">
@@ -65,7 +69,7 @@ function Live() {
                     <LiveGrid img={img} />
                 </div>
                 <div className='col-4'>
-                    <h2><b><u>Robot Live Data</u></b></h2>
+                    <RobotLiveData />
                 </div>
             </div>
 

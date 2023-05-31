@@ -73,9 +73,32 @@ const newRobotSimulatorConfig = async (config) => {
 
 }
 
+
+const startRobotSimulator = async () => {
+    // sending the data to the server
+    try {
+        const response = await fetch(SERVER + 'robot/start', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+    
+        // waiting 4 seconds for the robot to start
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        // getting the response from the server
+        return true;
+
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+}
+
 const post = {
     newMap,
     newRoomConfig,
-    newRobotSimulatorConfig
+    newRobotSimulatorConfig,
+    startRobotSimulator
 }
 export default post;

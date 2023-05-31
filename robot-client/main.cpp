@@ -37,8 +37,6 @@ void printToFile(std::string filename, cv::Mat &map) {
 
 using namespace PlayerCc;
 int main(int argc, char **argv) {
-
-
     MapGenerator *map = new MapGenerator(
             "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
 

@@ -1,6 +1,6 @@
 import './RobotStageForm.css'
 import post from '../../services/postServices';
-import { useState , useRef } from 'react';
+import { useState, useRef } from 'react';
 function RobotStageForm(props) {
 
     const { setUploadRobotConfigurations, setIsStage } = props;
@@ -13,7 +13,7 @@ function RobotStageForm(props) {
 
     const handleWorldFile = (event) => {
         // getting the file information
-        if(event.target.files.length === 0){
+        if (event.target.files.length === 0) {
             setWorldFile(null);
             return;
         }
@@ -33,7 +33,7 @@ function RobotStageForm(props) {
 
     const handleCfgFile = (event) => {
         // getting the file information
-        if(event.target.files.length === 0){
+        if (event.target.files.length === 0) {
             setWorldFile(null);
             return;
         }
@@ -56,7 +56,7 @@ function RobotStageForm(props) {
         event.preventDefault();
 
         // checking if the user uploaded all the necessary files
-        if(worldFile === null || configFile === null || ip.current.value === "" || port.current.value === ""){
+        if (worldFile === null || configFile === null || ip.current.value === "" || port.current.value === "") {
             alert("please upload all the necessary files");
             return;
         }
@@ -71,21 +71,23 @@ function RobotStageForm(props) {
 
         // sending the data to the server
         const request = await post.newRobotSimulatorConfig(data);
-        if(request && request.ok){
+        if (request && request.ok) {
             setIsStage(true);
             setUploadRobotConfigurations(true);
             alert("robot simulator config files was sent successfuly to server");
         }
-        else{
+        else {
             alert("failed to send the config files to the server");
         }
-    }  
+    }
 
     return (
         <>
             <div className='form robotStageForm'>
                 <div>
                     <h4><b>please make sure to upload all the necessary files for the stage program</b></h4>
+                    <p>Make sure the map path inside the .world file is located at "/bitmaps/fromServer.png" otherwise it won't be able to start the stage!</p>
+
                 </div>
                 <br />
                 <div className="form-group d-flex">
@@ -129,7 +131,7 @@ function RobotStageForm(props) {
                     />
                 </div>
                 <button className='btn btn-danger'
-                onClick={handleSend}>send to stage</button>
+                    onClick={handleSend}>send to stage</button>
             </div>
         </>
     )

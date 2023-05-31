@@ -1,0 +1,10 @@
+.connection-status {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: red
+}
+
+.connection-status.connected {
+    color: green !important;
+}

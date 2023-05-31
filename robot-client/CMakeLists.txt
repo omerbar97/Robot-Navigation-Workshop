@@ -51,15 +51,22 @@ add_executable(Robot-Navigation
         src/Behavior/RobotBehavior/RotationBehavior.h
         src/Behavior/RobotBehavior/RotationBehavior.cpp
         src/Behavior/Behavior.h
-        server/Server.h
-        server/Server.cpp
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
         src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h)
+
+add_executable(Server
+        server/main.cpp
+        server/WebSocketServer.cpp
+        server/WebSocketServer.h
+        server/Helper.cpp
+        server/Helper.h)
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp})
 target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY})
+target_link_libraries(Server PRIVATE curl)
+target_link_libraries(Server PRIVATE ssl crypto)
 

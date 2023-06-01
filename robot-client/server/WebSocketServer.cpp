@@ -133,7 +133,7 @@ bool WebSocketServer::startStageProcess() {
             return false;
         }
 
-        check2 = helper.writeToFile(stageUrl + "/fromServer.world", cfg);
+        check2 = helper.writeToFile(stageUrl + "/fromServer.world", world);
         if(!check2) {
             // sending error message to the client
             json jsonData;
@@ -167,7 +167,6 @@ bool WebSocketServer::startStageProcess() {
                 }
                 // starting the stage process
                 check = execlp("player", "player", "fromServer.cfg", NULL);
-
                 // if got here then there was an error
                 json jsonData;
                 jsonData["error"] = "failed to start the stage process";
@@ -178,14 +177,31 @@ bool WebSocketServer::startStageProcess() {
                 // parent process
                 // the process is independant from the server
                 // sending backToTheClient the success message
-                json jsonData;
-                jsonData["type"] = "stageInit";
-                jsonData["success"] = true;
-                std::string message = jsonData.dump();
-                // sleep for 3 seconds
-                sleep(3);
-                this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
-                return true;
+                // sleep for 2 seconds
+                sleep(2);
+                // checking if the child process is still running
+                int status;
+                pid_t result = waitpid(pid, &status, WNOHANG);
+                if (result == 0) {
+                    // the child process is still running
+                    // sending backToTheClient the success message
+                    json jsonData;
+                    jsonData["type"] = "stageInit";
+                    jsonData["success"] = true;
+                    std::string message = jsonData.dump();
+                    this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+                    return true;
+                } else {
+                    // the child process is not running
+                    // sending backToTheClient the error message
+                    json jsonData;
+                    jsonData["type"] = "stageInit";
+                    jsonData["success"] = false;
+                    jsonData["message"] = "failed to start the stage process";
+                    std::string message = jsonData.dump();
+                    this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+                    return false;
+                }
             }
         } else {
             // error in saving the png file

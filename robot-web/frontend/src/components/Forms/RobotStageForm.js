@@ -34,7 +34,7 @@ function RobotStageForm(props) {
     const handleCfgFile = (event) => {
         // getting the file information
         if (event.target.files.length === 0) {
-            setWorldFile(null);
+            setConfigFile(null);
             return;
         }
         const file = event.target.files[0];
@@ -68,6 +68,7 @@ function RobotStageForm(props) {
             ip: ip.current.value,
             port: port.current.value,
         }
+        console.log(data);
 
         // sending the data to the server
         const request = await post.newRobotSimulatorConfig(data);
@@ -77,6 +78,7 @@ function RobotStageForm(props) {
             alert("robot simulator config files was sent successfuly to server");
         }
         else {
+            setUploadRobotConfigurations(false);
             alert("failed to send the config files to the server");
         }
     }

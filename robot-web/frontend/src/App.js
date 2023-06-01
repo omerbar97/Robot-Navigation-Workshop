@@ -24,7 +24,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mapsettings" element={<ConfigPage setUploadMap={setUploadMap} setUploadConfigRooms={setUploadConfigRooms}/>} />
         <Route path="/robotsettings" element={<RobotConfig setUploadRobotConfigurations={setUploadRobotConfigurations} setIsStage={setIsStage}/>} />
-        <Route path="/live" element={<Live uploadMap={uploadMap} uploadConfigRooms={uploadConfigRooms}/>} uploadRobotConfigurations={uploadRobotConfigurations}/>
+        <Route path="/live" element={<Live uploadMap={uploadMap} uploadConfigRooms={uploadConfigRooms} uploadRobotConfigurations={uploadRobotConfigurations} />}/>
       </Routes>
     </BrowserRouter>
   );

@@ -13,6 +13,7 @@
 #include <nlohmann/json.hpp>
 #include <unistd.h>
 #include "Helper.h"
+#include <sys/wait.h>
 
 using json = nlohmann::json;
 typedef websocketpp::server<websocketpp::config::asio> server;

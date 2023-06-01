@@ -24,42 +24,26 @@ function Live(props) {
 
     const [isLive, setIsLive] = useState(false);
     const [img, setImg] = useState(null); // the map image
-    const handleBtn = (event) => {
+    const handleStartBtn = (event) => {
         event.preventDefault();
-        // if(img === null){
-        //     alert("problem with loading the map from the server, try again later")
-        //     return;
-        // }
-        setIsLive(!isLive);
+        if(!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations){
+            alert("You should first upload the neccesry files!");
+            return;
+        }
+        setIsLive(true);
+    }
+
+    const handleStopBtn = (event) => {
+        event.preventDefault();
+        setIsLive(false);
     }
 
     useEffect(() => {
         if (isLive) {
             // getting the map from the server
             getImgFromServerAndStartRobot(setImg);
-
         }
     }, [isLive])
-
-    if (!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations) {
-        return (
-            <div className="conatiner live-page mt-5">
-                <h4>
-                    <u><b>This is the live broadcast page, from here you can see the robot's movements in real time.</b></u>
-                </h4>
-                <div className="row"> {
-                    !isLive && (
-                        <div className='col-6 right'>
-                            <button
-                                className='btn btn-warning disabled'
-                                onClick={() => { alert("You should first upload the neccesry files!") }}>START ROBOT</button>
-                        </div>
-                    )
-                }
-                </div>
-            </div>
-        )
-    }
 
     return (
         <div className="conatiner live-page mt-5">
@@ -71,7 +55,7 @@ function Live(props) {
                     <div className='col-6 right'>
                         <button
                             className='btn btn-warning'
-                            onClick={handleBtn}>START ROBOT</button>
+                            onClick={handleStartBtn}>START ROBOT</button>
                     </div>
                 )
             }
@@ -80,7 +64,7 @@ function Live(props) {
                         <div className='col-6 right'>
                             <button
                                 className='btn btn-danger'
-                                onClick={handleBtn}>STOP ROBOT</button>
+                                onClick={handleStopBtn}>STOP ROBOT</button>
                         </div>
                     )
                 }

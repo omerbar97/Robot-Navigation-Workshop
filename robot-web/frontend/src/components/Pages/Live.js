@@ -30,6 +30,9 @@ function Live(props) {
             alert("You should first upload the neccesry files!");
             return;
         }
+        if(img === null){
+            return;
+        }
         setIsLive(true);
     }
 

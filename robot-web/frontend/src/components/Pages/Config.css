@@ -11,3 +11,9 @@ body {
     margin:auto;
     justify-content: center;
 }
+
+.item-config{
+    position: fixed;
+    max-width: 200px;
+    left:0;
+}

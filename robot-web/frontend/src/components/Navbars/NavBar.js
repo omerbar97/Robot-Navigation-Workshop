@@ -1,14 +1,15 @@
 import './NavBars.css'
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react';
+import ServerForm from '../Forms/ServerForm';
 
 
 const NavBar = (props) => {
 
-    const {uploadMap, uploadConfigRooms , uploadRobotConfigurations} = props;
+    const { uploadMap, uploadConfigRooms, uploadRobotConfigurations, setServerInfo, serverInfo, serverOnline } = props;
 
     useEffect(() => {
-        if(uploadMap === true && uploadConfigRooms === true && uploadRobotConfigurations === true){
+        if (uploadMap === true && uploadConfigRooms === true && uploadRobotConfigurations === true) {
             let liveDisplay = document.getElementById("liveDisplay");
             // removing the disabled class
             liveDisplay.classList.remove("disabled");
@@ -16,7 +17,22 @@ const NavBar = (props) => {
     }, [uploadMap, uploadConfigRooms, uploadRobotConfigurations])
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light navBar">
-            <a className="navbar-brand" href="#">Terminator T-800</a>
+            <div className='row'>
+                <a className="navbar-brand" href="#">Terminator T-800</a>
+                {
+                    serverOnline === false && (
+                        <button className='btn btn-danger toRight mr-4'
+                            onClick={() => { setServerInfo(!serverInfo) }}>OFFLINE</button>
+                    )
+                }
+                {
+                    serverOnline === true && (
+                        <button className='btn btn-success toRight mr-4'
+                            onClick={() => { setServerInfo(!serverInfo) }}>ONLINE</button>
+                    )
+                }
+
+            </div>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -36,6 +52,7 @@ const NavBar = (props) => {
                     </li>
                 </ul>
             </div>
+
         </nav>
     );
 };

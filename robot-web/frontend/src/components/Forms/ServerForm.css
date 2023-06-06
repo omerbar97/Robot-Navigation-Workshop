@@ -1,0 +1,11 @@
+.item-center {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.green{
+    color: rgb(0, 132, 0);
+}

@@ -73,6 +73,32 @@ const newRobotSimulatorConfig = async (config) => {
 
 }
 
+const updateServerIP = async (ip) => {
+    let data = {
+        "ip" : ip
+    }
+    try {
+        const response = await fetch(SERVER + 'server/ip', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        });
+    
+        if(response.ok){
+            console.log("ip was updated");
+            return true;
+        } else {
+            console.log("failed to update ip");
+            return response.text();
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    return false;
+}
+
 
 const startRobotSimulator = async () => {
     // sending the data to the server
@@ -99,6 +125,7 @@ const post = {
     newMap,
     newRoomConfig,
     newRobotSimulatorConfig,
-    startRobotSimulator
+    startRobotSimulator,
+    updateServerIP
 }
 export default post;

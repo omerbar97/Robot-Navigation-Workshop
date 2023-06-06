@@ -19,11 +19,6 @@ function RobotStageForm(props) {
         }
         const file = event.target.files[0];
         const reader = new FileReader();
-        // if (!file.type.match('world.*')) {
-        //     alert("Please select world file only.");
-        //     setWorldFile(null);
-        //     return;
-        // }
         reader.onload = function () {
             const dataURL = reader.result;
             setWorldFile(dataURL);
@@ -39,11 +34,6 @@ function RobotStageForm(props) {
         }
         const file = event.target.files[0];
         const reader = new FileReader();
-        // if (!file.type.match('cfg.*')) {
-        //     alert("Please select cfg file only.");
-        //     setConfigFile(null);
-        //     return;
-        // }
         reader.onload = function () {
             const dataURL = reader.result;
             setConfigFile(dataURL);

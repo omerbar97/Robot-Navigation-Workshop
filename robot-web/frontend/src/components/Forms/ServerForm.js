@@ -1,6 +1,7 @@
 import './ServerForm.css'
 import post from '../../services/postServices';
 import { useRef } from 'react';
+import WebSocketClient from '../../services/WebSocketClient'
 function ServerForm(props) {
 
     const { setServerOnline , setServerIp , serverIp} = props;
@@ -10,7 +11,7 @@ function ServerForm(props) {
         const ip = ipRef.current.value;
         let res = await post.updateServerIP(ip);
         if(res === true) {
-            alert("ip was updated");
+            alert("connected to the robot-server successfully");
             setServerIp(ip);
             setServerOnline(true);
         } else {

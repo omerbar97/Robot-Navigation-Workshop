@@ -7,12 +7,14 @@ import RobotConfig from './components/Pages/RobotConfig';
 import Live from './components/Pages/Live';
 import NavBar from './components/Navbars/NavBar';
 import get from './services/getServices';
+import WebSocketClient from './services/WebSocketClient';
 
 function App() {
 
   const [uploadMap, setUploadMap] = useState(false);
   const [uploadConfigRooms, setUploadConfigRooms] = useState(false);
   const [uploadRobotConfigurations, setUploadRobotConfigurations] = useState(false);
+
 
   // checking if the robot server has old config files
   useEffect(() => {
@@ -34,6 +36,22 @@ function App() {
       }
     }
 
+    const ws = new WebSocketClient("ws://localhost:8081");
+
+    // adding the event listener
+    if (ws) {
+      ws.ws.addEventListener('message', (event) => {
+        try {
+          let t = JSON.parse(event.data);
+          if (t.type === "robot-server" && t.success === false) {
+            setServerOnline(t.success);
+            setServerIp(null);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    }
     checkOldFiles();
   }, []);
 
@@ -71,7 +89,12 @@ function App() {
           setServerOnline={setServerOnline}
           setServerIp={setServerIp}
           serverIp={serverIp} />} />
-        <Route path="/live" element={<Live uploadMap={uploadMap} uploadConfigRooms={uploadConfigRooms} uploadRobotConfigurations={uploadRobotConfigurations} serverInfo={serverInfo} />} />
+        <Route path="/live" element={<Live
+          uploadMap={uploadMap}
+          uploadConfigRooms={uploadConfigRooms}
+          uploadRobotConfigurations={uploadRobotConfigurations}
+          serverInfo={serverInfo}
+          serverOnline={serverOnline} />} />
       </Routes>
     </BrowserRouter>
   );

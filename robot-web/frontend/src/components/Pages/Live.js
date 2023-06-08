@@ -15,29 +15,33 @@ async function getImgFromServerAndStartRobot(setImg) {
     }
     setImg(res);
     post.startRobotSimulator();
+    post.startRobot();
 }
 
 
 function Live(props) {
 
-    const { uploadMap, uploadConfigRooms, uploadRobotConfigurations } = props;
+    const { uploadMap, uploadConfigRooms, uploadRobotConfigurations, serverOnline } = props;
 
     const [isLive, setIsLive] = useState(false);
     const [img, setImg] = useState(null); // the map image
     const handleStartBtn = (event) => {
         event.preventDefault();
-        if(!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations){
+        if (!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations) {
             alert("You should first upload the neccesry files!");
             return;
         }
-        // if(img === null){
-        //     return;
-        // }
+        if (serverOnline === false) {
+            alert("You should first connect to the robot-server!");
+            return;
+        }
         setIsLive(true);
     }
 
-    const handleStopBtn = (event) => {
+    const handleStopBtn = async (event) => {
         event.preventDefault();
+        // calling the server to stop the robot
+        post.stopRobotSimulator();
         setIsLive(false);
     }
 

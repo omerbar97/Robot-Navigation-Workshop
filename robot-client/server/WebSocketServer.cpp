@@ -5,6 +5,7 @@
 #include "WebSocketServer.h"
 
 WebSocketServer::WebSocketServer(std::string ip, int port) : ip(ip), port(port), helper() {
+    isStageOnline = false;
     stageUrl = "/usr/local/share/stage/worlds";
 
     // Initialize the WebSocket server
@@ -38,19 +39,6 @@ void WebSocketServer::start() {
         serverWs.run();
     });
 
-//    // sending the postRequest to the node.js server that the server is running
-//    std::string postRequestUrl = "http://localhost:8080/robotServer/";
-//    // creating the json
-//    json jsonData;
-//    jsonData["type"] = "serverInit";
-//    jsonData["url"] = this->ip + ":" + std::to_string(this->port);
-//    std::string data = jsonData.dump();
-//    bool check = this->helper.postRequest(postRequestUrl, data);
-//    if(!check){
-//        std::cout << "Error: failed to send the post request to the node.js server" << std::endl;
-//        exit(1);
-//    }
-//    std::cout << "Server is running" << std::endl;
 }
 
 void WebSocketServer::stop() {
@@ -69,10 +57,18 @@ void WebSocketServer::onMessage(websocketpp::connection_hdl hdl, server::message
     std::cout << "Message received: " << message << std::endl;
     if (message == "START_STAGE") {
         this->currentHdl = hdl;
-        startStageProcess();
-    } else if (message == "START_ROBOT") {
+        this->isStageOnline = startStageProcess(hdl);
+    } else if (message == "START_ROBOT" && this->isStageOnline) {
         this->currentHdl = hdl;
-        startRobotControllerProcess();
+        startRobotControllerProcess(hdl);
+    } else if(message == "STOP_STAGE" && this->isStageOnline) {
+        // first checking if the child process still running
+        int status;
+        pid_t result = waitpid(this->stagePid, &status, WNOHANG);
+        if(result == 0) {
+            // killing the stage process
+            kill(this->stagePid, SIGKILL);
+        }
     }
     // Process the message as needed
 }
@@ -88,7 +84,7 @@ void WebSocketServer::onClose(websocketpp::connection_hdl hdl) {
 
 }
 
-bool WebSocketServer::startStageProcess() {
+bool WebSocketServer::startStageProcess(websocketpp::connection_hdl hdl) {
     // starting the stage process
     // getting the information from the server .cfg file and .world file, establishing the connection with the server
     // and starting the stage process
@@ -105,7 +101,7 @@ bool WebSocketServer::startStageProcess() {
         jsonData["success"] = false;
         jsonData["error"] = "failed to retrieve the .cfg and .world files from the server";
         std::string message = jsonData.dump();
-        this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+        this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
         return false;
     } else {
         // the format is json
@@ -122,36 +118,47 @@ bool WebSocketServer::startStageProcess() {
 
         // creating the .cfg file
         bool check2 = helper.writeToFile(stageUrl + "/fromServer.cfg", cfg);
-        if(!check2) {
+        if (!check2) {
             // sending error message to the client
             json jsonData;
             jsonData["type"] = "stageInit";
             jsonData["success"] = false;
             jsonData["message"] = "failed to create the .cfg file";
             std::string message = jsonData.dump();
-            this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+            this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
             return false;
         }
 
         check2 = helper.writeToFile(stageUrl + "/fromServer.world", world);
-        if(!check2) {
+        if (!check2) {
             // sending error message to the client
             json jsonData;
             jsonData["type"] = "stageInit";
             jsonData["success"] = false;
             jsonData["message"] = "failed to create the .world file";
             std::string message = jsonData.dump();
-            this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+            this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
             return false;
         }
 
         // creating the png file
         bool flag = helper.saveAsPng(map, stageUrl + "/bitmaps/fromServer.png");
+        bool flag2 = helper.saveAsPng(map, "../maps/fromServer.png");
         int check;
         // starting
         if (flag) {
             // creating a child process
             pid_t pid = fork();
+            if(pid == -1) {
+                // error in fork() exiting
+                json jsonData;
+                jsonData["type"] = "stageInit";
+                jsonData["success"] = false;
+                jsonData["message"] = "failed to fork()";
+                std::string message = jsonData.dump();
+                this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+                return false;
+            }
             if (pid == 0) {
                 // changing the current directory to the stage/worlds
                 check = chdir(stageUrl.c_str());
@@ -162,7 +169,7 @@ bool WebSocketServer::startStageProcess() {
                     jsonData["success"] = false;
                     jsonData["message"] = "failed to change directory to the stage/worlds";
                     std::string message = jsonData.dump();
-                    this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+                    this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
                     exit(1);
                 }
                 // starting the stage process
@@ -171,7 +178,7 @@ bool WebSocketServer::startStageProcess() {
                 json jsonData;
                 jsonData["error"] = "failed to start the stage process";
                 std::string message = jsonData.dump();
-                this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+                this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
                 exit(1);
             } else {
                 // parent process
@@ -189,7 +196,8 @@ bool WebSocketServer::startStageProcess() {
                     jsonData["type"] = "stageInit";
                     jsonData["success"] = true;
                     std::string message = jsonData.dump();
-                    this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+                    this->stagePid = pid;
+                    this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
                     return true;
                 } else {
                     // the child process is not running
@@ -199,7 +207,7 @@ bool WebSocketServer::startStageProcess() {
                     jsonData["success"] = false;
                     jsonData["message"] = "failed to start the stage process";
                     std::string message = jsonData.dump();
-                    this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+                    this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
                     return false;
                 }
             }
@@ -211,20 +219,19 @@ bool WebSocketServer::startStageProcess() {
             jsonData["success"] = false;
             jsonData["message"] = "failed to save the png file";
             std::string message = jsonData.dump();
-            this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+            this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
             return false;
         }
     }
-
 }
 
-bool WebSocketServer::startRobotControllerProcess() {
+bool WebSocketServer::startRobotControllerProcess(websocketpp::connection_hdl hdl) {
     // retriving the robot information from the server
     std::cout << "Starting the stage process\n";
     std::string url = "http://localhost:8080/robot/config";
 
     std::string response = helper.getResponse(url);
-    if(response.empty()) {
+    if (response.empty()) {
         // error in handling the GET method from client
         // sending backToTheClient the error message
         // creating new json object
@@ -233,7 +240,7 @@ bool WebSocketServer::startRobotControllerProcess() {
         jsonData["success"] = false;
         jsonData["error"] = "failed to retrieve the robot information from the server";
         std::string message = jsonData.dump();
-        this->serverWs.send(this->currentHdl, message, websocketpp::frame::opcode::text);
+        this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
         return false;
     } else {
         // the format is json
@@ -243,6 +250,88 @@ bool WebSocketServer::startRobotControllerProcess() {
 //            "port": "string",
 //            "roomConfig": string,
 //            "isStage": boolean
-//        }
+
+        json jsonData = json::parse(response);
+
+        // saving the roomConfig file in the configures folder inside the project
+        std::string roomConfig = jsonData["roomConfig"];
+
+        // opening the file
+        std::ofstream file("../configures/room_coordinates.txt");
+        if (!file.is_open()) {
+            // error in opening the file
+            // sending backToTheClient the error message
+            json jsonData;
+            jsonData["type"] = "robotInit";
+            jsonData["success"] = false;
+            jsonData["error"] = "failed to write the roomConfig file";
+            std::string message = jsonData.dump();
+            this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+            return false;
+        }
+
+        // writing the roomConfig to the file
+        file << roomConfig;
+        file.close();
+        std::string ip = jsonData["ip"];
+        std::string port = jsonData["port"];
+        std::string ws = jsonData["ws"];
+        // starting the robot controller process
+        // creating a child process
+        sleep(4); // waiting for stage to start
+        pid_t pid = fork();
+        if(pid == -1) {
+            // error in fork() exiting
+            json jsonData;
+            jsonData["type"] = "robotInit";
+            jsonData["success"] = false;
+            jsonData["message"] = "failed to fork()";
+            std::string message = jsonData.dump();
+            this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+            return false;
+        }
+        if(pid == 0) {
+            // child process
+            // running the robot controller process with the given ip and port
+            execlp("./Robot-Navigation", "./Robot-Navigation", ip.c_str(), port.c_str(), ws.c_str(), NULL);
+
+            // if got here then there was an error
+            json jsonData;
+            jsonData["type"] = "robotInit";
+            jsonData["success"] = false;
+            jsonData["message"] = "failed to execute the robot controller process";
+            std::string message = jsonData.dump();
+            this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+            exit(1);
+
+        } else {
+
+            // waiting for the robot controller process to start
+            sleep(2);
+            // checking if the child process is still running
+            int status;
+            pid_t result = waitpid(pid, &status, WNOHANG);
+            if (result == 0) {
+                // the child process is still running
+                // sending backToTheClient the success message
+                json jsonData;
+                jsonData["type"] = "robotInit";
+                jsonData["success"] = true;
+                std::string message = jsonData.dump();
+                this->robotPid = pid;
+                this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+                return true;
+            } else {
+                // the child process is not running
+                // sending backToTheClient the error message
+                json jsonData;
+                jsonData["type"] = "robotInit";
+                jsonData["success"] = false;
+                jsonData["message"] = "failed to start the robot controller process22";
+                std::string message = jsonData.dump();
+                this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+                return false;
+            }
+        }
     }
 }

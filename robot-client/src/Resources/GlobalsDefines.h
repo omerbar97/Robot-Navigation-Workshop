@@ -10,7 +10,7 @@
 #define DOOR 2
 #define EXIT_POINT 3
 #define ENTRY_POINT 4
-#define UNKNOWN 5
+//#define UNKNOWN 5
 
 
 #endif //ROBOT_NAVIGATION_WORKSHOP_GLOBALSDEFINES_H

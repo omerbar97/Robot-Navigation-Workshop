@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const WebSocketServer = require('./WebSocketServer');
+const server = require('./WebSocketServer');
 
 let instance = null;
 
@@ -41,6 +42,17 @@ class WebSocketClient {
           // broadcasting the data to all the clients
           WebSocketServer.broadcast(dataJson);
         }
+        if(dataJson.type === 'robotInit') {
+          // calling service for robot init
+          // broadcasting the data to all the clients
+          WebSocketServer.broadcast(dataJson);
+        }
+        if(dataJson.type === 'robotPosition') {
+          // broadcasting the data to all the clients
+          WebSocketServer.broadcast(dataJson);
+        }
+
+        console.log('Received message:', data);
       });
       
       // WebSocket connection error
@@ -51,6 +63,12 @@ class WebSocketClient {
 
       // WebSocket connection closed
       this.ws.on('close', () => {
+        // sending message to all the clients
+        server.broadcast({
+          type: 'robot-server',
+          success: false,
+          message: 'robot server disconnected',
+        });
         console.log('Disconnected from WebSocket server');
         this.instance = null;
         this.online = false;

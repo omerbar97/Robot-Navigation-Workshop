@@ -30,8 +30,19 @@ std::string Helper::getResponse(const std::string &url) {
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
         res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        return response;
+        if (res == CURLE_OK) {
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+            if (response_code == 200) {
+                curl_easy_cleanup(curl);
+                return response;
+            } else {
+                curl_easy_cleanup(curl);
+                return "";
+            }
+        } else {
+            curl_easy_cleanup(curl);
+            return "";
+        }
     }
     return "";
 }

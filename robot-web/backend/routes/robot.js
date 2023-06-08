@@ -11,8 +11,17 @@ router.route('/simulator')
 //     .get()
 //     .post();
 
-router.route('/start')
-    .post(robotController.startRobot);
+router.route('/startStage')
+    .post(robotController.startStage);
+
+router.route('/startRobot')
+    .post(robotController.startRobot)
+
+router.route('/stop')
+    .post(robotController.stopRobot);
+
+router.route('/config')
+    .get(robotController.Config);
 
 
 

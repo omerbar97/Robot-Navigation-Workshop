@@ -87,7 +87,7 @@ const updateServerIP = async (ip) => {
         });
     
         if(response.ok){
-            console.log("ip was updated");
+            console.log("connected to server with ip " + ip);
             return true;
         } else {
             console.log("failed to update ip");
@@ -103,7 +103,7 @@ const updateServerIP = async (ip) => {
 const startRobotSimulator = async () => {
     // sending the data to the server
     try {
-        const response = await fetch(SERVER + 'robot/start', {
+        const response = await fetch(SERVER + 'robot/startStage', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -121,11 +121,55 @@ const startRobotSimulator = async () => {
     return null;
 }
 
+const stopRobotSimulator = async () => {
+     // sending the data to the server
+     try {
+        const response = await fetch(SERVER + 'robot/stop', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+    
+        // waiting 4 seconds for the robot to stop
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        // getting the response from the server
+        return true;
+
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+}
+
+const startRobot = async () => {
+    // sending the data to the server
+    try {
+        const response = await fetch(SERVER + 'robot/startRobot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+    
+        // waiting 4 seconds for the robot to stop
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        // getting the response from the server
+        return true;
+
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+}
+
 const post = {
     newMap,
     newRoomConfig,
     newRobotSimulatorConfig,
     startRobotSimulator,
-    updateServerIP
+    updateServerIP,
+    stopRobotSimulator,
+    startRobot
 }
 export default post;

@@ -34,7 +34,6 @@ class WebSocketServer {
 
     broadcast(message) {
         this.clients.forEach((client) => {
-            console.log(message);
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(message));
             }

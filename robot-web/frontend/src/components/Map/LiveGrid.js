@@ -48,9 +48,6 @@ const LiveGrid = ({ img }) => {
               className={`grid-cell ${cell.current ? 'active' : ''} ${
                 cell.hovered ? 'hovered' : ''
               }`}
-            //   onClick={() => handleGridCellClick(index)}
-            //   onMouseEnter={() => handleGridCellHover(index)}
-            //   onMouseLeave={() => handleGridCellLeave(index)}
             />
           ))}
         </div>

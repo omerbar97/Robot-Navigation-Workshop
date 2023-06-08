@@ -52,6 +52,7 @@ class WebSocketClient {
       // WebSocket connection closed
       this.ws.on('close', () => {
         console.log('Disconnected from WebSocket server');
+        this.instance = null;
         this.online = false;
       });
     } catch (error) {

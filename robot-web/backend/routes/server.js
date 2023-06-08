@@ -6,4 +6,7 @@ router.route('/ip')
     .get()
     .post(serverController.connectToServer);
 
+router.route('/')
+    .get(serverController.oldFiles);
+
 module.exports = router;

@@ -11,7 +11,6 @@ const Map = async () => {
                 'Content-Type': 'application/json'
             },
         });
-        console.log(response)
         if(response.ok){
             console.log("map received from server");
             return await response.text();
@@ -26,8 +25,33 @@ const Map = async () => {
     return null;
 }
 
+const oldFiles = async () => {
+    try {
+        const response = await fetch(SERVER + 'server', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        console.log(response);
+        if(response.ok){
+            let data = await response.json();
+            // data = JSON.parse(data);
+            return data;
+        }
+        else{
+            // failed to get the old files
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    return null;
+}
+
 const get = {
     Map,
+    oldFiles
 }
 
 export default get;

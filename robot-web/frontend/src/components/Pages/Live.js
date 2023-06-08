@@ -1,7 +1,7 @@
 import './Live.css';
 import get from '../../services/getServices';
 import post from '../../services/postServices';
-import LiveGrid from '../Map/LiveGrid';
+import LiveGridMap from '../Map/LiveGridMap';
 import RobotLiveData from '../Info/RobotLiveData';
 import { useEffect, useState } from 'react';
 
@@ -49,7 +49,7 @@ function Live(props) {
     }, [isLive])
 
     return (
-        <div className="conatiner live-page mt-5">
+        <div className={`conatiner live-page mt-5 ${isLive ? 'extend-height' : ''}`}>
             <h4>
                 <u><b>This is the live broadcast page, from here you can see the robot's movements in real time.</b></u>
             </h4>
@@ -72,10 +72,10 @@ function Live(props) {
                     )
                 }
             </div>
-            {isLive && img && (<div className='d-flex'>
+            {isLive && img && (<div className='d-flex container-live'>
                 <div className='col-7'>
                     {/* here the map going to be */}
-                    <LiveGrid img={img} />
+                    <LiveGridMap img={img} />
                 </div>
                 <div className='col-5'>
                     <RobotLiveData />

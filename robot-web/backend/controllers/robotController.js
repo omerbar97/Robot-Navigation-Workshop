@@ -3,6 +3,8 @@ const { addIp,
     addCfg,
     addWorld } = require('../models/robotModel');
 
+
+
 const WebSocketClient = require('../services/WebSocketClient.js');
 
 // saving the robot information from the client
@@ -16,23 +18,23 @@ const postRobotSimulation = async (req, res) => {
     // }
     // checking if data is okay
     let data = req.body;
-    if(!data) {
+    if (!data) {
         res.status(400).send('Bad Request');
         return;
     }
-    else if(!data.world) {
+    else if (!data.world) {
         res.status(400).send('Bad Request');
         return;
     }
-    else if(!data.cfg) {
+    else if (!data.cfg) {
         res.status(400).send('Bad Request');
         return;
     }
-    else if(!data.ip) {
+    else if (!data.ip) {
         res.status(400).send('Bad Request');
         return;
     }
-    else if(!data.port) {
+    else if (!data.port) {
         res.status(400).send('Bad Request');
         return;
     }
@@ -45,7 +47,7 @@ const postRobotSimulation = async (req, res) => {
 
     // sending the response
     res.status(200).send('OK');
-    
+
 };
 
 const startRobot = (req, res) => {
@@ -54,6 +56,7 @@ const startRobot = (req, res) => {
     let ws = new WebSocketClient(); // instance of the websocket client
     ws.send('START_STAGE');
 };
+
 
 module.exports = {
     postRobotSimulation,

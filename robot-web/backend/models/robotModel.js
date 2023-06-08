@@ -24,7 +24,7 @@ const getIp = async () => {
         let data = await db.getData("/ip");
         return data;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
     return null;
 }
@@ -34,7 +34,7 @@ const getPort = async () => {
         let data = await db.getData("/port");
         return data;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
     return null;
 }
@@ -44,7 +44,7 @@ const getCfg = async () => {
         let data = await db.getData("/cfg");
         return data;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
     return null;
 }
@@ -54,7 +54,7 @@ const getWorld = async () => {
         let data = await db.getData("/world");
         return data;
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
     return null;
 }

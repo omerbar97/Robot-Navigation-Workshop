@@ -1,4 +1,4 @@
-import SERVER from './api'
+import {SERVER} from './api'
 
 // all the server get request
 
@@ -11,6 +11,7 @@ const Map = async () => {
                 'Content-Type': 'application/json'
             },
         });
+        console.log(response)
         if(response.ok){
             console.log("map received from server");
             return await response.text();

@@ -1,51 +1,64 @@
 import './Live.css';
 import get from '../../services/getServices';
+import post from '../../services/postServices';
 import LiveGrid from '../Map/LiveGrid';
+import RobotLiveData from '../Info/RobotLiveData';
 import { useEffect, useState } from 'react';
 
-async function getImgFromServer(setImg) {
+async function getImgFromServerAndStartRobot(setImg) {
     let res = await get.Map();
+    console.log(res);
     if (res === null) {
         // failed to retrive the map
         alert("failed to retrive the map, try again later");
         return;
     }
-    console.log(res);
     setImg(res);
+    post.startRobotSimulator();
 }
 
 
-function Live() {
+function Live(props) {
+
+    const { uploadMap, uploadConfigRooms, uploadRobotConfigurations } = props;
 
     const [isLive, setIsLive] = useState(false);
     const [img, setImg] = useState(null); // the map image
-    const handleBtn = (event) => {
+    const handleStartBtn = (event) => {
         event.preventDefault();
-        if(img === null){
-            alert("problem with loading the map from the server, try again later")
+        if(!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations){
+            alert("You should first upload the neccesry files!");
             return;
         }
-        setIsLive(!isLive);
+        if(img === null){
+            return;
+        }
+        setIsLive(true);
+    }
+
+    const handleStopBtn = (event) => {
+        event.preventDefault();
+        setIsLive(false);
     }
 
     useEffect(() => {
         if (isLive) {
             // getting the map from the server
-            getImgFromServer(setImg);
+            getImgFromServerAndStartRobot(setImg);
         }
-    }, [])
+    }, [isLive])
 
     return (
         <div className="conatiner live-page mt-5">
-            <h5>
-                <u>This is the live broadcast page, from here you can see the robot's movements in real time.</u>
-            </h5>
+            <h4>
+                <u><b>This is the live broadcast page, from here you can see the robot's movements in real time.</b></u>
+            </h4>
             <div className="row"> {
                 !isLive && (
                     <div className='col-6 right'>
                         <button
                             className='btn btn-warning'
-                            onClick={handleBtn}>start robot</button>
+                            onClick={handleStartBtn}>START ROBOT</button>
                     </div>
                 )
             }
@@ -54,18 +67,18 @@ function Live() {
                         <div className='col-6 right'>
                             <button
                                 className='btn btn-danger'
-                                onClick={handleBtn}>stop robot</button>
+                                onClick={handleStopBtn}>STOP ROBOT</button>
                         </div>
                     )
                 }
             </div>
             {isLive && img && (<div className='d-flex'>
-                <div className='col-8'>
+                <div className='col-7'>
                     {/* here the map going to be */}
                     <LiveGrid img={img} />
                 </div>
-                <div className='col-4'>
-                    <h2><b><u>Robot Live Data</u></b></h2>
+                <div className='col-5'>
+                    <RobotLiveData />
                 </div>
             </div>
 

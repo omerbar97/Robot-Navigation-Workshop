@@ -25,7 +25,7 @@ function UploadForm(props) {
             return;
         }
         reader.onload = function (event) {
-            const fileContent = event.target.result; // Get the file content
+            const fileContent = event.target.result;
             setText({ text: fileContent });
         }
         reader.readAsText(file);
@@ -66,11 +66,14 @@ function UploadForm(props) {
                 setUploadConfigRooms(true);
                 alert("map and config files uploaded successfully");
             } else {
+                setUploadMap(false);
+                setUploadConfigRooms(false);
                 alert("failed to upload map and config files");
             }
         } catch (error) {
+            setUploadMap(false);
+            setUploadConfigRooms(false);
             alert("failed to upload map and config files");
-            console.log(error);
         }
     }
 

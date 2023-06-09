@@ -12,6 +12,7 @@
 RoomsHandler::RoomsHandler(std::string roomConfigPath, std::vector<int> roomsIds) {
     this->roomsId = roomsIds;
     this->initRooms(roomConfigPath);
+
 }
 
 void RoomsHandler::initRooms(std::string roomConfigPath) {

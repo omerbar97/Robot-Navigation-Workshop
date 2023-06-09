@@ -1,12 +1,11 @@
 .live-grid-container {
     display: inline-block;
     position: relative;
-
   }
   
   .live-grid-container img {
-    display: grid;
-    position: absolute;
+    /* display: grid;
+    position: absolute; */
     top: 0;
     left: 0;
     margin: 0;

@@ -3,6 +3,8 @@ const { addIp,
     addCfg,
     addWorld } = require('../models/robotModel');
 
+const wsClient = require('../services/WebSocketClient.js');
+
 // saving the robot information from the client
 const postRobotSimulation = async (req, res) => {
     // sending the following data
@@ -46,6 +48,13 @@ const postRobotSimulation = async (req, res) => {
     
 };
 
+const startRobot = (req, res) => {
+    // starting the robot
+    // sending the following data
+    wsClient.send('START_STAGE');
+};
+
 module.exports = {
-    postRobotSimulation
+    postRobotSimulation,
+    startRobot
 }

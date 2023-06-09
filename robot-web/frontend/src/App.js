@@ -9,9 +9,9 @@ import NavBar from './components/Navbars/NavBar';
 
 function App() {
 
-  const [uploadMap, setUploadMap] = useState(true);
-  const [uploadConfigRooms, setUploadConfigRooms] = useState(true);
-  const [uploadRobotConfigurations, setUploadRobotConfigurations] = useState(true);
+  const [uploadMap, setUploadMap] = useState(false);
+  const [uploadConfigRooms, setUploadConfigRooms] = useState(false);
+  const [uploadRobotConfigurations, setUploadRobotConfigurations] = useState(false);
   const [isStage, setIsStage] = useState(false);
 
 
@@ -24,7 +24,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mapsettings" element={<ConfigPage setUploadMap={setUploadMap} setUploadConfigRooms={setUploadConfigRooms}/>} />
         <Route path="/robotsettings" element={<RobotConfig setUploadRobotConfigurations={setUploadRobotConfigurations} setIsStage={setIsStage}/>} />
-        <Route path="/live" element={<Live />} />
+        <Route path="/live" element={<Live uploadMap={uploadMap} uploadConfigRooms={uploadConfigRooms} uploadRobotConfigurations={uploadRobotConfigurations} />}/>
       </Routes>
     </BrowserRouter>
   );

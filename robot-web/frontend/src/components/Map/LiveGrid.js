@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import "./LiveGrid.css";
 
 
 const LiveGrid = ({ img }) => {
@@ -7,7 +8,7 @@ const LiveGrid = ({ img }) => {
   
     const gridStyle = {
       gridTemplateColumns: `repeat(${gridWidth}, 5px)`,
-      gridTemplateRows: `repeat(${gridHeight}, 5px)`,
+      gridTemplateRows: `repelive-grid-containerat(${gridHeight}, 5px)`,
       width: img.width,
       height: img.height,
     };

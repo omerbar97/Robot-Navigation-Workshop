@@ -11,9 +11,9 @@
 //}
 
 RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy) :
-            robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
+        robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
     this->robotTurnSpeed = 0.03;
-    this->robotGroundSpeed = 0.06;
+    this->robotGroundSpeed = 0.04;
 }
 
 

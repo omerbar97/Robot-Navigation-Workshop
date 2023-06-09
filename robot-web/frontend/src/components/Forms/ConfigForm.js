@@ -76,6 +76,7 @@ function ConfigForm(props) {
             setUploadConfigRooms(true);
             alert("config file sent successfully");
         } else {
+            setUploadConfigRooms(false);
             alert("error sending config file");
         }
     }
@@ -88,6 +89,7 @@ function ConfigForm(props) {
             setUploadMap(true);
             alert("map file sent successfully");
         } else {
+            setUploadMap(false);
             alert("error sending map file");
         }
     }

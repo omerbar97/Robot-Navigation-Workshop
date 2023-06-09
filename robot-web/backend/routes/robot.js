@@ -10,4 +10,6 @@ router.route('/physical')
     .get()
     .post();
 
+router.route('/start')
+    .post(robotController.startRobot);
 module.exports = router;

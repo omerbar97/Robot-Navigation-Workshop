@@ -28,6 +28,7 @@ void RRTStarAlgorithm::calculate() {
     ompl::base::StateSpacePtr space(this->gridMap);
 
     space->as<ompl::base::RealVectorStateSpace>()->setBounds(*this->getGridMap()->getBounds());
+    auto bla = space;
 
     // creating the space information
     ompl::base::SpaceInformationPtr spaceInformation(std::make_shared<ompl::base::SpaceInformation>(space));

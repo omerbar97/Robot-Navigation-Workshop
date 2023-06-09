@@ -89,6 +89,7 @@ public:
     // algorithm setter, setting the point as it is in the stageMap, then transforming it to the matrix coordinates
     void setStartingPoint(std::pair<double ,double> start);
     void setGoalPoint(std::pair<double ,double> goal);
+    std::pair<double ,double>  getGoalPoint();
 
     // do the calculation
     void createPath();

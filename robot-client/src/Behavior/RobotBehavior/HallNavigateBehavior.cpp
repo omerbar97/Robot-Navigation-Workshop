@@ -48,7 +48,7 @@ int HallNavigateBehavior::execute() {
         // sense
         this->robot->update();
         // think
-        isTurning = avoidObstacles(groundSpeed, turnSpeed);
+//        isTurning = avoidObstacles(groundSpeed, turnSpeed);
 
         // act
         pos.SetSpeed(groundSpeed, turnSpeed);
@@ -64,7 +64,8 @@ int HallNavigateBehavior::execute() {
 //        if(distance < minDistance) {
 //            minDistance = distance;
 //        }
-        usleep(100);
+        printf("groudSpeed: %f, turnSpeed: %f, distance: %f\n", groundSpeed, turnSpeed, distance);
+        usleep(10);
     }
 
     pos.SetSpeed(0, 0);

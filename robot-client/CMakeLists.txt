@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.24)
 project(Robot-Navigation-Workshop)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-dev")
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+
 
 # Find playerc++ library and headers
 find_package(playerc++ REQUIRED)

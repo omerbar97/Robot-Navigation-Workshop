@@ -55,3 +55,4 @@ Make sure to install all the dependances to be able to run our program
 | OMPL | [https://github.com/ompl/ompl][PlGd] |
 | Espeak | [https://espeak.sourceforge.net/][PlOd] |
 | Json for C++ | [https://github.com/nlohmann/json][PlMe] |
+| cmake | [https://cmake.org/download/][PlMe] |

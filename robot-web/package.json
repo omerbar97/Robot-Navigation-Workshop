@@ -1,0 +1,16 @@
+{
+  "name": "robot-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd frontend && npm run build",
+    "copy": "cp -r frontend/build/* backend/public",
+    "build-all": "npm run build && npm run copy",
+    "start-deploy":"cd backend && npm run deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "robot-navigation-workshop",
+  "version": "1.0.0",
+  "description": "<h2>About</h2> <p>Welcome to our second-year Computer Science project on robot navigation! This repository contains the code and documentation for our exploration into the fascinating field of robot navigation. Our team, consisting of three dedicated and enthusiastic students, aims to develop a robust and efficient navigation system for a mobile robot using the Player/Stage platform and implementing it in C++.</p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd robot-web && npm run build-all",
+    "start": "cd robot-web && npm run start-deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

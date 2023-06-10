@@ -8,7 +8,7 @@ class WebSocketServer {
     }
 
     start() {
-        this.server = new WebSocket.Server({ port: this.port });
+        this.server = new WebSocket.Server({ port: this.port, host: '0.0.0.0' });
 
         this.server.on('connection', (ws) => {
             console.log('A new client connected');

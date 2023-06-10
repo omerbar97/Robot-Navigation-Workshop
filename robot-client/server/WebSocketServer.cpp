@@ -8,6 +8,7 @@ WebSocketServer::WebSocketServer(std::string ip, int port) : ip(ip), port(port),
     isStageOnline = false;
     isRobotOnline = false;
     stageUrl = "/usr/local/share/stage/worlds";
+    requestIp = "http://localhost:8080";
 
     // Initialize the WebSocket server
     serverWs.init_asio();
@@ -101,8 +102,8 @@ bool WebSocketServer::startStageProcess(websocketpp::connection_hdl hdl) {
     // and starting the stage process
     std::cout << "Starting the stage process\n";
     // converting the port to string
-    std::string portStr = std::to_string(this->port);
-    std::string url =  ip + ":" + portStr + "/stage/config";
+    std::string url = requestIp + "/stage/config";
+    std::cout << "Sending GET request to: " << url << std::endl;
 
     std::string response = helper.getResponse(url);
     if (response.empty()) {
@@ -240,10 +241,10 @@ bool WebSocketServer::startStageProcess(websocketpp::connection_hdl hdl) {
 
 bool WebSocketServer::startRobotControllerProcess(websocketpp::connection_hdl hdl) {
     // retriving the robot information from the server
-    std::cout << "Starting the stage process\n";
+    std::cout << "Starting the robot process\n";
     // converting the port to string
-    std::string portStr = std::to_string(this->port);
-    std::string url = ip + ":" + portStr + "/robot/config";
+    std::string url = requestIp + "/robot/config";
+    std::cout << "Sending GET request to: " << url << std::endl;
 
     std::string response = helper.getResponse(url);
     if (response.empty()) {

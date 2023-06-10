@@ -9,6 +9,8 @@
     "copy": "cp -r frontend/build/* backend/public",
     "dependances": "cd backend && npm install",
     "build-all": "npm run build && npm run copy && npm run dependances",
+    "build-local": "npm run build && npm run copy",
+    "start-local": "cd backend && npm run local",
     "start-deploy":"cd backend && npm run deploy"
   },
   "keywords": [],

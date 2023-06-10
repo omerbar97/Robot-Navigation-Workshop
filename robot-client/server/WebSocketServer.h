@@ -25,6 +25,7 @@ private:
     std::string stageUrl;
     std::thread serverThread;
     std::string ip;
+    std::string requestIp;
     bool isStageOnline;
     bool isRobotOnline;
     pid_t stagePid;

@@ -12,14 +12,14 @@ const connectToServer = (req, res) => {
     let data = req.body;
     console.log(data);
     if (!data) {
-        res.status(400).send('wrong input');
+        res.status(400).send('Wrong Input');
         return;
     } else if (!data.ip) {
-        res.status(400).send('wrong input');
+        res.status(400).send('Wrong Input');
         return;
     }
     try {
-        console.log("trying to connect to server with ip " + data.ip);
+        console.log("Trying to connect to server with ip " + data.ip);
         wsClient = new WebSocketClient(data.ip);
         wsClient.connect();
         // waiting 4 seconds for the robot to start
@@ -41,7 +41,6 @@ const connectToServer = (req, res) => {
 const oldFiles = (req, res) => {
     // checking if the robot has old files configuration all ready
     // if so sending true
-    console.log("checking if the robot has old files configuration all ready");
     let data = {
         "config": false,
         "map": false,
@@ -68,8 +67,6 @@ const oldFiles = (req, res) => {
         data.room = true;
     }
 
-    // sending the response
-    console.log(data);
     res.status(200).send(data);
 };
 

@@ -37,7 +37,7 @@ function App() {
       }
     }
 
-    const ws = new WebSocketClient("ws://localhost:8081");
+    const ws = new WebSocketClient("wss://t-800-interface.onrender.com");
 
     // adding the event listener
     if (ws && isCallBack === false) {

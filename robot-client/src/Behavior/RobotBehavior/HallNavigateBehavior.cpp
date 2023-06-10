@@ -23,39 +23,39 @@ int HallNavigateBehavior::execute() {
     bool isTurning = false;
     bool latestTurn = false;
     double turnSpeed = 0;
-    pos.SetSpeed(groundSpeed, turnSpeed);
+    this->robot->setSpeed(groundSpeed, turnSpeed);
     while(distance > 0.1) {
-        if(!isTurning && latestTurn) {
-            // moving the robot a little bit forward, getting current position
-            // checking the laser scan if there is an obstacle in the side of the robot
-            // if there is an obstacle, we need to move the robot forward until the obstacle is not in the side of the robot
-            // if there is no obstacle, we need to rotate the robot to the goal point
-            // checking the laser scan
-
-            pos.SetSpeed(groundSpeed, 0);
-            while(this->robot->hasObstaclesOnSides()) {
-                // moving the robot forward
-                std::cout << "moving the robot forward" << std::endl;
-                usleep(10000);
-            }
-            latestTurn = false;
-            // need to redirect the robot to the goal point
-            // rotate the robot to the goal point
-            RotationBehavior rotationBehavior(this->robot, this->goalPoint);
-            rotationBehavior.execute();
-        }
+//        if(!isTurning && latestTurn) {
+//            // moving the robot a little bit forward, getting current position
+//            // checking the laser scan if there is an obstacle in the side of the robot
+//            // if there is an obstacle, we need to move the robot forward until the obstacle is not in the side of the robot
+//            // if there is no obstacle, we need to rotate the robot to the goal point
+//            // checking the laser scan
+//
+//            pos.SetSpeed(groundSpeed, 0);
+//            while(this->robot->hasObstaclesOnSides()) {
+//                // moving the robot forward
+//                std::cout << "moving the robot forward" << std::endl;
+//                usleep(10000);
+//            }
+//            latestTurn = false;
+//            // need to redirect the robot to the goal point
+//            // rotate the robot to the goal point
+//            RotationBehavior rotationBehavior(this->robot, this->goalPoint);
+//            rotationBehavior.execute();
+//        }
 
         // sense
         this->robot->update();
         // think
-        isTurning = avoidObstacles(groundSpeed, turnSpeed);
-
-        // act
-        pos.SetSpeed(groundSpeed, turnSpeed);
-        if(isTurning && !latestTurn) {
-            latestTurn = true;
-            usleep(10000);
-        }
+//        isTurning = avoidObstacles(groundSpeed, turnSpeed);
+//
+//        // act
+//        pos.SetSpeed(groundSpeed, turnSpeed);
+//        if(isTurning && !latestTurn) {
+//            latestTurn = true;
+//            usleep(10000);
+//        }
         // calculating the distance
         distance = sqrt(pow(this->goalPoint.first - pos.GetXPos(), 2) + pow(this->goalPoint.second - pos.GetYPos(), 2));
 //        if(minDistance - distance > 0.05) {
@@ -67,7 +67,7 @@ int HallNavigateBehavior::execute() {
         usleep(100);
     }
 
-    pos.SetSpeed(0, 0);
+    this->robot->setSpeed(0, 0);
 }
 
 HallNavigateBehavior::~HallNavigateBehavior() {

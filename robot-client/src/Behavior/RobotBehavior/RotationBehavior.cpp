@@ -33,6 +33,17 @@ int RotationBehavior::execute() {
     double rotationSpeed = this->robot->getTurnSpeed();
     double angleDiff;
 
+//    // Determine rotation direction based on the sign of angleDiff
+//    try{
+//        if (angleDiff > 0) {
+//            this->robot->setSpeed(0, rotationSpeed);  // Rotate right
+//        } else if(angleDiff <= 0) {
+//            this->robot->setSpeed(0, -rotationSpeed);  // Rotate left
+//        }
+//    } catch (PlayerCc::PlayerError &e) {
+//        std::cerr << e << std::endl;
+//    }
+
     while (true) {
         // getting robot current information
         this->robot->update();
@@ -50,16 +61,20 @@ int RotationBehavior::execute() {
         }
 
         // Determine rotation direction based on the sign of angleDiff
-        if (angleDiff > 0) {
-            pos.SetSpeed(0, rotationSpeed);  // Rotate right
-        } else if(angleDiff <= 0){
-            pos.SetSpeed(0, -rotationSpeed);  // Rotate left
+        try{
+            if (angleDiff > 0) {
+                this->robot->setSpeed(0, rotationSpeed);  // Rotate right
+            } else if(angleDiff <= 0) {
+                this->robot->setSpeed(0, -rotationSpeed);  // Rotate left
+            }
+        } catch (PlayerCc::PlayerError &e) {
+            std::cerr << e << std::endl;
         }
 
         usleep(100);
     }
 
-    pos.SetSpeed(0, 0);
+    this->robot->setSpeed(0, 0);
 
     return 0; // success
 }

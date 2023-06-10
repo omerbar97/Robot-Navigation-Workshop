@@ -1,0 +1,19 @@
+{
+  "name": "robot-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd frontend && npm install && npm install react-scripts && npm run build",
+    "copy": "cp -r frontend/build/* backend/public",
+    "dependances": "cd backend && npm install",
+    "build-all": "npm run build && npm run copy && npm run dependances",
+    "build-local": "npm run build && npm run copy",
+    "start-local": "cd backend && npm run local",
+    "start-deploy":"cd backend && npm run deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

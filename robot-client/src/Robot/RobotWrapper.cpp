@@ -4,16 +4,12 @@
 
 #include "RobotWrapper.h"
 
-//RobotWrapper::RobotWrapper(std::string robotIp, int robotPort, int groundSpeed, int turnSpeed) {
-//    this->initRobot(robotIp, robotPort);
-//    this->robotGroundSpeed = groundSpeed;
-//    this->robotTurnSpeed = turnSpeed;
-//}
-
-RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy) :
-            robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
+RobotWrapper::RobotWrapper(PlayerCc::PlayerClient &robot, PlayerCc::Position2dProxy &positionProxy,
+                           PlayerCc::RangerProxy &laserProxy, std::string ws) :
+        robot(robot), positionProxy(positionProxy), laserProxy(laserProxy) {
     this->robotTurnSpeed = 0.03;
-    this->robotGroundSpeed = 0.06;
+    this->robotGroundSpeed = 0.1;
+    this->isRobotOnline = true;
 }
 
 
@@ -29,9 +25,9 @@ RobotWrapper::~RobotWrapper() {
 //    this->getClient().Disconnect();
 }
 
-void RobotWrapper::setRobotPath(std::pair<double, double> path) {
-    this->robotCurrentPath = path;
-}
+//void RobotWrapper::setRobotPath(std::pair<double, double> path) {
+//    this->robotCurrentPath = path;
+//}
 
 void RobotWrapper::setRobotSpeed(double speed) {
     this->robotGroundSpeed = speed;
@@ -41,15 +37,15 @@ void RobotWrapper::setRobotTurnSpeed(double speed) {
     this->robotTurnSpeed = speed;
 }
 
-PlayerCc::Position2dProxy& RobotWrapper::getPos() {
+PlayerCc::Position2dProxy &RobotWrapper::getPos() {
     return this->positionProxy;
 }
 
-PlayerCc::RangerProxy& RobotWrapper::getLaser() {
+PlayerCc::RangerProxy &RobotWrapper::getLaser() {
     return this->laserProxy;
 }
 
-PlayerCc::PlayerClient& RobotWrapper::getClient() {
+PlayerCc::PlayerClient &RobotWrapper::getClient() {
     return this->robot;
 }
 
@@ -75,12 +71,14 @@ std::pair<double, double> RobotWrapper::getCurrentPosition() {
 }
 
 void RobotWrapper::update() {
+    // lock the robot mutex
+    std::lock_guard<std::mutex> lock(this->robotMutex);
     try {
-        while(this->robot.Peek()) {
+        while (this->robot.Peek()) {
             usleep(50);
             this->robot.Read();
         }
-    } catch (PlayerCc::PlayerError & e) {
+    } catch (PlayerCc::PlayerError &e) {
 //        std::cerr << e << std::endl;
     }
 }
@@ -151,4 +149,21 @@ bool RobotWrapper::hasObstaclesOnSides() {
     }
     // No obstacles found on either side
     return false;
+}
+
+bool RobotWrapper::isOnline() {
+    return this->isRobotOnline;
+}
+
+void RobotWrapper::setSpeed(double speed, double turnSpeed) {
+    std::lock_guard<std::mutex> lock(this->robotMutex);
+    this->positionProxy.SetSpeed(speed, turnSpeed);
+}
+
+void RobotWrapper::setCurrentPath(std::vector<std::pair<double, double>>  path) {
+    this->robotCurrentPath = path;
+}
+
+std::vector<std::pair<double, double>>  RobotWrapper::getRobotCurrentPath() {
+    return this->robotCurrentPath;
 }

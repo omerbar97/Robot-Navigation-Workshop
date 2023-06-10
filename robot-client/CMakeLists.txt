@@ -20,6 +20,7 @@ find_library(OMPL_LIBRARY
 include_directories(${OMPL_INCLUDE_DIRS})
 
 find_package(jsoncpp CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 # Add the executables
 add_executable(Robot-Navigation
@@ -53,7 +54,11 @@ add_executable(Robot-Navigation
         src/Behavior/Behavior.h
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
-        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h)
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.h
+        Client/Client.h
+        src/Client/WebSocketClient.h
+        src/Client/WebSocketClient.cpp
+        )
 
 add_executable(Server
         server/main.cpp
@@ -65,8 +70,7 @@ add_executable(Server
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp})
-target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY})
-target_link_libraries(Server PRIVATE curl)
-target_link_libraries(Server PRIVATE ssl crypto)
+target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp} ${jsoncpp_INCLUDE_DIRS})
+target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY} OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(Server PRIVATE curl ssl crypto)
 

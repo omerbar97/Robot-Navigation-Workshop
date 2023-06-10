@@ -25,6 +25,11 @@ private:
     std::string stageUrl;
     std::thread serverThread;
     std::string ip;
+    std::string requestIp;
+    bool isStageOnline;
+    bool isRobotOnline;
+    pid_t stagePid;
+    pid_t robotPid;
     int port;
     Helper helper;
     websocketpp::connection_hdl currentHdl;
@@ -42,8 +47,8 @@ public:
     void onOpen(websocketpp::connection_hdl hdl);
     void onClose(websocketpp::connection_hdl hdl);
 
-    bool startStageProcess();
-    bool startRobotControllerProcess();
+    bool startStageProcess(websocketpp::connection_hdl hdl);
+    bool startRobotControllerProcess(websocketpp::connection_hdl hdl);
 
 
 

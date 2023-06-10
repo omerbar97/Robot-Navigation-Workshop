@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const mapRoute = require('./routes/map');
 const robotRoute = require('./routes/robot');
 const stageRoute = require('./routes/stage');
+const serverRoute = require('./routes/server');
 
 // setting the environment variables
 customEnv.env(process.env.NODE_ENV, './config');
@@ -27,6 +28,8 @@ app.use(express.static('public'));
 app.use('/map', mapRoute);
 app.use('/robot', robotRoute);
 app.use('/stage', stageRoute);
+app.use('/server', serverRoute);
+
 
 app.listen(port, ip, () => {
   console.log(`Server running at http://${ip}:${port}/`);

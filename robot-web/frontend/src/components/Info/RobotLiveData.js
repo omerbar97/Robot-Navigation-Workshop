@@ -6,20 +6,48 @@ import WebSocketClient from '../../services/WebSocketClient';
 
 function RobotLiveData(props) {
 
+    const { setRobotCurrentPosition , setIsListener, isListener} = props;
+
     const [robotOnline, setRobotOnline] = useState(false);
     const [stageOnline, setStageOnline] = useState(false);
+    const [robotError, setRobotError] = useState(false);
+    const [stageError, setStageError] = useState(false);
 
-    const ws = new WebSocketClient("ws://localhost:8081");
 
-    ws.ws.addEventListener('message', (event) => {
-        let dataJson = JSON.parse(event.data);
-        if (dataJson.type === "stageInit" && dataJson.success) {
-            setStageOnline(true);
-        }
-        if (dataJson.type === "robotInit" && dataJson.success) {
-            setRobotOnline(true);
-        }
-    });
+    const ws = new WebSocketClient();
+    if (ws.ws && isListener === false) {
+        console.log("adding event listener");
+        setIsListener(true);
+        ws.ws.addEventListener('message', (event) => {
+            try{
+                let dataJson = JSON.parse(event.data);
+                if (dataJson.type === "stageInit" && dataJson.success) {
+                    setStageOnline(true);
+                } else if (dataJson.type === "stageInit" && !dataJson.success) {
+                    setStageError(true);
+                    setStageOnline(false);
+                }
+                if (dataJson.type === "robotInit" && dataJson.success) {
+                    setRobotOnline(true);
+                } else if (dataJson.type === "robotInit" && !dataJson.success) {
+                    setRobotError(true);
+                    setRobotOnline(false);
+                }
+                if(dataJson.type === "robotPosition") {
+                    let data = {
+                        x: dataJson.x,
+                        y: dataJson.y
+                    }
+                    console.log("updating position: " + data.x + " " + data.y);
+                    setRobotCurrentPosition(data);
+                }
+            } catch(error) {
+                console.log(error);
+                setIsListener(false);
+            }
+        });
+    }
+
 
 
     return (
@@ -48,8 +76,13 @@ function RobotLiveData(props) {
                         )
                     }
                     {
-                        stageOnline && (
+                        stageOnline && !stageError && (
                             <h5 className='connection-status connected'>connected to stage</h5>
+                        )
+                    }
+                    {
+                        !stageOnline && stageError && (
+                            <h5 className='connection-status'>Failed to connect to stage</h5>
                         )
                     }
                 </div>
@@ -77,8 +110,13 @@ function RobotLiveData(props) {
                         )
                     }
                     {
-                        robotOnline && (
+                        robotOnline && !robotError && (
                             <h5 className='connection-status connected'>connected to robot</h5>
+                        )
+                    }
+                    {
+                        !robotOnline && robotError && (
+                            <h5 className='connection-status'>Failed to connect to robot</h5>
                         )
                     }
                 </div>

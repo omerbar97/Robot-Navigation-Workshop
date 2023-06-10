@@ -6,6 +6,8 @@
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTWRAPPER_H
 #include <libplayerc++/playerc++.h>
 #include <string>
+#include <nlohmann/json.hpp>
+#include <mutex>
 
 class RobotWrapper {
 private:
@@ -15,23 +17,24 @@ private:
     // robot extensions
     PlayerCc::Position2dProxy& positionProxy;
     PlayerCc::RangerProxy& laserProxy;
-
+    bool isRobotOnline;
     double robotGroundSpeed;
     double robotTurnSpeed;
-
-    std::pair<double, double> robotCurrentPath;
-
+    std::vector<std::pair<double, double>> robotCurrentPath;
     void initRobot(std::string robotIp, int robotPort);
+    std::mutex robotMutex;
 
 public:
 
 //    RobotWrapper(std::string robotIp = "localhost", int robotPort = 6665, int groundSpeed = 0.5, int turnSpeed = 0.1);
-    RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy);
+    RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy, std::string ws);
     ~RobotWrapper();
 
     void setRobotPath(std::pair<double, double> path);
     void setRobotSpeed(double speed);
     void setRobotTurnSpeed(double speed);
+    void setSpeed(double speed, double turnSpeed);
+    void setCurrentPath(std::vector<std::pair<double, double>>  path);
 
 
     double getGroundSpeed();
@@ -40,6 +43,7 @@ public:
     bool isObstacleOnLeft();
     bool isObstacleOnRight();
     bool hasObstaclesOnSides();
+    std::vector<std::pair<double, double>>  getRobotCurrentPath();
 
     // getRobot Extensions
     PlayerCc::Position2dProxy& getPos();
@@ -47,6 +51,7 @@ public:
     PlayerCc::PlayerClient& getClient();
 
     void update();
+    bool isOnline();
 
 };
 

@@ -12,8 +12,21 @@
 #include "src/Robot/RobotWrapper.h"
 #include "src/Behavior/RobotBehavior/HallNavigateBehavior.h"
 #include "src/Behavior/RobotBehavior/RotationBehavior.h"
-#include "src/Behavior/MessageBehavior/VoiceMessageBehavior.h"
 #include <string>
+#include <thread>
+#include "src/Client/WebSocketClient.h"
+
+
+void startWs(RobotWrapper *robotWrapper, std::string ws) {
+    WebSocketClient* client = new WebSocketClient(robotWrapper, ws);
+
+    // setting another thread for the position sending
+    std::thread wsThread(&WebSocketClient::sendRobotPosition, client);
+
+    client->run();
+    wsThread.join();
+}
+
 
 void drawBlock(cv::Mat &map, int x, int y, int blockSize) {
     for (int i = x; i < x + blockSize; i++) {
@@ -36,27 +49,44 @@ void printToFile(std::string filename, cv::Mat &map) {
 }
 
 using namespace PlayerCc;
+
 int main(int argc, char **argv) {
+    if (argc != 4) {
+        // error
+        std::cout << "Error: invalid number of arguments" << std::endl;
+        return 1;
+    }
+
     MapGenerator *map = new MapGenerator(
-            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
+            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/maps/fromServer.png");
 
     RoomsHandler roomHandler(
-            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt", {2});
-    PlayerCc::PlayerClient client("localhost", 6665);
+            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt",
+            {15});
+    int port = strtol(argv[2], nullptr, 10);
+    std::cout << "port: " << port << std::endl;
+    std::cout << "ip: " << argv[1] << std::endl;
+//    if(port < 0 || port > 65535) {
+//        std::cout << "Error: invalid port number" << std::endl;
+//        return 1;
+//    }
+    std::string ip = argv[1];
+    PlayerCc::PlayerClient client(ip, port);
     PlayerCc::Position2dProxy position(&client, 0);
     PlayerCc::RangerProxy laser(&client, 1);
-//    client.Read();
 
     std::list<playerc_device_info_t> t = client.GetDeviceList();
 
 
-    for(auto i : t) {
-        std::cout << "drivername: " << i.drivername << std::endl;
-        std::cout << "index " << i.addr.index << std::endl;
-    }
     std::cout << position.GetYaw() << std::endl;
 
-    RobotWrapper* robotWrapper = new RobotWrapper(client, position, laser);
+    RobotWrapper *robotWrapper = new RobotWrapper(client, position, laser, "ws://localhost:8081");
+    std::string ws = argv[3];
+
+    // Run a member function of robotWrapper in a separate thread
+    std::thread* thread;
+    thread = new std::thread(startWs, robotWrapper, ws);
+
 
     // create path
     Route *route = new Route(new RRTStarAlgorithm(), map);
@@ -67,7 +97,8 @@ int main(int argc, char **argv) {
 
     route->createPath();
     std::vector<std::pair<double, double> > path = route->getLatestPath();
-    for(int i = 1; i < path.size(); i++) {
+    robotWrapper->setCurrentPath(path);
+    for (int i = 1; i < path.size(); i++) {
         //     rotation to the point
         std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
         RotationBehavior rotationBehavior(robotWrapper, path[i]);
@@ -78,22 +109,8 @@ int main(int argc, char **argv) {
 
     }
 
-//    Server server("localhost", 8080);
-//    std::thread* serverThread;
-//    if(server.init()) {
-//        serverThread = new std::thread(&Server::acceptConnection, &server);
-//        serverThread->detach();
-//        while(true) {
-//            std::string n;
-//            std::cin >> n;
-//            server.send(n);
-//            server.recv();
-//        }
-//    }
 
-//    VoiceMessageBehavior voiceMessageBehavior("ofir ve shilo ya-manyakym", "kamika");
-//    voiceMessageBehavior.execute();
-
+    thread->join();
     return 0;
 
 }

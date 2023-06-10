@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd frontend && npm run build",
+    "build": "cd frontend && npm install && npm install react-scripts && npm run build",
     "copy": "cp -r frontend/build/* backend/public",
-    "build-all": "npm run build && npm run copy",
+    "dependances": "cd backend && npm install",
+    "build-all": "npm run build && npm run copy && npm run dependances",
     "start-deploy":"cd backend && npm run deploy"
   },
   "keywords": [],

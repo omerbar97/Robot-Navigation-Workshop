@@ -68,8 +68,8 @@ const startRobot = (req, res) => {
 
 const stopRobot = (req, res) => {
     let ws = new WebSocketClient(); // instance of the websocket client
-    console.log("sending stop_robot");
     ws.send('STOP_STAGE');
+    ws.send('STOP_ROBOT');
 };
 
 const Config = async (req, res) => {

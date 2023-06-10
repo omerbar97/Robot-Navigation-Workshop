@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "local": "export NODE_ENV=local && nodemon app.js"
+    "local": "export NODE_ENV=local && nodemon app.js",
+    "deploy": "export NODE_ENV=deploy && nodemon app.js"
   },
   "keywords": [],
   "author": "",

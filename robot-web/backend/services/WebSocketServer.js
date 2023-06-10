@@ -15,12 +15,17 @@ class WebSocketServer {
             this.clients.add(ws);
 
             ws.on('message', (message) => {
-                console.log(`Received message: ${message}`);
+                console.log(`Received message in .SERVER: ${message}`);
+                // checking if the message is a json
+                try {
+                    let dataJson = JSON.parse(message);
+                    this.broadcast(dataJson);
+                    return;
+                } catch (error) {
+                    // if not a json, then it is a string
+                    this.broadcast(message);
+                }
 
-                // Process the received message here or perform any necessary actions
-
-                // Send a response back to the client
-                ws.send('Received your message');
             });
 
             ws.on('close', () => {
@@ -35,6 +40,7 @@ class WebSocketServer {
     broadcast(message) {
         this.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
+                console.log(`Broadcasting message: ${message}`);
                 client.send(JSON.stringify(message));
             }
         });

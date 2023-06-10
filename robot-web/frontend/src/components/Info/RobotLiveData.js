@@ -6,31 +6,45 @@ import WebSocketClient from '../../services/WebSocketClient';
 
 function RobotLiveData(props) {
 
+    const { setRobotCurrentPosition , setIsListener, isListener} = props;
+
     const [robotOnline, setRobotOnline] = useState(false);
     const [stageOnline, setStageOnline] = useState(false);
     const [robotError, setRobotError] = useState(false);
     const [stageError, setStageError] = useState(false);
 
+
     const ws = new WebSocketClient();
-    if (ws.ws) {
+    if (ws.ws && isListener === false) {
+        console.log("adding event listener");
+        setIsListener(true);
         ws.ws.addEventListener('message', (event) => {
-            let dataJson = JSON.parse(event.data);
-            if (dataJson.type === "stageInit" && dataJson.success) {
-                setStageOnline(true);
-            } else if (dataJson.type === "stageInit" && !dataJson.success) {
-                setStageError(true);
-                setStageOnline(false);
+            try{
+                let dataJson = JSON.parse(event.data);
+                if (dataJson.type === "stageInit" && dataJson.success) {
+                    setStageOnline(true);
+                } else if (dataJson.type === "stageInit" && !dataJson.success) {
+                    setStageError(true);
+                    setStageOnline(false);
+                }
+                if (dataJson.type === "robotInit" && dataJson.success) {
+                    setRobotOnline(true);
+                } else if (dataJson.type === "robotInit" && !dataJson.success) {
+                    setRobotError(true);
+                    setRobotOnline(false);
+                }
+                if(dataJson.type === "robotPosition") {
+                    let data = {
+                        x: dataJson.x,
+                        y: dataJson.y
+                    }
+                    console.log("updating position: " + data.x + " " + data.y);
+                    setRobotCurrentPosition(data);
+                }
+            } catch(error) {
+                console.log(error);
+                setIsListener(false);
             }
-            if (dataJson.type === "robotInit" && dataJson.success) {
-                setRobotOnline(true);
-            } else if (dataJson.type === "robotInit" && !dataJson.success) {
-                setRobotError(true);
-                setRobotOnline(false);
-            }
-            if(dataJson.type === "robotPosition") {
-                console.log(dataJson);
-            }
-            console.log(dataJson);
         });
     }
 

@@ -14,6 +14,7 @@ function App() {
   const [uploadMap, setUploadMap] = useState(false);
   const [uploadConfigRooms, setUploadConfigRooms] = useState(false);
   const [uploadRobotConfigurations, setUploadRobotConfigurations] = useState(false);
+  const [isCallBack, setIsCallBack] = useState(false); // [x,y]
 
 
   // checking if the robot server has old config files
@@ -39,7 +40,7 @@ function App() {
     const ws = new WebSocketClient("ws://localhost:8081");
 
     // adding the event listener
-    if (ws) {
+    if (ws && isCallBack === false) {
       ws.ws.addEventListener('message', (event) => {
         try {
           let t = JSON.parse(event.data);
@@ -51,6 +52,7 @@ function App() {
           console.log(error);
         }
       });
+      setIsCallBack(true);
     }
     checkOldFiles();
   }, []);

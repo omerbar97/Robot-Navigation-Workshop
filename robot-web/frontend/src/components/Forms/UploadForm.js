@@ -108,7 +108,7 @@ function UploadForm(props) {
                 </div>
                 <button
                     className='btn btn-danger mb-2'
-                    onClick={handleSubmit}>send to server</button>
+                    onClick={handleSubmit}>SEND TO SERVER</button>
                 {
                     text.text !== "" && (
                         <CodeBlock

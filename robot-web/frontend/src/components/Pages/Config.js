@@ -10,7 +10,7 @@ import ServerForm from '../Forms/ServerForm';
 
 const ConfigPage = (props) => {
 
-  const { setUploadMap, setUploadConfigRooms , serverInfo , setServerIp , setServerOnline , serverIp} = props;
+  const { setUploadMap, setUploadConfigRooms, serverInfo, setServerIp, setServerOnline, serverIp } = props;
 
   const [newConfig, setNewConfig] = useState(false);
   const [img, setImg] = useState(null);
@@ -19,6 +19,7 @@ const ConfigPage = (props) => {
   const [enterRoom, setEnterRoom] = useState("undefined");
   const [exitRoom, setExitRoom] = useState("undefined");
   const [id, setId] = useState(null);
+  const [roomID, setRoomID] = useState(1);
   let inputRef = useRef(null);
 
   const handleClick = (event) => {
@@ -33,7 +34,7 @@ const ConfigPage = (props) => {
         {
           serverInfo === true && (
             <div className='server-side mt-2'>
-              <ServerForm setServerIp={setServerIp} setServerOnline={setServerOnline} serverIp={serverIp}/>
+              <ServerForm setServerIp={setServerIp} setServerOnline={setServerOnline} serverIp={serverIp} />
             </div>
           )
         }
@@ -69,7 +70,9 @@ const ConfigPage = (props) => {
                 img={img}
                 setScale={setScale}
                 setUploadMap={setUploadMap}
-                setUploadConfigRooms={setUploadConfigRooms} />
+                setUploadConfigRooms={setUploadConfigRooms}
+                roomID={roomID}
+                setRoomID={setRoomID} />
             </div>
             <div className='col-6'>
               <GridMap img={img}

@@ -83,7 +83,7 @@ function RobotStageForm(props) {
                 </div>
                 <br />
                 <div className="form-group d-flex">
-                    <label className='col-3' htmlFor="imgToUpload">.world file</label>
+                    <label className='col-3' htmlFor="imgToUpload">.WORLD File</label>
                     <input
                         type="file"
                         className="form-control robotItemForm"
@@ -93,7 +93,7 @@ function RobotStageForm(props) {
                     />
                 </div>
                 <div className="form-group d-flex">
-                    <label className='col-3' htmlFor="configFileToUpload">.cfg file</label>
+                    <label className='col-3' htmlFor="configFileToUpload">.CFG File</label>
                     <input
                         type="file"
                         className="form-control robotItemForm"
@@ -103,7 +103,7 @@ function RobotStageForm(props) {
                     />
                 </div>
                 <div className="form-group d-flex">
-                    <label className='col-3' htmlFor="robotIp">robot ip</label>
+                    <label className='col-3' htmlFor="robotIp">Robot IP</label>
                     <input
                         type="text"
                         ref={ip}
@@ -113,7 +113,7 @@ function RobotStageForm(props) {
                     />
                 </div>
                 <div className="form-group d-flex">
-                    <label className='col-3' htmlFor="robotPort">robot port</label>
+                    <label className='col-3' htmlFor="robotPort">Robot PORT</label>
                     <input
                         type="text"
                         ref={port}
@@ -123,7 +123,7 @@ function RobotStageForm(props) {
                     />
                 </div>
                 <button className='btn btn-danger'
-                    onClick={handleSend}>send to stage</button>
+                    onClick={handleSend}>SEND TO STAGE</button>
             </div>
         </>
     )

@@ -1,20 +1,20 @@
-// const WebSocket = require('ws');
 
 let instance = null;
 
 class WebSocketClient {
   constructor(serverUrl) {
-    if (!instance) {
+    if (!WebSocketClient.instance) {
       console.log('Creating new instance of WebSocketClient');
       this.serverUrl = serverUrl;
       this.online = false;
       this.ws = null;
-      instance = this;
+      WebSocketClient.instance = this;
       this.connect();
     }
     console.log('Returning instance of WebSocketClient');
-    return instance;
+    return WebSocketClient.instance;
   }
+
 
   connect() {
     try {
@@ -66,4 +66,4 @@ class WebSocketClient {
   }
 }
 
-module.exports = WebSocketClient;
+export default WebSocketClient;

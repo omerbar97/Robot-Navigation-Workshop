@@ -6,16 +6,16 @@ import RobotLiveData from '../Info/RobotLiveData';
 import { useEffect, useState } from 'react';
 
 async function getImgFromServerAndStartRobot(setImg) {
-    let res = await get.Map();
-    console.log(res);
-    if (res === null) {
+    let img = await get.Map();
+    if (img === null) {
         // failed to retrive the map
         alert("failed to retrive the map, try again later");
-        return;
+        return false;
     }
-    setImg(res);
+    setImg(img);
     post.startRobotSimulator();
     post.startRobot();
+    return true;
 }
 
 
@@ -24,8 +24,10 @@ function Live(props) {
     const { uploadMap, uploadConfigRooms, uploadRobotConfigurations, serverOnline } = props;
 
     const [isLive, setIsLive] = useState(false);
+    const [robotCurrentPosition, setRobotCurrentPosition] = useState(null); // [x,y]
+    const [isListener, setIsListener] = useState(false);
     const [img, setImg] = useState(null); // the map image
-    const handleStartBtn = (event) => {
+    const handleStartBtn = async (event) => {
         event.preventDefault();
         if (!uploadMap || !uploadConfigRooms || !uploadRobotConfigurations) {
             alert("You should first upload the neccesry files!");
@@ -35,6 +37,11 @@ function Live(props) {
             alert("You should first connect to the robot-server!");
             return;
         }
+        let flag = await getImgFromServerAndStartRobot(setImg);
+        if(flag === false) {
+            alert("failed to start the stage and the robot, try again later");
+            return;
+        }
         setIsLive(true);
     }
 
@@ -42,15 +49,18 @@ function Live(props) {
         event.preventDefault();
         // calling the server to stop the robot
         post.stopRobotSimulator();
+        setImg(null);
         setIsLive(false);
+        setIsListener(false);
+        setRobotCurrentPosition(null);
     }
 
-    useEffect(() => {
-        if (isLive) {
-            // getting the map from the server
-            getImgFromServerAndStartRobot(setImg);
-        }
-    }, [isLive])
+    // useEffect(() => {
+    //     if (isLive) {
+    //         // getting the map from the server
+    //         getImgFromServerAndStartRobot(setImg);
+    //     }
+    // }, [isLive])
 
     return (
         <div className={`conatiner live-page mt-5 ${isLive ? 'extend-height' : ''}`}>
@@ -79,10 +89,10 @@ function Live(props) {
             {isLive && img && (<div className='d-flex container-live'>
                 <div className='col-7'>
                     {/* here the map going to be */}
-                    <LiveGridMap img={img} />
+                    <LiveGridMap img={img} robotCurrentPosition={robotCurrentPosition}/>
                 </div>
                 <div className='col-5'>
-                    <RobotLiveData />
+                    <RobotLiveData setRobotCurrentPosition={setRobotCurrentPosition} isListener={isListener} setIsListener={setIsListener}/>
                 </div>
             </div>
 

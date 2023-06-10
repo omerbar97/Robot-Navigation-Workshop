@@ -33,12 +33,12 @@ function RobotConfig(props) {
                 <div className='row'>
                     <div className='col-6'>
                         <button className='btn btn-danger'
-                            onClick={handleClickStage}>set for stage</button>
+                            onClick={handleClickStage}>SET FOR STAGE</button>
                     </div>
                     <div className='col-6'>
                         <button
                             className='btn btn-warning'
-                            onClick={handleClickPhysical}>set for ip</button>
+                            onClick={handleClickPhysical}>SET FOR IP</button>
                     </div>
                 </div>
                 <div className='row'>

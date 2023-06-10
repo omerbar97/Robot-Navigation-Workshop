@@ -12,7 +12,9 @@ function ConfigForm(props) {
         img,
         setScale,
         setUploadMap,
-        setUploadConfigRooms } = props;
+        setUploadConfigRooms,
+        roomID,
+        setRoomID } = props;
 
     const [text, setText] = useState({
         text: "",
@@ -61,6 +63,7 @@ function ConfigForm(props) {
             text: text.text + nameRef.current.value + " " + roomIdRef.current.value + " " + centerRoom + " " + enterRoom + " " + exitRoom + "\n",
         }
         setText(data);
+        setRoomID(roomID + 1);
     }
 
     const handleScale = (event) => {
@@ -96,7 +99,7 @@ function ConfigForm(props) {
 
     return (
         <form className="form scrollContainer config-form config-page">
-            <label htmlFor="selectScale"><b>grid scale </b></label>
+            <label htmlFor="selectScale" className='col-5 mr-0'><b>GRID SCALE </b></label>
             <select className="form-select form-select-sm"
                 onChange={handleScale}
                 id="selectScale">
@@ -115,9 +118,9 @@ function ConfigForm(props) {
                     onChange={handleImg}
                 />
                 {img && (
-                    <div className="form-group col-7">
+                    <div className="form-group col-8">
                         <button className='btn btn-danger'
-                            onClick={sendMapToServer}>send map to robot</button>
+                            onClick={sendMapToServer}>SEND MAP TO SERVER</button>
                     </div>
                 )}
             </div>
@@ -136,7 +139,9 @@ function ConfigForm(props) {
                     ref={roomIdRef}
                     className="form-control item"
                     id="roomId"
+                    value={roomID}
                     placeholder="room id"
+                    disabled
                 />
             </div>
             <div className='points'>
@@ -183,7 +188,7 @@ function ConfigForm(props) {
                                 type="button"
                                 className="btn btn-primary create-account"
                                 onClick={handleSubmit}>
-                                add room
+                                ADD
                             </button>
                         </div>
                         <div className='col-8'>
@@ -191,7 +196,7 @@ function ConfigForm(props) {
                                 type="button"
                                 className="btn btn-danger create-account"
                                 onClick={sendConfigToServer}>
-                                send config file to server
+                                SEND CONFIG TO SERVER
                             </button>
                         </div>
                     </div>
@@ -204,6 +209,7 @@ function ConfigForm(props) {
                             className="configSection"
                             showLineNumbers={false}
                             theme={dracula}
+                            codeBlock
                         />
                     )
                 }

@@ -36,6 +36,7 @@ const GridMap = (props) => {
   const [enterGrid, setEnterGrid] = useState(null);
   const [exitGrid, setExitGrid] = useState(null);
 
+
   const gridRef = useRef(null);
   const zoomScale = useRef(1);
   const dragStart = useRef({ x: 0, y: 0 });

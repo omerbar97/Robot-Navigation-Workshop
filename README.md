@@ -1,24 +1,58 @@
 # Robot-Navigation-Workshop
-<h2>About</h2>
-<p>Welcome to our second-year Computer Science project on robot navigation! This repository contains the code and documentation for our exploration into the fascinating field of robot navigation. Our team, consisting of three dedicated and enthusiastic students, aims to develop a robust and efficient navigation system for a mobile robot using the Player/Stage platform and implementing it in C++.</p>
 
-<h2>Team Members</h2>
-<ul>
-  <li>Omer Bar</li>
-  <li>Shilo Padael</li>
-  <li>Ofir Helerman</li>
-</ul>
+## Team-Member
+- **Omer Bar**
+- **Shilo Padael**
+- **Ofir Helerman**
+
+## About
+
+Welcome to our second-year Computer Science project on robot navigation! This repository contains the code and documentation for our exploration into the fascinating field of robot navigation. Our team, consisting of three dedicated and enthusiastic students, aims to develop a robust and efficient navigation system for a mobile robot using the Player/Stage platform and implementing it in C++.
+
+#### Furthermore
+Our second-year Computer Science project focuses on developing a robot navigation system using the Player/Stage platform and integrating the Open Motion Planning Library (OMPL) algorithms. We aim to create an autonomous navigation system that enables a mobile robot to navigate its environment efficiently and safely. The project involves perception, mapping, path planning, and control components. By leveraging Player/Stage and OMPL, we will build a robust and optimized system. Throughout the project, we anticipate challenges in algorithm tuning and system integration. The code and documentation in this repository provide an overview of our implementation progress. Join us on this exciting journey into the world of robot navigation!
+
+## Features
+- Player/Stage Interface: The program interfaces with the player/stage platform to control the robot's navigation in a specified map.
+- C++ Implementation: The codebase is written in C++, ensuring efficiency and performance in robot navigation tasks. Including a server that run the process child of the controller.
+- Multithreading: the robot-controller is connecting to the robot and to the Express WebSocket in a seperate thread to send the robot live data.
+- Websockets: The application utilizes websockets to establish real-time bidirectional communication between the server and the user interface, ensuring seamless control and live data updates.
+- HTTP and Express Server: An HTTP server, built with Express, is included to handle incoming requests and provide a RESTful API for controlling the robot and accessing relevant data.
+- React Interface: The user interface is developed using React, offering an intuitive and interactive experience for controlling the robot's movements and accessing various features.
+- Live Data Display: The interface provides a live display of real-time data from the robot, such as sensor readings, position updates, and other relevant information.
 
 
-<h2>Project Description</h2>
-<p>
-Our second-year Computer Science project focuses on developing a robot navigation system using the Player/Stage platform and integrating the Open Motion Planning Library (OMPL) algorithms. We aim to create an autonomous navigation system that enables a mobile robot to navigate its environment efficiently and safely. The project involves perception, mapping, path planning, and control components. By leveraging Player/Stage and OMPL, we will build a robust and optimized system. Throughout the project, we anticipate challenges in algorithm tuning and system integration. The code and documentation in this repository provide an overview of our implementation progress. Join us on this exciting journey into the world of robot navigation!</p>
+## Installation
 
-<h2>Dependencies</h2>
-<p>To successfully run and utilize the robot navigation project, the following dependencies are required:</p>
-<ul>
-   <li>Player/Stage: The Player/Stage platform provides the foundation for our robot navigation system. Ensure that Player/Stage is properly installed and configured on your system. can download <a href="https://playerstage.sourceforge.net/doc/Stage-3.2.1/install.html">here</li>
-  <li>C++ Compiler: A compatible C++ compiler is needed to compile and build the project code. We recommend using a recent version of GCC or Clang.</li>
-  <li>Open Motion Planning Library (OMPL): OMPL is a key component of our project, providing state-of-the-art motion planning algorithms. Install the OMPL library and its dependencies according to the official documentation for your system. can download <a href="https://github.com/ompl/ompl">here</a> </li>
-</ul>
-<p>Ensure that all the necessary dependencies are installed and configured correctly on your system before attempting to run the project. This will ensure a smooth execution and enable you to explore the capabilities of our robot navigation system effectively.</p>
+You must have all the program depandances to be able to run it.
+
+Set up the server-interface for localhost use.
+
+```sh
+git clone https://github.com/omerbar97/Robot-Navigation-Workshop.git
+cd Robot-Navigation-Workshop                // going to project directory
+npm run build                               // building the node_mudule and static html file for the server
+npm run start-local                         // for localhost
+```
+
+Set up the C++ Server, inside the Robot-Navigation-Workshop folder do:
+```sh
+cd robot-client                             // going to project directory
+mkdir build                                 // creating a new folder
+cd build                                    
+cmake ../                                   // creating the makefile
+make                                        // compiling the program
+./Server 'ip' 'port'
+```
+
+## Dependances
+##### You Must Have Linux Machine
+Make sure to install all the dependances to be able to run our program
+| Dependances | Link |
+| ------ | ------ |
+| Git | [https://git-scm.com/downloads][PlGh] |
+| Player + Stage| [https://playerstage.sourceforge.net/][PlDb] |
+| OMPL | [https://github.com/ompl/ompl][PlGd] |
+| Espeak | [https://espeak.sourceforge.net/][PlOd] |
+| Json for C++ | [https://github.com/nlohmann/json][PlMe] |
+

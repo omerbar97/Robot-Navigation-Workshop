@@ -50,9 +50,9 @@ make                                        // compiling the program
 Make sure to install all the dependances to be able to run our program
 | Dependances | Link |
 | ------ | ------ |
-| Git | [https://git-scm.com/downloads][PlGh] |
-| Player + Stage| [https://playerstage.sourceforge.net/][PlDb] |
-| OMPL | [https://github.com/ompl/ompl][PlGd] |
-| Espeak | [https://espeak.sourceforge.net/][PlOd] |
-| Json for C++ | [https://github.com/nlohmann/json][PlMe] |
-| cmake | [https://cmake.org/download/][PlMe] |
+| Git | [https://git-scm.com/downloads]|
+| Player + Stage| [https://playerstage.sourceforge.net/]|
+| OMPL | [https://github.com/ompl/ompl]|
+| Espeak | [https://espeak.sourceforge.net/]|
+| Json for C++ | [https://github.com/nlohmann/json]|
+| cmake | [https://cmake.org/download/]|

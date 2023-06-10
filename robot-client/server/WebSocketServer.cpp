@@ -6,6 +6,7 @@
 
 WebSocketServer::WebSocketServer(std::string ip, int port) : ip(ip), port(port), helper() {
     isStageOnline = false;
+    isRobotOnline = false;
     stageUrl = "/usr/local/share/stage/worlds";
 
     // Initialize the WebSocket server
@@ -69,6 +70,16 @@ void WebSocketServer::onMessage(websocketpp::connection_hdl hdl, server::message
             // killing the stage process
             kill(this->stagePid, SIGKILL);
         }
+        this->isStageOnline = false;
+    } else if(message == "STOP_ROBOT" && this->isRobotOnline) {
+        // first checking if the child process still running
+        int status;
+        pid_t result = waitpid(this->robotPid, &status, WNOHANG);
+        if(result == 0) {
+            // killing the stage process
+            kill(this->robotPid, SIGKILL);
+        }
+        this->isRobotOnline = false;
     }
     // Process the message as needed
 }
@@ -89,7 +100,9 @@ bool WebSocketServer::startStageProcess(websocketpp::connection_hdl hdl) {
     // getting the information from the server .cfg file and .world file, establishing the connection with the server
     // and starting the stage process
     std::cout << "Starting the stage process\n";
-    std::string url = "http://localhost:8080/stage/config";
+    // converting the port to string
+    std::string portStr = std::to_string(this->port);
+    std::string url =  ip + ":" + portStr + "/stage/config";
 
     std::string response = helper.getResponse(url);
     if (response.empty()) {
@@ -228,7 +241,9 @@ bool WebSocketServer::startStageProcess(websocketpp::connection_hdl hdl) {
 bool WebSocketServer::startRobotControllerProcess(websocketpp::connection_hdl hdl) {
     // retriving the robot information from the server
     std::cout << "Starting the stage process\n";
-    std::string url = "http://localhost:8080/robot/config";
+    // converting the port to string
+    std::string portStr = std::to_string(this->port);
+    std::string url = ip + ":" + portStr + "/robot/config";
 
     std::string response = helper.getResponse(url);
     if (response.empty()) {
@@ -320,6 +335,7 @@ bool WebSocketServer::startRobotControllerProcess(websocketpp::connection_hdl hd
                 std::string message = jsonData.dump();
                 this->robotPid = pid;
                 this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
+                this->isRobotOnline = true;
                 return true;
             } else {
                 // the child process is not running
@@ -327,7 +343,7 @@ bool WebSocketServer::startRobotControllerProcess(websocketpp::connection_hdl hd
                 json jsonData;
                 jsonData["type"] = "robotInit";
                 jsonData["success"] = false;
-                jsonData["message"] = "failed to start the robot controller process22";
+                jsonData["message"] = "failed to start the robot controller process";
                 std::string message = jsonData.dump();
                 this->serverWs.send(hdl, message, websocketpp::frame::opcode::text);
                 return false;

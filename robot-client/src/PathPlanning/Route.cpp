@@ -159,9 +159,11 @@ void Route::createPath() {
     // doing all the logic of the algorithm
 
     this->algorithm->calculate();
-
-    // getting the path from the algorithm
+//    this->cvMap = new cv::Mat(this->mapGenerator->getBinaryMatrix());
+//    this->gridMap->setGridMatrix(this->cvMap);
+//    // getting the path from the algorithm
     this->latestPath = getStagePath();
+
 }
 
 std::vector<std::pair<double, double>> Route::getLatestPath() const {

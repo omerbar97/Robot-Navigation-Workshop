@@ -38,18 +38,18 @@ const ConfigPage = (props) => {
             </div>
           )
         }
-        <div className='container d-flex'>
+        <div className='container'>
           <div className='row mt-2'>
             <div className='item-config'>
               <button className='btn btn-info shadow'
                 onClick={handleClick}
               >to create a new map configuration file click here</button>
             </div>
-          </div>
-          <div className='row mt-0 robot-page'>
+            <div className='robot-page'>
             <div className='col-12'>
               <UploadForm setUploadMap={setUploadMap} setUploadConfigRooms={setUploadConfigRooms} />
             </div>
+          </div>
           </div>
         </div>
       </>

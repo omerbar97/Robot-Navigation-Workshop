@@ -30,6 +30,7 @@ app.use('/robot', robotRoute);
 app.use('/stage', stageRoute);
 app.use('/server', serverRoute);
 
+
 app.listen(port, ip, () => {
   console.log(`Server running at http://${ip}:${port}/`);
 });

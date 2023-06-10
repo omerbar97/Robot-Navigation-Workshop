@@ -13,7 +13,6 @@ body {
 }
 
 .item-config{
-    position: fixed;
-    max-width: 200px;
+    max-width: 300px;
     left:0;
 }

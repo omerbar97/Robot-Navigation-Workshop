@@ -5,13 +5,9 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROBOTWRAPPER_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTWRAPPER_H
 #include <libplayerc++/playerc++.h>
-#include <websocketpp/client.hpp>
-#include <websocketpp/config/asio_no_tls.hpp>
-#include <websocketpp/config/asio_client.hpp>
 #include <string>
 #include <nlohmann/json.hpp>
-
-typedef websocketpp::client<websocketpp::config::asio_client> client;
+#include <mutex>
 
 class RobotWrapper {
 private:
@@ -21,13 +17,12 @@ private:
     // robot extensions
     PlayerCc::Position2dProxy& positionProxy;
     PlayerCc::RangerProxy& laserProxy;
-    client* clientWs;
-    websocketpp::connection_hdl hdlServer;
     bool isRobotOnline;
     double robotGroundSpeed;
     double robotTurnSpeed;
-    std::pair<double, double> robotCurrentPath;
+    std::vector<std::pair<double, double>> robotCurrentPath;
     void initRobot(std::string robotIp, int robotPort);
+    std::mutex robotMutex;
 
 public:
 
@@ -38,15 +33,17 @@ public:
     void setRobotPath(std::pair<double, double> path);
     void setRobotSpeed(double speed);
     void setRobotTurnSpeed(double speed);
+    void setSpeed(double speed, double turnSpeed);
+    void setCurrentPath(std::vector<std::pair<double, double>>  path);
 
 
     double getGroundSpeed();
     double getTurnSpeed();
-    client* getWsClient();
     std::pair<double, double> getCurrentPosition();
     bool isObstacleOnLeft();
     bool isObstacleOnRight();
     bool hasObstaclesOnSides();
+    std::vector<std::pair<double, double>>  getRobotCurrentPath();
 
     // getRobot Extensions
     PlayerCc::Position2dProxy& getPos();
@@ -54,9 +51,7 @@ public:
     PlayerCc::PlayerClient& getClient();
 
     void update();
-    void sendRobotPosition();
-    void startClient(client::connection_ptr con);
-
+    bool isOnline();
 
 };
 

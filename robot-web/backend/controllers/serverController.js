@@ -22,6 +22,10 @@ const connectToServer = (req, res) => {
         console.log("Trying to connect to server with ip " + data.ip);
         wsClient = new WebSocketClient(data.ip);
         wsClient.connect();
+        if(wsClient.serverUrl !== data.ip){
+            // changing the url
+            wsClient.changeServerUrl(data.ip);
+        }
         // waiting 4 seconds for the robot to start
         setTimeout(() => {
             if (wsClient.online === true) {

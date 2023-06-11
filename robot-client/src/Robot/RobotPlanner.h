@@ -6,31 +6,34 @@
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTPLANNER_H
 #include <vector>
 #include "../Resources/Room.h"
-#include "../Resources/RoomsHandler.h"
+#include "../Resources/RoomsContainer.h"
 #include "RobotWrapper.h"
 #include "../PathPlanning/Route.h"
 #include "../Resources/MapGenerator.h"
 #include "../PathPlanning/Algorithm/RRTStarAlgorithm.h"
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
+#include "../Behavior/Behavior.h"
+#include "../Behavior/Mission.h"
 
 
-
-//TODO: update the room file
+using namespace std;
 class RobotPlanner {
 private:
-    std::vector<Room> rooms;
-    std:: string roomConfigPath;
+    RoomsContainer* roomsContainer;
     RobotWrapper *robotWrapper;
     Route* route;
     MapGenerator* mapGenerator;
     RobotBehaviorFactory* robotBehaviorFactory;
+    vector<Behavior*> currentPlan;
+    void planInformMission(const vector<string>& roomsIDs);
+    void planNavigationMission(const vector<string>& roomsIDs);
 
-    void goToPoint(std::pair<double, double> point);
+//    void goToPoint(std::pair<double, double> point);
 
 public:
-    RobotPlanner(std::string roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator);
-    std::vector<Room> getRooms() const;
-    std::vector<Room> setRooms(std::vector<Room> rooms);
+    RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator);
+    ~RobotPlanner();
+    void plan(const MissionType& mission, const vector<string>& parameters);
     int executePlan();
 
 

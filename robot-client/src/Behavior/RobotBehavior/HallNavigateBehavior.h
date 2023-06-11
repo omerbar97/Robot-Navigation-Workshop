@@ -6,7 +6,9 @@
 #define ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #include "RobotBehavior.h"
 #include "RotationBehavior.h"
-
+#include "LinearNavigation.h"
+using namespace std;
+using Point = std::pair<double, double>;
 class HallNavigateBehavior : public RobotBehavior {
 protected:
 
@@ -18,7 +20,8 @@ public:
      * constructor
      * @param robot
      */
-    HallNavigateBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
+    HallNavigateBehavior(RobotWrapper* robot, Point goalPoint);
+    HallNavigateBehavior(RobotWrapper* robot, vector<Point> path);
 
     ~HallNavigateBehavior();
 

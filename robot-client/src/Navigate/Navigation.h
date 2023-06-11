@@ -62,6 +62,7 @@ public:
      */
      int doMission() {
         behavior->execute();
+        return 0;
      }
 
 };

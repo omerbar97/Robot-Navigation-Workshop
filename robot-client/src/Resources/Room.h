@@ -32,7 +32,7 @@ public:
     Room(std::pair<float, float> centerPoint, std::pair<float, float> entryPoint, std::pair<float, float> exitPoint,
          int roomId);
 
-    Room(std::string roomInfoLine);
+    explicit Room(const std::string& roomInfoLine);
 
     /**
      * Gets the entry point to the room.

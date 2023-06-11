@@ -4,18 +4,76 @@
 
 #include "RobotPlanner.h"
 
-RobotPlanner::RobotPlanner(std::string roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator) {
+RobotPlanner::RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator) {
     std::pair<double, double> defPoint = std::make_pair(0, 0);
-    this->roomConfigPath = roomConfigPath;
     this->robotWrapper = robotWrapper;
-    RoomsHandler roomsHandler(roomConfigPath, std::vector<int>{2,1});
-    this->rooms = roomsHandler.getRooms();
-    this->route = new Route(new RRTStarAlgorithm(), mapGenerator);
+    this->mapGenerator = mapGenerator;
+    this->route = new Route(new RRTStarAlgorithm(), this->mapGenerator);
+    this->roomsContainer = new RoomsContainer(roomConfigPath);
 //    this->robotBehaviorFactory = new RobotBehaviorFactory(this->robotWrapper, defPoint);
 }
-//TODO: update the room file
-std::vector<Room> RobotPlanner::getRooms() const {
-    return this->rooms;
+
+RobotPlanner::~RobotPlanner() = default;
+
+/**
+ * plan the inform mission
+ * @param roomsIDs - the order of the rooms to visit
+ */
+void RobotPlanner::planInformMission(const vector<string>& roomsIDs) {
+    // currently, the function assumes that inform mission is only to move between rooms.
+
+    // if inside a room -
+    // if inside if the first room - then inform the person in the room
+    // if inside any other room - then navigate regularly, but first exit the room
+
+    // if in the hallway - navigate to the next room regularly
+
+
+}
+
+
+void RobotPlanner::planNavigationMission(const vector<string>& roomsIDs) {
+    // assumes that the robot starts inside a room
+    // creating a plan that will look like this:
+    // 1. navigate to the exit point of the current room
+    // 2. navigate to the entry point of the next room
+    // 3. enter the next room
+    // 4. repeat 1-3 until the last room
+    // note : in the future, it will use a factory to create the behaviors
+    //        however for now, it will be done manually
+
+    for (int i = 0; i < roomsIDs.size() - 2; i++) {
+        try {
+            int source = stoi(roomsIDs.at(i));
+            int destination = stoi(roomsIDs.at(i + 1));
+            this->currentPlan.push_back(new ExitRoomBehavior(this->robotWrapper,
+                                                             this->roomsContainer->getRoomById(source)));
+
+            this->currentPlan.push_back(new HallNavigateBehavior(this->robotWrapper,
+                                                                 this->roomsContainer->getRoomById(destination)->
+                                                                 getEntryPoint()));
+            this->currentPlan.push_back(new EnterRoomBehavior(this->robotWrapper,
+                                                              this->roomsContainer->getRoomById(destination + 1)));
+
+        } catch ( const exception& e) {
+            cout << "error: " << e.what() << endl;
+            exit(1);
+        }
+    }
+}
+
+void RobotPlanner::plan(const MissionType& mission, const vector<std::string> &parameters) {
+    switch (mission) {
+        case MissionType::NAVIGATION:
+            planNavigationMission(parameters);
+            break;
+        case MissionType::INFORM:
+            planInformMission(parameters);
+            break;
+        default:
+            cout << "mission type not supported" << endl;
+            exit(1);
+    } 
 }
 
 /**
@@ -23,44 +81,51 @@ std::vector<Room> RobotPlanner::getRooms() const {
  * @param rooms - the rooms to set
  */
 int RobotPlanner::executePlan() {
-    //set the first two points, the first point is always the robot Postion, and the end point is to nhe next point
-    for(int i = 0; i < this->rooms.size(); i++) {
-        //get the next room
-        Room room = this->rooms[i];
-        goToPoint(room.getEntryPoint());
-
-
-        //create a behavior of entryRoom.
-
-
-        goToPoint(room.getExitPoint());
-
+    for (Behavior* task : currentPlan) {
+        task->execute();
     }
+    return 0;
 }
 
-void RobotPlanner::goToPoint(std::pair<double, double> point) {
-    //TODO:: update the position after merge with omer branch.
-    std::pair<double, double> start = robotWrapper->getCurrentPosition();
-    this->route->setStartingPoint(start);
-    this->route->setGoalPoint(point);
-
-    this->route->createPath();
-
-    // getting route
-
-    std::vector<std::pair<double, double> > path = route->getLatestPath();
-
-    //execute the path
-    for(int i = 1; i < path.size(); i++) {
-        //rotation to the point
-        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-        rotationBehavior.execute();
 
 
-        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-        hallNavigateBehavior.execute();
+//    //set the first two points, the first point is always the robot Postion, and the end point is to nhe next point
+//    for(int i = 0; i < this->rooms.size(); i++) {
+//        //get the next room
+//        Room room = this->rooms[i];
+//        goToPoint(room.getEntryPoint());
+//
+//
+//        //create a behavior of entryRoom.
+//
+//
+//        goToPoint(room.getExitPoint());
+//
+//    }
 
-
-    }
-
-}
+//void RobotPlanner::goToPoint(std::pair<double, double> point) {
+//    //TODO:: update the position after merge with omer branch.
+//    std::pair<double, double> start = robotWrapper->getCurrentPosition();
+//    this->route->setStartingPoint(start);
+//    this->route->setGoalPoint(point);
+//
+//    this->route->createPath();
+//
+//    // getting route
+//
+//    std::vector<std::pair<double, double> > path = route->getLatestPath();
+//
+//    //execute the path
+//    for(int i = 1; i < path.size(); i++) {
+//        //rotation to the point
+//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+//        rotationBehavior.execute();
+//
+//
+//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+//        hallNavigateBehavior.execute();
+//
+//
+//    }
+//
+//}

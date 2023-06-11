@@ -13,8 +13,6 @@
 #include "src/Behavior/RobotBehavior/HallNavigateBehavior.h"
 #include "src/Behavior/RobotBehavior/RotationBehavior.h"
 #include "src/Behavior/MessageBehavior/VoiceMessageBehavior.h"
-#include "src/Robot/RobotPlanner.h"
-
 #include <string>
 
 void drawBlock(cv::Mat &map, int x, int y, int blockSize) {
@@ -42,8 +40,6 @@ int main(int argc, char **argv) {
     MapGenerator *map = new MapGenerator(
             "/home/shilopadael/CLionProjects/Robotica/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
 
-    std::string roomConfigPath = "/home/shilopadael/CLionProjects/Robotica/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt";
-
     RoomsHandler roomHandler(
             "/home/shilopadael/CLionProjects/Robotica/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt", {2,1});
     PlayerCc::PlayerClient client("localhost", 6665);
@@ -54,7 +50,6 @@ int main(int argc, char **argv) {
     std::list<playerc_device_info_t> t = client.GetDeviceList();
 
 
-
     for(auto i : t) {
         std::cout << "drivername: " << i.drivername << std::endl;
         std::cout << "index " << i.addr.index << std::endl;
@@ -63,98 +58,94 @@ int main(int argc, char **argv) {
 
     RobotWrapper* robotWrapper = new RobotWrapper(client, position, laser);
 
+    // create path
+    Route *route = new Route(new RRTStarAlgorithm(), map);
 
-    RobotPlanner *planer = new  RobotPlanner(roomConfigPath,robotWrapper,map);
-    planer->executePlan();
-//
-//    // create path
-//    Route *route = new Route(new RRTStarAlgorithm(), map);
-//
-//    std::pair<double, double> start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
-////    printf("getGoalPoint -%\n", roomHandler.getRooms()[0].getCenterPoint());
-//    std::cout << "getGoalPoint" << roomHandler.getRooms()[0].getCenterPoint().first << " , " << roomHandler.getRooms()[0].getCenterPoint().second << std::endl;
-//
-//    route->createPath();
-//    std::vector<std::pair<double, double> > path = route->getLatestPath();
-//    for(int i = 1; i < path.size(); i++) {
-//        //rotation to the point
-//        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
-//
-//
-//   // MapGenerator *map1 = new MapGenerator(
-//   //         "/home/shilopadael/CLionProjects/Robotica/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
-//
-//    //Route *route1 = new Route(new RRTStarAlgorithm(), map1);
-////    Route *route2 = new Route(new RRTStarAlgorithm(), map);
-//    //route->setMapGenerator(map);
-//    start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[1].getCenterPoint());
-//    std::cout << "getGoalPoint" << roomHandler.getRooms()[1].getCenterPoint().first << " , " << roomHandler.getRooms()[1].getCenterPoint().second << std::endl;
-//
-//
-//
-//    route->createPath();
-//    path = route->getLatestPath();
-//    for(int i = 1 ; i < path.size() ; i++) {
-//        //rotation to the point
-//        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
-//
-//    start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
-//    std::cout << "getGoalPoint" << roomHandler.getRooms()[0].getCenterPoint().first << " , " << roomHandler.getRooms()[1].getCenterPoint().second << std::endl;
-//
-//
-//
-//    route->createPath();
-//    path = route->getLatestPath();
-//    for(int i = 1 ; i < path.size() ; i++) {
-//        //rotation to the point
-//        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
-//
-//    start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[1].getCenterPoint());
-//    std::cout << "getGoalPoint" << roomHandler.getRooms()[1].getCenterPoint().first << " , " << roomHandler.getRooms()[1].getCenterPoint().second << std::endl;
-//
-//
-//
-//    route->createPath();
-//    path = route->getLatestPath();
-//    for(int i = 1 ; i < path.size() ; i++) {
-//        //rotation to the point
-//        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
+    std::pair<double, double> start = robotWrapper->getCurrentPosition();
+    route->setStartingPoint(start);
+    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
+//    printf("getGoalPoint -%\n", roomHandler.getRooms()[0].getCenterPoint());
+    std::cout << "getGoalPoint" << roomHandler.getRooms()[0].getCenterPoint().first << " , " << roomHandler.getRooms()[0].getCenterPoint().second << std::endl;
+
+    route->createPath();
+    std::vector<std::pair<double, double> > path = route->getLatestPath();
+    for(int i = 1; i < path.size(); i++) {
+        //rotation to the point
+        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
+
+    }
+
+
+   // MapGenerator *map1 = new MapGenerator(
+   //         "/home/shilopadael/CLionProjects/Robotica/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
+
+    //Route *route1 = new Route(new RRTStarAlgorithm(), map1);
+//    Route *route2 = new Route(new RRTStarAlgorithm(), map);
+    //route->setMapGenerator(map);
+    start = robotWrapper->getCurrentPosition();
+    route->setStartingPoint(start);
+    route->setGoalPoint(roomHandler.getRooms()[1].getCenterPoint());
+    std::cout << "getGoalPoint" << roomHandler.getRooms()[1].getCenterPoint().first << " , " << roomHandler.getRooms()[1].getCenterPoint().second << std::endl;
+
+
+
+    route->createPath();
+    path = route->getLatestPath();
+    for(int i = 1 ; i < path.size() ; i++) {
+        //rotation to the point
+        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
+
+    }
+
+    start = robotWrapper->getCurrentPosition();
+    route->setStartingPoint(start);
+    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
+    std::cout << "getGoalPoint" << roomHandler.getRooms()[0].getCenterPoint().first << " , " << roomHandler.getRooms()[1].getCenterPoint().second << std::endl;
+
+
+
+    route->createPath();
+    path = route->getLatestPath();
+    for(int i = 1 ; i < path.size() ; i++) {
+        //rotation to the point
+        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
+
+    }
+
+    start = robotWrapper->getCurrentPosition();
+    route->setStartingPoint(start);
+    route->setGoalPoint(roomHandler.getRooms()[1].getCenterPoint());
+    std::cout << "getGoalPoint" << roomHandler.getRooms()[1].getCenterPoint().first << " , " << roomHandler.getRooms()[1].getCenterPoint().second << std::endl;
+
+
+
+    route->createPath();
+    path = route->getLatestPath();
+    for(int i = 1 ; i < path.size() ; i++) {
+        //rotation to the point
+        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
+
+    }
 
 
 //    Server server("localhost", 8080);

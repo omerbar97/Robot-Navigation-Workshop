@@ -56,9 +56,7 @@ add_executable(Robot-Navigation
         src/Behavior/Behavior.h
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
-        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h
-        src/Robot/RobotPlanner.cpp
-        src/Robot/RobotPlanner.h)
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h src/Behavior/RobotBehavior/EnterRoomBehavior.cpp src/Behavior/RobotBehavior/LinearNavigation.cpp src/Behavior/RobotBehavior/LinearNavigation.h)
 
 add_executable(Server
         server/main.cpp

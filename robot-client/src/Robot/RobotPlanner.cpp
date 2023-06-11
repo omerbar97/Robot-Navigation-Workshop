@@ -8,10 +8,10 @@ RobotPlanner::RobotPlanner(std::string roomConfigPath, RobotWrapper* robotWrappe
     std::pair<double, double> defPoint = std::make_pair(0, 0);
     this->roomConfigPath = roomConfigPath;
     this->robotWrapper = robotWrapper;
-    RoomsHandler roomsHandler(roomConfigPath, std::vector<int>{1,2,3,4,5,6,7,8,9,10});
+    RoomsHandler roomsHandler(roomConfigPath, std::vector<int>{2,1});
     this->rooms = roomsHandler.getRooms();
     this->route = new Route(new RRTStarAlgorithm(), mapGenerator);
-    this->robotBehaviorFactory = new RobotBehaviorFactory(this->robotWrapper, defPoint);
+//    this->robotBehaviorFactory = new RobotBehaviorFactory(this->robotWrapper, defPoint);
 }
 //TODO: update the room file
 std::vector<Room> RobotPlanner::getRooms() const {
@@ -23,42 +23,44 @@ std::vector<Room> RobotPlanner::getRooms() const {
  * @param rooms - the rooms to set
  */
 int RobotPlanner::executePlan() {
-    //TODO :make sure that in the room clas there is  option to push a room.
-    //set the first two point, the first point is always the robot Postion, and the end point is to nhe next point
-    while(!this->rooms.empty()) {
-
+    //set the first two points, the first point is always the robot Postion, and the end point is to nhe next point
+    for(int i = 0; i < this->rooms.size(); i++) {
         //get the next room
-        Room room = this->rooms.front();
-        this->rooms.erase(this->rooms.begin());
-
+        Room room = this->rooms[i];
         goToPoint(room.getEntryPoint());
+
+
+        //create a behavior of entryRoom.
+
+
         goToPoint(room.getExitPoint());
-        //got to the next room
+
     }
 }
 
 void RobotPlanner::goToPoint(std::pair<double, double> point) {
     //TODO:: update the position after merge with omer branch.
-    std::pair robotPosition=  std::make_pair(this->robotWrapper->getPos()->GetXPos(), this->robotWrapper->getPos()->GetYPos());
-    this->route->setStartingPoint(robotPosition);
-
+    std::pair<double, double> start = robotWrapper->getCurrentPosition();
+    this->route->setStartingPoint(start);
     this->route->setGoalPoint(point);
+
     this->route->createPath();
 
     // getting route
-    auto matrixPath = route->matrixPoint();
+
+    std::vector<std::pair<double, double> > path = route->getLatestPath();
 
     //execute the path
-    for (auto point : matrixPath) {
-        //TODO:: make sure that the robot position is the position we need.
-        //set start point of the factory
-        //TODO:: update the position after merge with omer branch.
-        robotPosition=  std::make_pair(this->robotWrapper->getPos()->GetXPos(), this->robotWrapper->getPos()->GetYPos());
-        this->robotBehaviorFactory->setStartPoint(robotPosition);
-        //set the end point of the factory
-        this->robotBehaviorFactory->setGoalPoint(point);
-        //execute the behavior
-        this->robotBehaviorFactory->createBehavior()->execute();
+    for(int i = 1; i < path.size(); i++) {
+        //rotation to the point
+        RotationBehavior rotationBehavior(robotWrapper, path[i]);
+        rotationBehavior.execute();
+
+
+        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
+        hallNavigateBehavior.execute();
+
+
     }
 
 }

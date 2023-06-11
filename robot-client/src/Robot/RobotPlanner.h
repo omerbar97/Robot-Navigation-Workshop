@@ -12,7 +12,7 @@
 #include "../Resources/MapGenerator.h"
 #include "../PathPlanning/Algorithm/RRTStarAlgorithm.h"
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
-#include <ompl/geometric/planners/astar/AStar.h>
+
 
 
 //TODO: update the room file

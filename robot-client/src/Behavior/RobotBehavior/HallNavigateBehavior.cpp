@@ -25,30 +25,38 @@ int HallNavigateBehavior::execute() {
     double turnSpeed = 0;
     pos.SetSpeed(groundSpeed, turnSpeed);
     while(distance > 0.1) {
-        if(!isTurning && latestTurn) {
-            // moving the robot a little bit forward, getting current position
-            // checking the laser scan if there is an obstacle in the side of the robot
-            // if there is an obstacle, we need to move the robot forward until the obstacle is not in the side of the robot
-            // if there is no obstacle, we need to rotate the robot to the goal point
-            // checking the laser scan
-
-            pos.SetSpeed(groundSpeed, 0);
-            while(this->robot->hasObstaclesOnSides()) {
-                // moving the robot forward
-                std::cout << "moving the robot forward" << std::endl;
-                usleep(10000);
-            }
-            latestTurn = false;
-            // need to redirect the robot to the goal point
-            // rotate the robot to the goal point
-            RotationBehavior rotationBehavior(this->robot, this->goalPoint);
-            rotationBehavior.execute();
-        }
+//        if(!isTurning && latestTurn) {
+//            // moving the robot a little bit forward, getting current position
+//            // checking the laser scan if there is an obstacle in the side of the robot
+//            // if there is an obstacle, we need to move the robot forward until the obstacle is not in the side of the robot
+//            // if there is no obstacle, we need to rotate the robot to the goal point
+//            // checking the laser scan
+//
+//            pos.SetSpeed(groundSpeed, 0);
+//            while(this->robot->hasObstaclesOnSides()) {
+//                // moving the robot forward
+//                std::cout << "moving the robot forward" << std::endl;
+//                usleep(10000);
+//            }
+//            latestTurn = false;
+//            // need to redirect the robot to the goal point
+//            // rotate the robot to the goal point
+//            RotationBehavior rotationBehavior(this->robot, this->goalPoint);
+//            rotationBehavior.execute();
+//        }
 
         // sense
         this->robot->update();
         // think
-//        isTurning = avoidObstacles(groundSpeed, turnSpeed);
+        isTurning = avoidObstacles(groundSpeed, turnSpeed);
+//        bool isTurning = avoidObstacles(groundSpeed, turnSpeed);
+        std::cout<<"isTurning: "<<isTurning<<std::endl;
+
+//        if (isTurning) {
+//            // Obstacle detected, adjust the motion accordingly
+//            this->robot->setRobotSpeed(groundSpeed);
+//            this->robot->setRobotTurnSpeed(turnSpeed);
+//        }
 
         // act
         pos.SetSpeed(groundSpeed, turnSpeed);
@@ -64,12 +72,13 @@ int HallNavigateBehavior::execute() {
 //        if(distance < minDistance) {
 //            minDistance = distance;
 //        }
-        printf("groudSpeed: %f, turnSpeed: %f, distance: %f\n", groundSpeed, turnSpeed, distance);
+//        printf("groudSpeed: %f, turnSpeed: %f, distance: %f\n", groundSpeed, turnSpeed, distance);
         usleep(10);
     }
 
     pos.SetSpeed(0, 0);
 }
+
 
 HallNavigateBehavior::~HallNavigateBehavior() {
 
@@ -77,35 +86,71 @@ HallNavigateBehavior::~HallNavigateBehavior() {
 
 bool HallNavigateBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
     double avoidDistance = 0.3;
-    double avoidTurnSpeed = 0.3;
+    double avoidTurnSpeed = 60;
     PlayerCc::RangerProxy& laser = this->robot->getLaser();
-    if(laser[2] < avoidDistance)
-    {
-        std::cout << "avoiding obstacle turning right" << std::endl;
+    std::cout << "laser[0]: " << laser[0] << std::endl;
+    std::cout << "laser[1]: " << laser[1] << std::endl;
+    std::cout << "laser[2]: " << laser[2] << std::endl;
+    std::cout << "laser[3]: " << laser[3] << std::endl;
+
+    // Check if obstacle on the right
+    if (laser[2] < avoidDistance) {
+        std::cout << "Avoiding obstacle by turning right" << std::endl;
         forwardSpeed = 0;
-        //turn right
-        turnSpeed = (-1)*avoidTurnSpeed;
+        turnSpeed = -avoidTurnSpeed;
         return true;
     }
-    else if(laser[3] < avoidDistance)
-    {
-        std::cout << "avoiding obstacle turning left" << std::endl;
+        // Check if obstacle on the left
+    else if (laser[3] < avoidDistance) {
+        std::cout << "Avoiding obstacle by turning left" << std::endl;
         forwardSpeed = 0;
-        //turn left
         turnSpeed = avoidTurnSpeed;
         return true;
     }
-    else if( (laser[0] < avoidDistance) && \
-               (laser[1] < avoidDistance))
-    {
-        //back off a little bit
+        // Check if obstacles ahead and on the sides
+    else if (laser[0] < avoidDistance && laser[1] < avoidDistance) {
+        std::cout << "Avoiding obstacle by backing off and turning" << std::endl;
         forwardSpeed = -0.2;
         turnSpeed = avoidTurnSpeed;
         return true;
     }
-    turnSpeed = 0;
-    forwardSpeed = this->robot->getGroundSpeed();
-    return false; //do nothing
+
+    // No obstacles, proceed with normal navigation
+//    turnSpeed = 0;
+//    forwardSpeed = this->robot->getGroundSpeed();
+    return false;
 }
+//bool HallNavigateBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
+//    double avoidDistance = 0.3;
+//    double avoidTurnSpeed = 0.3;
+//    PlayerCc::RangerProxy& laser = this->robot->getLaser();
+//    if(laser[2] < avoidDistance)
+//    {
+//        std::cout << "avoiding obstacle turning right" << std::endl;
+//        forwardSpeed = 0;
+//        //turn right
+//        turnSpeed = (-1)*avoidTurnSpeed;
+//        return true;
+//    }
+//    else if(laser[3] < avoidDistance)
+//    {
+//        std::cout << "avoiding obstacle turning left" << std::endl;
+//        forwardSpeed = 0;
+//        //turn left
+//        turnSpeed = avoidTurnSpeed;
+//        return true;
+//    }
+//    else if( (laser[0] < avoidDistance) && \
+//               (laser[1] < avoidDistance))
+//    {
+//        //back off a little bit
+//        forwardSpeed = -0.2;
+//        turnSpeed = avoidTurnSpeed;
+//        return true;
+//    }
+//    turnSpeed = 0;
+//    forwardSpeed = this->robot->getGroundSpeed();
+//    return false; //do nothing
+//}
 
 

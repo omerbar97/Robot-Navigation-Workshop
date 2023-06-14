@@ -4,7 +4,7 @@
 
 #include "RotationBehavior.h"
 
-RotationBehavior::RotationBehavior(RobotWrapper *robot, std::pair<double, double> goalPoint) : RobotBehavior(robot,
+RotationBehavior::RotationBehavior(RobotWrapper *robot, std::pair<double, double>& goalPoint) : RobotBehavior(robot,
                                                                                                              goalPoint) {
 
 }

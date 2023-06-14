@@ -21,7 +21,7 @@ public:
      * @param robot
      */
     HallNavigateBehavior(RobotWrapper* robot, Point goalPoint);
-    HallNavigateBehavior(RobotWrapper* robot, vector<Point> path);
+    HallNavigateBehavior(RobotWrapper* robot, vector<Point>& path);
 
     ~HallNavigateBehavior();
 

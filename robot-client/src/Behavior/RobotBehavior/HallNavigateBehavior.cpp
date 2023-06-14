@@ -8,7 +8,7 @@ HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, Point goalPoint)
 
 }
 
-HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, vector<Point> path) : RobotBehavior(robot, path) {
+HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, vector<Point>& path) : RobotBehavior(robot, path) {
 
 }
 

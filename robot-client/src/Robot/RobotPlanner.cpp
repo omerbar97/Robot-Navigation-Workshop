@@ -5,10 +5,10 @@
 #include "RobotPlanner.h"
 
 
-RobotPlanner::RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator) {
+RobotPlanner::RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* map) {
     this->robotWrapper = robotWrapper;
     this->roomsContainer = new RoomsContainer(roomConfigPath);
-    this->navigationMissionFactory = NavigationMissionsFactory(this->robotWrapper, this->roomsContainer, mapGenerator);
+    this->map = map;
 }
 
 RobotPlanner::~RobotPlanner() = default;
@@ -36,7 +36,8 @@ void RobotPlanner::planNavigationMission(const vector<string>& roomsIDs) {
     for(int i = 0; i < roomsIDs.size() - 1; i++) {
         Room *currentRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i)));
         Room *nextRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i + 1)));
-        Mission *mission = new R2R(currentRoom, nextRoom, this->robotWrapper);
+        Mission *mission = new R2R(currentRoom, nextRoom, this->robotWrapper,
+                                   new RRTStarAlgorithm(), this->map);
         this->currentPlan.push(mission);
     }
 

@@ -6,22 +6,31 @@
 #include "../../PathPlanning/Route.h"
 
 
-R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot) {
+R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot, Algorithm* algorithm, MapGenerator* mapGenerator) {
     this->robot = robot;
 
     robot->update();
-    std::vector<Behavior*> vector;
+    this->tasks = vector<Behavior*>();
 
-    vector.push_back(new ExitRoomBehavior(this->robot, roomSource));
-    Route*
-    Route* route = new Route(this->roomSource->getEntryPoint(), roomDest->getEntryPoint());
-    vector.push_back(new EnterRoomBehavior(robot, roomDest));
+    this->tasks.push_back(new ExitRoomBehavior(this->robot, roomSource));
+
+    auto* route = new Route(algorithm, mapGenerator);
+    route->setStartingPoint(roomSource->getEntryPoint());
+    route->setGoalPoint(roomDest->getEntryPoint());
+    route->createPath();
+    vector<Point> path = route->getLatestPath();
+    if (!path.empty()) {
+        path.erase(path.begin());
+    }
+    this->tasks.push_back(new HallNavigateBehavior(this->robot, path));
+
+    this->tasks.push_back(new EnterRoomBehavior(robot, roomDest));
 
 
 }
 
 int R2R::doMission() {
-    for (Behavior* task : vector) {
+    for (Behavior* task : tasks) {
         task->execute();
     }
 }

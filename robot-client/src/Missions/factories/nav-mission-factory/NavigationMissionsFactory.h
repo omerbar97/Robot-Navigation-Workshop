@@ -8,12 +8,14 @@
 
 #include "../../Mission.h"
 #include "../../../PathPlanning/Algorithm/Algorithm.h"
+#include "../../../Resources/MapGenerator.h"
 
 class NavigationMissionsFactory {
 public:
     NavigationMissionsFactory() = default;
     ~NavigationMissionsFactory() = default;
-    Mission* createR2RMission(Room* roomSource, Room* roomDest, RobotWrapper* robot, Algorithm* algorithm);
+    Mission* createR2RMission(Room* roomSource, Room* roomDest, RobotWrapper* robot,
+                              Algorithm* algorithm, MapGenerator* mapGenerator);
 };
 
 

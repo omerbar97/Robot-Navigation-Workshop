@@ -25,13 +25,13 @@ private:
     RoomsContainer* roomsContainer;
     RobotWrapper *robotWrapper;
     queue<Mission*> currentPlan;
-    NavigationMissionsFactory navigationMissionFactory;
+    MapGenerator* map;
     void planInformMission(const vector<string>& roomsIDs);
     void planNavigationMission(const vector<string>& roomsIDs);
 
 
 public:
-    RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator);
+    RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* map);
     ~RobotPlanner();
     void plan(const MissionType& mission, const vector<string>& parameters);
     int executePlan();

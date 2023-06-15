@@ -8,7 +8,7 @@
 
 
 
-Room::Room(std::pair<float, float> centerPoint, std::pair<float, float> entryPoint, std::pair<float, float> exitPoint,
+Room::Room(std::pair<double, double> centerPoint, std::pair<double, double> entryPoint, std::pair<double, double> exitPoint,
                int roomId) {
     this->centerPoint = centerPoint;
     this->entryPoint = entryPoint;
@@ -49,15 +49,15 @@ Room::Room(const std::string& roomInfoLine) {
 
 int Room::getRoomId() const { return this->roomId; }
 
-std::pair<float, float> Room::getEntryPoint() const {
+std::pair<double, double> Room::getEntryPoint() const {
     return this->entryPoint;
 }
 
-std::pair<float, float> Room::getCenterPoint() const {
+std::pair<double, double> Room::getCenterPoint() const {
     return this->centerPoint;
 }
 
-std::pair<float, float> Room::getExitPoint() const {
+std::pair<double, double> Room::getExitPoint() const {
     return this->exitPoint;
 }
 

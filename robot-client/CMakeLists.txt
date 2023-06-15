@@ -56,7 +56,7 @@ add_executable(Robot-Navigation
         src/Behavior/Behavior.h
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
-        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h src/Behavior/RobotBehavior/EnterRoomBehavior.cpp src/Behavior/RobotBehavior/LinearNavigation.cpp src/Behavior/RobotBehavior/LinearNavigation.h src/Behavior/RobotBehavior/ExitRoomBehavior.h src/Behavior/RobotBehavior/ExitRoomBehavior.cpp src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp src/Robot/RobotCLI.cpp src/Robot/RobotCLI.h src/Navigate/RoomToRoomNavigation.cpp src/Navigate/RoomToRoomNavigation.h)
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h src/Behavior/RobotBehavior/EnterRoomBehavior.cpp src/Behavior/RobotBehavior/LinearNavigation.cpp src/Behavior/RobotBehavior/LinearNavigation.h src/Behavior/RobotBehavior/ExitRoomBehavior.h src/Behavior/RobotBehavior/ExitRoomBehavior.cpp src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp src/Robot/RobotCLI.cpp src/Robot/RobotCLI.h src/Navigate/RoomToRoomNavigation.cpp src/Navigate/RoomToRoomNavigation.h src/Behavior/Missions/NavigationMission.cpp)
 
 add_executable(Server
         server/main.cpp

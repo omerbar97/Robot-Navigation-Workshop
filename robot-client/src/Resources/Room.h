@@ -16,9 +16,9 @@
 class Room {
 private:
     /// The entry point to the room.
-    std::pair<float, float> entryPoint;
-    std::pair<float, float> centerPoint;
-    std::pair<float, float> exitPoint;
+    std::pair<double, double> entryPoint;
+    std::pair<double, double> centerPoint;
+    std::pair<double, double> exitPoint;
     /// The room's ID.
     int roomId;
     std::string roomName;
@@ -29,7 +29,7 @@ public:
      * @param entryPoint The entry point to the room.
      * @param roomId The room's ID.
      */
-    Room(std::pair<float, float> centerPoint, std::pair<float, float> entryPoint, std::pair<float, float> exitPoint,
+    Room(std::pair<double, double> centerPoint, std::pair<double, double> entryPoint, std::pair<double, double> exitPoint,
          int roomId);
 
     explicit Room(const std::string& roomInfoLine);
@@ -38,19 +38,19 @@ public:
      * Gets the entry point to the room.
      * @return The entry point to the room.
      */
-    std::pair<float, float> getEntryPoint() const;
+    std::pair<double, double> getEntryPoint() const;
 
         /**
      * Gets the entry point to the room.
      * @return The entry point to the room.
      */
-    std::pair<float, float> getCenterPoint() const;
+     std::pair<double, double> getCenterPoint() const;
 
         /**
      * Gets the entry point to the room.
      * @return The entry point to the room.
      */
-    std::pair<float, float> getExitPoint() const;
+    std::pair<double, double> getExitPoint() const;
 
     /**
      * Gets the room's ID.

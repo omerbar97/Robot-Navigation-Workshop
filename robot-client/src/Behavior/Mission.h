@@ -6,6 +6,10 @@
 #define ROBOT_NAVIGATION_WORKSHOP_MISSION_H
 
 #include "Behavior.h"
+#include "../Robot/RobotWrapper.h"
+#include "../Resources/Room.h"
+
+
 
 
 enum class MissionType {

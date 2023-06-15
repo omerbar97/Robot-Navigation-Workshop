@@ -33,6 +33,7 @@ void RobotCLI::printHelp() {
     std::cout << "help                                         : Display the available commands and their usage.";
     std::cout << std::endl;
     std::cout << "exit                                         : Exit the CLI.";
+    std::cout << std::endl << std::endl;
 }
 
 void RobotCLI::parseCommand(string& input, MissionType& command, vector<string>& args) {
@@ -60,7 +61,7 @@ void RobotCLI::run() {
     while (!isDone) {
         cout << ">> ";
         string input;
-        cin >> input;
+        getline(cin, input);
         cout << endl;
         if (input == "exit") {
             isDone = true;

@@ -22,7 +22,7 @@ public:
 
     // the virtual method is still virtual
     virtual int execute() = 0;
-    RobotBehavior(RobotWrapper* robot, std::pair<double, double>& goalPoint);
+    RobotBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
 
     virtual ~RobotBehavior() = default;
 

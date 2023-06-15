@@ -42,24 +42,41 @@ void RobotPlanner::planNavigationMission(const vector<string>& roomsIDs) {
     // note : in the future, it will use a factory to create the behaviors
     //        however for now, it will be done manually
 
-    for (int i = 0; i < roomsIDs.size() - 2; i++) {
-        try {
-            int source = stoi(roomsIDs.at(i));
-            int destination = stoi(roomsIDs.at(i + 1));
-            this->currentPlan.push_back(new ExitRoomBehavior(this->robotWrapper,
-                                                             this->roomsContainer->getRoomById(source)));
+    //TODO:: plan priority queue of MissionType and parameters
+    for(int i = 0; i < roomsIDs.size() - 1; i++) {
 
-            this->currentPlan.push_back(new HallNavigateBehavior(this->robotWrapper,
-                                                                 this->roomsContainer->getRoomById(destination)->
-                                                                 getEntryPoint()));
-            this->currentPlan.push_back(new EnterRoomBehavior(this->robotWrapper,
-                                                              this->roomsContainer->getRoomById(destination + 1)));
+        Room* currentRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i)));
+        Room* nextRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i + 1)));
+        Mission* mission = new NavigationMission(currentRoom, nextRoom, this->robotWrapper);
+        this->currentPlan.push(mission);
 
-        } catch ( const exception& e) {
-            cout << "error: " << e.what() << endl;
-            exit(1);
-        }
+
+        //get the next room
+//        Room* room = this->roomsContainer->getRoomById(stoi(roomNum));
+//        Mission * mission = new NavigationMission((this->robotWrapper), room);
+//        this->currentPlan.push(mission);
     }
+
+
+//    for (int i = 0; i < roomsIDs.size() - 2; i++) {
+//        try {
+//            int source = stoi(roomsIDs.at(i));
+//            int destination = stoi(roomsIDs.at(i + 1));
+//            this->currentPlan.push_back(new ExitRoomBehavior(this->robotWrapper,
+//                                                             this->roomsContainer->getRoomById(source)));
+//
+//            this->currentPlan.push_back(new HallNavigateBehavior(this->robotWrapper,
+//                                                                 this->roomsContainer->getRoomById(destination)->
+//                                                                 getEntryPoint()));
+//            this->currentPlan.push_back(new EnterRoomBehavior(this->robotWrapper,
+//                                                              this->roomsContainer->getRoomById(destination + 1)));
+//
+//        } catch ( const exception& e) {
+//            cout << "error: " << e.what() << endl;
+//            exit(1);
+//        }
+//    }
+
 }
 
 void RobotPlanner::plan(const MissionType& mission, const vector<std::string> &parameters) {
@@ -81,8 +98,15 @@ void RobotPlanner::plan(const MissionType& mission, const vector<std::string> &p
  * @param rooms - the rooms to set
  */
 int RobotPlanner::executePlan() {
-    for (Behavior* task : currentPlan) {
-        task->execute();
+    while(this->currentPlan.size() > 0) {
+        // get the next mission
+        Mission* mission = this->currentPlan.front();
+        // delete the mission from the queue
+        this->currentPlan.pop();
+        // do the mission
+        mission->doMission();
+        // delete the mission
+        delete mission;
     }
     return 0;
 }

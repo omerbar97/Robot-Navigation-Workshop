@@ -14,6 +14,7 @@
 #include "src/Behavior/RobotBehavior/RotationBehavior.h"
 #include "src/Behavior/MessageBehavior/VoiceMessageBehavior.h"
 #include "src/Robot/RobotPlanner.h"
+#include "src/Robot/RobotCLI.h"
 #include <string>
 
 void drawBlock(cv::Mat &map, int x, int y, int blockSize) {
@@ -40,13 +41,16 @@ using namespace PlayerCc;
 int main() {
 
     MapGenerator *map = new MapGenerator(
-            "/home/ofirhelerman/CS-BIU/YearB/RoboticsSeminar/src-clion-robotics/robot-client/maps/csMap.png");
-    const std::string pathToRoomsConfig = "/home/ofirhelerman/CS-BIU/YearB/RoboticsSeminar/src-clion-robotics/robot-client/configures/room_coordinates.txt";
+            "/home/shilopadael/CLionProjects/Robot-Navigation-Workshop/robot-client/maps/csMap.png");
+    const std::string pathToRoomsConfig = "/home/shilopadael/CLionProjects/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt";
     PlayerCc::PlayerClient client("localhost", 6665);
     PlayerCc::Position2dProxy position(&client, 0);
     PlayerCc::RangerProxy laser(&client, 1);
     auto* robotWrapper = new RobotWrapper(client, position, laser);
     auto* robotPlanner = new RobotPlanner(pathToRoomsConfig, robotWrapper, map);
+    RobotCLI* robotCLI = new RobotCLI(robotPlanner);
+    robotCLI->run();
+
 
     return 0;
 }

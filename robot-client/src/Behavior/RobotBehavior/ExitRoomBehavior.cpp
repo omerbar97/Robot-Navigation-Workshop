@@ -18,7 +18,7 @@ bool ExitRoomBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
 int ExitRoomBehavior::execute() {
     // create a straight line behaviour to move the robot into the room and additional data
     LinearNavigation navigateStraightLine;
-    double forwardSpeed = 0.01;
+    double forwardSpeed = 0.04;
     double turnSpeed = 0;
     double minDistance = 0.1;
 

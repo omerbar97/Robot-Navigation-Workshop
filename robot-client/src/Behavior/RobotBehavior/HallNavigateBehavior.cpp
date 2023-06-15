@@ -8,9 +8,9 @@ HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, Point goalPoint)
 
 }
 
-HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, vector<Point>& path) : RobotBehavior(robot, path) {
+//HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, vector<Point>& path) : RobotBehavior(robot, path) {
 
-}
+//}
 
 int HallNavigateBehavior::execute() {
     // this function will navigate the robot in the hall environment, the robot will move forward until it will reach

@@ -5,6 +5,7 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROBOTPLANNER_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTPLANNER_H
 #include <vector>
+#include <queue>
 #include "../Resources/Room.h"
 #include "../Resources/RoomsContainer.h"
 #include "RobotWrapper.h"
@@ -14,6 +15,7 @@
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
 #include "../Behavior/Behavior.h"
 #include "../Behavior/Mission.h"
+#include "../Behavior/Missions/NavigationMission.h"
 
 
 using namespace std;
@@ -24,7 +26,7 @@ private:
     Route* route;
     MapGenerator* mapGenerator;
     RobotBehaviorFactory* robotBehaviorFactory;
-    vector<Behavior*> currentPlan;
+    queue<Mission*> currentPlan;
     void planInformMission(const vector<string>& roomsIDs);
     void planNavigationMission(const vector<string>& roomsIDs);
 

@@ -5,6 +5,7 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROBOTCLI_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTCLI_H
 
+#include <iostream>
 #include <sstream>
 #include <vector>
 #include "RobotPlanner.h"

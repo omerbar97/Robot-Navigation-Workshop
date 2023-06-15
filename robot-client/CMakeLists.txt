@@ -27,8 +27,6 @@ find_package(jsoncpp CONFIG REQUIRED)
 # Add the executables
 add_executable(Robot-Navigation
         main.cpp
-        src/Navigate/Navigation.cpp
-        src/Navigate/Navigation.h
         src/PathPlanning/Route.cpp
         src/PathPlanning/Route.h
         src/Resources/MapGenerator.cpp
@@ -56,7 +54,22 @@ add_executable(Robot-Navigation
         src/Behavior/Behavior.h
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
-        src/Behavior/MessageBehavior/VoiceMessageBehavior.h Client/Client.h src/Behavior/RobotBehavior/EnterRoomBehavior.cpp src/Behavior/RobotBehavior/LinearNavigation.cpp src/Behavior/RobotBehavior/LinearNavigation.h src/Behavior/RobotBehavior/ExitRoomBehavior.h src/Behavior/RobotBehavior/ExitRoomBehavior.cpp src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp src/Robot/RobotCLI.cpp src/Robot/RobotCLI.h src/Navigate/RoomToRoomNavigation.cpp src/Navigate/RoomToRoomNavigation.h src/Behavior/Missions/NavigationMission.cpp)
+        src/Behavior/MessageBehavior/VoiceMessageBehavior.h
+        Client/Client.h
+        src/Behavior/RobotBehavior/EnterRoomBehavior.cpp
+        src/Behavior/behaviour-functors/LinearNavigation.cpp
+        src/Behavior/behaviour-functors/LinearNavigation.h
+        src/Behavior/RobotBehavior/ExitRoomBehavior.h
+        src/Behavior/RobotBehavior/ExitRoomBehavior.cpp
+        src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp
+        src/Robot/RobotCLI.cpp
+        src/Robot/RobotCLI.h
+        src/Missions/navigation-missions/R2R.cpp
+        src/Behavior/behaviour-functors/RotateRobot.cpp
+        src/Behavior/behaviour-functors/RotateRobot.h
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.cpp
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h src/Missions/factories/MissionFactory.h)
 
 add_executable(Server
         server/main.cpp

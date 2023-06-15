@@ -5,7 +5,7 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ENTERROOMBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_ENTERROOMBEHAVIOR_H
 #include "RobotBehavior.h"
-#include "LinearNavigation.h"
+#include "../behaviour-functors/LinearNavigation.h"
 #include "../../Resources/Room.h"
 
 using namespace std;

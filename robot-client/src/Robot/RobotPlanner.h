@@ -14,8 +14,9 @@
 #include "../PathPlanning/Algorithm/RRTStarAlgorithm.h"
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
 #include "../Behavior/Behavior.h"
-#include "../Behavior/Mission.h"
-#include "../Behavior/Missions/NavigationMission.h"
+#include "../Missions/Mission.h"
+#include "../Missions/navigation-missions/R2R.h"
+#include "../Missions/factories/nav-mission-factory/NavigationMissionsFactory.h"
 
 
 using namespace std;
@@ -23,14 +24,11 @@ class RobotPlanner {
 private:
     RoomsContainer* roomsContainer;
     RobotWrapper *robotWrapper;
-    Route* route;
-    MapGenerator* mapGenerator;
-    RobotBehaviorFactory* robotBehaviorFactory;
     queue<Mission*> currentPlan;
+    NavigationMissionsFactory navigationMissionFactory;
     void planInformMission(const vector<string>& roomsIDs);
     void planNavigationMission(const vector<string>& roomsIDs);
 
-//    void goToPoint(std::pair<double, double> point);
 
 public:
     RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator);

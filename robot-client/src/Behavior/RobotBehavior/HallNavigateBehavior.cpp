@@ -3,9 +3,11 @@
 //
 
 #include "HallNavigateBehavior.h"
+#include "../behaviour-functors/RotateRobot.h"
 
-HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, Point goalPoint) : RobotBehavior(robot, goalPoint) {
-
+HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, vector<Point> &path) :
+        RobotBehavior(robot, path.at(path.size() - 1)) {
+    this->path = path;
 }
 
 //HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, vector<Point>& path) : RobotBehavior(robot, path) {
@@ -13,47 +15,13 @@ HallNavigateBehavior::HallNavigateBehavior(RobotWrapper *robot, Point goalPoint)
 //}
 
 int HallNavigateBehavior::execute() {
-    // this function will navigate the robot in the hall environment, the robot will move forward until it will reach
-    // the goal point.
-    PlayerCc::Position2dProxy& pos = this->robot->getPos();
-    // navigating the robot to the goal point
-
-
-    this->robot->update();
-    double minDistance;
-    double distance = sqrt(pow(this->goalPoint.first - pos.GetXPos(), 2) + pow(this->goalPoint.second - pos.GetYPos(), 2));
-    minDistance = distance;
-    double groundSpeed = this->robot->getGroundSpeed();
-    bool isTurning = false;
-    bool latestTurn = false;
-    double turnSpeed = 0;
-    pos.SetSpeed(groundSpeed, turnSpeed);
-
-    while(distance > 0.1) {
-
-        // sense
-        this->robot->update();
-        // think
-//        isTurning = avoidObstacles(groundSpeed, turnSpeed);
-        std::cout<<"isTurning: "<<isTurning<<std::endl;
-
-        // act
-        pos.SetSpeed(groundSpeed, turnSpeed);
-        if(isTurning && !latestTurn) {
-            latestTurn = true;
-            usleep(10000);
-        }
-        // calculating the distance
-        distance = sqrt(pow(this->goalPoint.first - pos.GetXPos(), 2) + pow(this->goalPoint.second - pos.GetYPos(), 2));
-        usleep(10);
+    LinearNavigation navigateStraightLine;
+    RotateRobot rotateTowards;
+    for (Point& point : this->path) {
+        rotateTowards(this->robot, point);
+        navigateStraightLine(this->robot, point, 0.1, 0.1);
     }
-
-    pos.SetSpeed(0, 0);
-}
-
-
-HallNavigateBehavior::~HallNavigateBehavior() {
-
+    return 0;
 }
 
 bool HallNavigateBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
@@ -92,5 +60,7 @@ bool HallNavigateBehavior::avoidObstacles(double &forwardSpeed, double &turnSpee
 //    forwardSpeed = this->robot->getGroundSpeed();
     return false;
 }
+
+
 
 

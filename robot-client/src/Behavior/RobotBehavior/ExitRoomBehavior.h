@@ -5,7 +5,7 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_EXITROOMBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_EXITROOMBEHAVIOR_H
 #include "RobotBehavior.h"
-#include "LinearNavigation.h"
+#include "../behaviour-functors/LinearNavigation.h"
 #include "../../Resources/Room.h"
 
 class ExitRoomBehavior : public RobotBehavior{

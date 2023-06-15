@@ -47,20 +47,22 @@ Room::Room(const std::string& roomInfoLine) {
     this->exitPoint = std::make_pair(std::stof(tokens[6]), std::stof(tokens[7]));
 }
 
-int Room::getRoomId() const { return this->roomId; }
+const int& Room::getRoomId() const {
+    return this->roomId;
+}
 
-std::pair<double, double> Room::getEntryPoint() const {
+const std::pair<double, double>& Room::getEntryPoint() const {
     return this->entryPoint;
 }
 
-std::pair<double, double> Room::getCenterPoint() const {
+const std::pair<double, double>& Room::getCenterPoint() const {
     return this->centerPoint;
 }
 
-std::pair<double, double> Room::getExitPoint() const {
+const std::pair<double, double> & Room::getExitPoint() const {
     return this->exitPoint;
 }
 
-std::string Room::getRoomName() const {
+const std::string & Room::getRoomName() const {
     return this->roomName;
 }

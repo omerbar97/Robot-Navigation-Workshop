@@ -4,13 +4,11 @@
 
 #include "RobotPlanner.h"
 
+
 RobotPlanner::RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator) {
-    std::pair<double, double> defPoint = std::make_pair(0, 0);
     this->robotWrapper = robotWrapper;
-    this->mapGenerator = mapGenerator;
-    this->route = new Route(new RRTStarAlgorithm(), this->mapGenerator);
     this->roomsContainer = new RoomsContainer(roomConfigPath);
-//    this->robotBehaviorFactory = new RobotBehaviorFactory(this->robotWrapper, defPoint);
+    this->navigationMissionFactory = NavigationMissionsFactory(this->robotWrapper, this->roomsContainer, mapGenerator);
 }
 
 RobotPlanner::~RobotPlanner() = default;
@@ -34,48 +32,13 @@ void RobotPlanner::planInformMission(const vector<string>& roomsIDs) {
 
 void RobotPlanner::planNavigationMission(const vector<string>& roomsIDs) {
     // assumes that the robot starts inside a room
-    // creating a plan that will look like this:
-    // 1. navigate to the exit point of the current room
-    // 2. navigate to the entry point of the next room
-    // 3. enter the next room
-    // 4. repeat 1-3 until the last room
-    // note : in the future, it will use a factory to create the behaviors
-    //        however for now, it will be done manually
-
     //TODO:: plan priority queue of MissionType and parameters
     for(int i = 0; i < roomsIDs.size() - 1; i++) {
-
-        Room* currentRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i)));
-        Room* nextRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i + 1)));
-        Mission* mission = new NavigationMission(currentRoom, nextRoom, this->robotWrapper);
+        Room *currentRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i)));
+        Room *nextRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i + 1)));
+        Mission *mission = new R2R(currentRoom, nextRoom, this->robotWrapper);
         this->currentPlan.push(mission);
-
-
-        //get the next room
-//        Room* room = this->roomsContainer->getRoomById(stoi(roomNum));
-//        Mission * mission = new NavigationMission((this->robotWrapper), room);
-//        this->currentPlan.push(mission);
     }
-
-
-//    for (int i = 0; i < roomsIDs.size() - 2; i++) {
-//        try {
-//            int source = stoi(roomsIDs.at(i));
-//            int destination = stoi(roomsIDs.at(i + 1));
-//            this->currentPlan.push_back(new ExitRoomBehavior(this->robotWrapper,
-//                                                             this->roomsContainer->getRoomById(source)));
-//
-//            this->currentPlan.push_back(new HallNavigateBehavior(this->robotWrapper,
-//                                                                 this->roomsContainer->getRoomById(destination)->
-//                                                                 getEntryPoint()));
-//            this->currentPlan.push_back(new EnterRoomBehavior(this->robotWrapper,
-//                                                              this->roomsContainer->getRoomById(destination + 1)));
-//
-//        } catch ( const exception& e) {
-//            cout << "error: " << e.what() << endl;
-//            exit(1);
-//        }
-//    }
 
 }
 

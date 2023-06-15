@@ -38,28 +38,28 @@ public:
      * Gets the entry point to the room.
      * @return The entry point to the room.
      */
-    std::pair<double, double> getEntryPoint() const;
+    const std::pair<double, double>& getEntryPoint() const;
 
         /**
      * Gets the entry point to the room.
      * @return The entry point to the room.
      */
-     std::pair<double, double> getCenterPoint() const;
+     const std::pair<double, double>& getCenterPoint() const;
 
         /**
      * Gets the entry point to the room.
      * @return The entry point to the room.
      */
-    std::pair<double, double> getExitPoint() const;
+        const std::pair<double, double> & getExitPoint() const;
 
     /**
      * Gets the room's ID.
      * @return The room's ID.
      */
-    int getRoomId() const;
+    const int& getRoomId() const;
 
 
-    std::string getRoomName() const;
+    const std::string & getRoomName() const;
 };
 
 

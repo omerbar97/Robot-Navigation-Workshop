@@ -7,7 +7,7 @@
 #include "../../Robot/RobotWrapper.h"
 #include "../../Behavior/RobotBehavior/RobotBehavior.h"
 #include "../MessageBehavior/VoiceMessageBehavior.h"
-#include "../Mission.h"
+#include "../../Missions/Mission.h"
 
 class RobotMissionFactory {
 private:

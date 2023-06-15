@@ -4,6 +4,7 @@
 
 #include "EnterRoomBehavior.h"
 #include "RotationBehavior.h"
+#include "../behaviour-functors/RotateRobot.h"
 
 EnterRoomBehavior::EnterRoomBehavior(RobotWrapper *robot, Room* goalRoom) :
 RobotBehavior(robot, goalRoom->getCenterPoint()) {
@@ -25,17 +26,19 @@ int EnterRoomBehavior::execute() {
 
     // create a straight line behaviour to move the robot into the room and additional data
     LinearNavigation navigateStraightLine;
-    double forwardSpeed = 0.01;
-    double turnSpeed = 0;
+    RotateRobot rotateTowards;
+    double forwardSpeed = 0.04;
     double minDistance = 0.1;
 
     // TODO: think about bring the robot into the entry point of the room first
 
     /// move robot into doorstep in a straight line using a straight line behaviour
-    navigateStraightLine(robot, this->goalRoom->getExitPoint(), forwardSpeed, turnSpeed, minDistance);
+    rotateTowards(this->robot, this->goalRoom->getExitPoint());
+    navigateStraightLine(robot, this->goalRoom->getExitPoint(), forwardSpeed, minDistance);
 
     /// move robot into the room's center using a rotation behaviour
-    navigateStraightLine(robot, this->goalRoom->getCenterPoint(), forwardSpeed, turnSpeed, minDistance);
+    rotateTowards(this->robot, this->goalRoom->getCenterPoint());
+    navigateStraightLine(robot, this->goalRoom->getCenterPoint(), forwardSpeed, minDistance);
 
     return 0;
 }

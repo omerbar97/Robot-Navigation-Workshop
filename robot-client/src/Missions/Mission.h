@@ -5,7 +5,7 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_MISSION_H
 #define ROBOT_NAVIGATION_WORKSHOP_MISSION_H
 
-#include "Behavior.h"
+#include "../Behavior/Behavior.h"
 #include "../Robot/RobotWrapper.h"
 #include "../Resources/Room.h"
 

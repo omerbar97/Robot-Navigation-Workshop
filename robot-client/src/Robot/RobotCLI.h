@@ -15,11 +15,11 @@ private:
     RobotPlanner* robotPlanner;
     void printIntro();
     void printHelp();
-    void parseCommand(string& input, MissionType& command, vector<string>& args);
+    bool parseCommand(string& input, MissionType& command, vector<string>& args);
 
 
 public:
-    RobotCLI(RobotPlanner *robotPlanner);
+    explicit RobotCLI(RobotPlanner *robotPlanner);
     void run();
 
 };

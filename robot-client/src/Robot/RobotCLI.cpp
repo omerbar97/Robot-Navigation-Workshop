@@ -36,7 +36,7 @@ void RobotCLI::printHelp() {
     std::cout << std::endl << std::endl;
 }
 
-void RobotCLI::parseCommand(string& input, MissionType& command, vector<string>& args) {
+bool RobotCLI::parseCommand(string& input, MissionType& command, vector<string>& args) {
     stringstream ss(input);
     string commandName;
     ss >> commandName;
@@ -46,13 +46,14 @@ void RobotCLI::parseCommand(string& input, MissionType& command, vector<string>&
         command = MissionType::INFORM;
     } else {
         cout << "command not supported" << endl;
-        exit(1);
+        return false;
     }
 
     string arg;
     while (ss >> arg) {
         args.push_back(arg);
     }
+    return true;
 }
 
 void RobotCLI::run() {
@@ -70,12 +71,13 @@ void RobotCLI::run() {
         } else {
             MissionType commandName;
             vector<string> args;
-            parseCommand(input, commandName, args);
-            cout << "create plan..." << endl;
-            this->robotPlanner->plan(commandName, args);
-            cout << "execute plan..." << endl;
-            this->robotPlanner->executePlan();
-            cout << "done!" << endl;
+            if (parseCommand(input, commandName, args)) {
+                cout << "create plan..." << endl;
+                this->robotPlanner->plan(commandName, args);
+                cout << "execute plan..." << endl;
+                this->robotPlanner->executePlan();
+                cout << "done!" << endl;
+            }
         }
     }
 }

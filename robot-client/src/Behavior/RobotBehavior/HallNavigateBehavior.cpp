@@ -19,7 +19,7 @@ int HallNavigateBehavior::execute() {
     RotateRobot rotateTowards;
     for (Point& point : this->path) {
         rotateTowards(this->robot, point);
-        navigateStraightLine(this->robot, point, 0.1, 0.1);
+        navigateStraightLine(this->robot, point, 0.06, 0.1);
     }
     return 0;
 }

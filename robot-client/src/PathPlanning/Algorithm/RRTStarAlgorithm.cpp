@@ -59,7 +59,7 @@ void RRTStarAlgorithm::calculate() {
 
     ompl::base::PlannerStatus status = planner->solve(ptc);
 
-    if(status == ompl::base::PlannerStatus::EXACT_SOLUTION) {
+    if(status == ompl::base::PlannerStatus::EXACT_SOLUTION || status == ompl::base::PlannerStatus::APPROXIMATE_SOLUTION) {
         ompl::geometric::PathGeometricPtr solutionPath = std::dynamic_pointer_cast<ompl::geometric::PathGeometric>(problemDefinition->getSolutionPath());
         transferPathToVector(solutionPath);
 

@@ -15,8 +15,13 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     double groundSpeed = robot->getGroundSpeed();
     double turnSpeed = 0;
     pos.SetSpeed(groundSpeed, turnSpeed);
-
+    // debug
+    std::cout << "minDistance: " << minDistance << std::endl;
     while(distance > minDistance) {
+
+        // debug
+        std::cout << "distance: " << distance << std::endl;
+
 
         // sense
         robot->update();

@@ -51,6 +51,10 @@ class WebSocketClient {
           // broadcasting the data to all the clients
           WebSocketServer.broadcast(dataJson);
         }
+        if(dataJson.type === 'robotTravel') {
+          // print
+          console.log(dataJson);
+        }
 
         console.log('Received message:', data);
       });

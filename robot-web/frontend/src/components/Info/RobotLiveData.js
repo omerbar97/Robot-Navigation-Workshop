@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect , useRef } from 'react';
 import './RobotLiveData.css'
 import WebSocketClient from '../../services/WebSocketClient';
 
@@ -12,6 +12,7 @@ function RobotLiveData(props) {
     const [stageOnline, setStageOnline] = useState(false);
     const [robotError, setRobotError] = useState(false);
     const [stageError, setStageError] = useState(false);
+    const inputRef = useRef(null);
 
 
     const ws = new WebSocketClient();
@@ -46,6 +47,16 @@ function RobotLiveData(props) {
                 setIsListener(false);
             }
         });
+    }
+
+    const handleBtnClick = (e) => {
+        e.preventDefault();
+        // sending the data to the socket client
+        let data = {
+            type: "robotTravel",
+            rooms: inputRef.current.value
+        }
+        ws.send(JSON.stringify(data));
     }
 
 
@@ -129,10 +140,10 @@ function RobotLiveData(props) {
                             <p className='info'>Based on the room cfg that you upload, please enter 3 rooms id to travel</p>
                             <div className='row'>
                                 <div className='col-3'>
-                                    <input type="text" className='form-control inputInfo' placeholder='1 3 4' />
+                                    <input ref={inputRef} type="text" className='form-control inputInfo' placeholder='1 3 4' />
                                 </div>
                                 <div className='col-2'>
-                                    <button className='btn btn-danger'>SEND</button>
+                                    <button className='btn btn-danger' onClick={handleBtnClick}>SEND</button>
                                 </div>
                             </div>
 

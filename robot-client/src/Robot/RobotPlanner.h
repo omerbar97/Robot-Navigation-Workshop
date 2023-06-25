@@ -6,6 +6,7 @@
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTPLANNER_H
 #include <vector>
 #include <queue>
+#include <mutex>
 #include "../Resources/Room.h"
 #include "../Resources/RoomsContainer.h"
 #include "RobotWrapper.h"
@@ -22,10 +23,12 @@
 using namespace std;
 class RobotPlanner {
 private:
+    bool isInPlan;
     RoomsContainer* roomsContainer;
     RobotWrapper *robotWrapper;
     queue<Mission*> currentPlan;
     MapGenerator* map;
+    std::mutex mutex;
     void planInformMission(const vector<string>& roomsIDs);
     void planNavigationMission(const vector<string>& roomsIDs);
 
@@ -34,10 +37,12 @@ public:
     RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* map);
     ~RobotPlanner();
     void plan(const MissionType& mission, const vector<string>& parameters);
+    void setPlanFromString(const string& plan);
     int executePlan();
     bool isRobotOnline();
-
+    RobotWrapper* getRobotWrapper();
     void initRobot();
+    bool isRobotInPlan();
 
 
 

@@ -14,7 +14,7 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     double distance = sqrt(pow(dest.first - pos.GetXPos(), 2) + pow(dest.second - pos.GetYPos(), 2));
     double groundSpeed = robot->getGroundSpeed();
     double turnSpeed = 0;
-    pos.SetSpeed(groundSpeed, turnSpeed);
+    robot->setSpeed(groundSpeed, turnSpeed);
     // debug
     std::cout << "minDistance: " << minDistance << std::endl;
     while(distance > minDistance) {
@@ -30,7 +30,7 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
         // TODO: implement obstacle avoidance
 
         // act
-        pos.SetSpeed(fSpeed, turnSpeed);
+        robot->setSpeed(fSpeed, turnSpeed);
 
         // calculating the distance
         distance = sqrt(pow(dest.first - pos.GetXPos(), 2) + pow(dest.second - pos.GetYPos(), 2));

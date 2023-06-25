@@ -9,6 +9,7 @@ RobotPlanner::RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrap
     this->robotWrapper = robotWrapper;
     this->roomsContainer = new RoomsContainer(roomConfigPath);
     this->map = map;
+    this->isInPlan = false;
 }
 
 RobotPlanner::~RobotPlanner() = default;
@@ -38,7 +39,11 @@ void RobotPlanner::planNavigationMission(const vector<string>& roomsIDs) {
         Room *nextRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i + 1)));
         Mission *mission = new R2R(currentRoom, nextRoom, this->robotWrapper,
                                    new RRTStarAlgorithm(), this->map);
+        // lock the mutex
+        this->mutex.lock();
         this->currentPlan.push(mission);
+        // unlock the mutex
+        this->mutex.unlock();
     }
 
 }
@@ -62,16 +67,24 @@ void RobotPlanner::plan(const MissionType& mission, const vector<std::string> &p
  * @param rooms - the rooms to set
  */
 int RobotPlanner::executePlan() {
-    while(this->currentPlan.size() > 0) {
+    this->isInPlan = true;
+    // copying the queue
+    // lock
+    this->mutex.lock();
+    queue<Mission*> tempQueue = this->currentPlan;
+    this->currentPlan = queue<Mission*>();
+    this->mutex.unlock();
+    while(tempQueue.size() > 0) {
         // get the next mission
-        Mission* mission = this->currentPlan.front();
+        Mission* mission = tempQueue.front();
         // delete the mission from the queue
-        this->currentPlan.pop();
+        tempQueue.pop();
         // do the mission
         mission->doMission();
         // delete the mission
         delete mission;
     }
+    this->isInPlan = false;
     return 0;
 }
 
@@ -81,6 +94,31 @@ void RobotPlanner::initRobot() {
 
 bool RobotPlanner::isRobotOnline() {
     return this->robotWrapper->isOnline();
+}
+
+RobotWrapper *RobotPlanner::getRobotWrapper() {
+    return this->robotWrapper;
+}
+
+void RobotPlanner::setPlanFromString(const string &plan) {
+    // setting a given plan from a string
+    // the first number of the string is the current robot room.
+
+    // splitting the string by spaces
+    std::vector<std::string> rooms;
+    std::string token;
+    std::stringstream ss(plan);
+
+    while (std::getline(ss, token, ' ')) {
+        rooms.push_back(token);
+    }
+
+    // creating mission to navigate, the first navigation is to go out of the room
+    planNavigationMission(rooms);
+}
+
+bool RobotPlanner::isRobotInPlan() {
+    return this->isInPlan;
 }
 
 

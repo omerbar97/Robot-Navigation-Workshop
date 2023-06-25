@@ -5,16 +5,20 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_WEBSOCKETCLIENT_H
 #define ROBOT_NAVIGATION_WORKSHOP_WEBSOCKETCLIENT_H
 #include "../Robot/RobotWrapper.h"
+#include "../Robot/RobotPlanner.h"
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/config/asio_client.hpp>
 #include <nlohmann/json.hpp>
+#include <regex>
 
 
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 class WebSocketClient {
 private:
     RobotWrapper* robot;
+    std::vector<std::thread*> threads;
+    RobotPlanner* planner;
     std::string ws;
     client wsClient;
     websocketpp::connection_hdl connection;
@@ -27,7 +31,7 @@ private:
     void on_interrupt(websocketpp::connection_hdl hdl);
 
 public:
-    WebSocketClient(RobotWrapper* robot, std::string ws);
+    WebSocketClient(RobotPlanner* robot, std::string ws);
 
     ~WebSocketClient();
 
@@ -41,6 +45,8 @@ public:
     void update();
 
     bool isOnline();
+
+    void waitForThread();
 
     void setRobot(RobotWrapper* robot);
 

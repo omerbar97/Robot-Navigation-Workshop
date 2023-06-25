@@ -73,15 +73,6 @@ void RobotCLI::run() {
             printHelp();
         } else if (input == "start") {
             this->robotPlanner->initRobot();
-            if (this->stageThread != nullptr) {
-                // checking if thread still running
-                if (this->stageThread->joinable()) {
-                    // starting the robot
-                    cout << "The stage program is running in another thread" << endl;
-                }
-            } else {
-                cout << "The stage program didn't activated through this program" << endl;
-            }
             cout << "trying to connect to the robot interface...  ";
             std::cout << '-' << std::flush;
             sleep(1);

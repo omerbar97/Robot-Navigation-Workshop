@@ -1,10 +1,8 @@
 
 #include <libplayerc++/playerc++.h>
 #include "src/Resources/MapGenerator.h"
-#include "src/PathPlanning/Route.h"
 #include "src/Resources/RoomsContainer.h"
 #include "src/Robot/RobotWrapper.h"
-#include "src/Behavior/RobotBehavior/RotationBehavior.h"
 #include <thread>
 #include "src/Robot/RobotPlanner.h"
 #include "src/Robot/RobotCLI.h"
@@ -13,6 +11,9 @@
 #include <iostream>
 #include "src/Client/WebSocketClient.h"
 
+
+using namespace PlayerCc;
+std::thread *stageThread;
 
 void startWs(RobotPlanner *planner, std::string ws) {
     WebSocketClient *client = new WebSocketClient(planner, ws);
@@ -27,87 +28,16 @@ void startWs(RobotPlanner *planner, std::string ws) {
     wsThread.join();
 }
 
-
-
-//using namespace PlayerCc;
-//
-//int main(int argc, char **argv) {
-//    if (argc != 4) {
-//        // error
-//        std::cout << "Error: invalid number of arguments" << std::endl;
-//        return 1;
-//    }
-//
-//    MapGenerator *map = new MapGenerator(
-//            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/maps/fromServer.png");
-//
-//    RoomsHandler roomHandler(
-//            "/home/omer/Desktop/Programming/Robot/Robot-Navigation-Workshop/robot-client/configures/room_coordinates.txt",
-//            {15});
-//    int port = strtol(argv[2], nullptr, 10);
-//    std::cout << "port: " << port << std::endl;
-//    std::cout << "ip: " << argv[1] << std::endl;
-////    if(port < 0 || port > 65535) {
-////        std::cout << "Error: invalid port number" << std::endl;
-////        return 1;
-////    }
-//    std::string ip = argv[1];
-//    PlayerCc::PlayerClient client(ip, port);
-//    PlayerCc::Position2dProxy position(&client, 0);
-//    PlayerCc::RangerProxy laser(&client, 1);
-//
-//    std::list<playerc_device_info_t> t = client.GetDeviceList();
-//
-//
-//    std::cout << position.GetYaw() << std::endl;
-//
-//    RobotWrapper *robotWrapper = new RobotWrapper(client, position, laser, "ws://localhost:8081");
-//    std::string ws = argv[3];
-//
-//    // Run a member function of robotWrapper in a separate thread
-//    std::thread* thread;
-//    thread = new std::thread(startWs, robotWrapper, ws);
-//
-//
-//    // create path
-//    Route *route = new Route(new RRTStarAlgorithm(), map);
-//
-//    std::pair<double, double> start = robotWrapper->getCurrentPosition();
-//    route->setStartingPoint(start);
-//    route->setGoalPoint(roomHandler.getRooms()[0].getCenterPoint());
-//
-//    route->createPath();
-//    std::vector<std::pair<double, double> > path = route->getLatestPath();
-//    robotWrapper->setCurrentPath(path);
-//    for (int i = 1; i < path.size(); i++) {
-//        //     rotation to the point
-//        std::cout << "rotation to the point: " << path[i].first << " , " << path[i].second << std::endl;
-//        RotationBehavior rotationBehavior(robotWrapper, path[i]);
-//        rotationBehavior.execute();
-//        std::cout << "navigate to point: " << path[i].first << " , " << path[i].second << std::endl;
-//        HallNavigateBehavior hallNavigateBehavior(robotWrapper, path[i]);
-//        hallNavigateBehavior.execute();
-//
-//    }
-//
-//
-//    thread->join();
-//    return 0;
-//=======
-
-
-using namespace PlayerCc;
-std::thread *stageThread;
-
 // signal keyboard ctrl+c handler
 void signalHandler(int signum) {
     std::cout << "Interrupt signal (" << signum << ") received." << std::endl;
+    std::cout << "to close the program, enter: exit" << std::endl;
     // cleanup and close up stuff here
     // terminate program
-    if (stageThread != nullptr) {
-        pthread_kill(stageThread->native_handle(), SIGINT);
-    }
-    exit(signum);
+//    if (stageThread != nullptr) {
+//        pthread_kill(stageThread->native_handle(), SIGINT);
+//    }
+//    exit(signum);
 }
 
 std::string getAbsolutePath(const std::string &relativePath) {
@@ -138,9 +68,6 @@ void launch_robotCLI(std::thread *stageThread) {
     std::string mapGeneratorPath = getAbsolutePath("../maps/fromServer.png");
     auto *map = new MapGenerator("../maps/fromServer.png");
 
-//    PlayerClient client("localhost", 6665);
-//    Position2dProxy position(&client, 0);
-//    RangerProxy laser(&client, 1);
     std::string path = "localhost";
     auto *robotWrapper = new RobotWrapper(path, 6665, path);
     std::string pathToRoomsConfig = getAbsolutePath("../configurations/room_coordinates.txt");

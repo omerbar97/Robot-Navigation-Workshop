@@ -5,33 +5,44 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROBOTPLANNER_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTPLANNER_H
 #include <vector>
+#include <queue>
+#include <mutex>
 #include "../Resources/Room.h"
-#include "../Resources/RoomsHandler.h"
+#include "../Resources/RoomsContainer.h"
 #include "RobotWrapper.h"
 #include "../PathPlanning/Route.h"
 #include "../Resources/MapGenerator.h"
 #include "../PathPlanning/Algorithm/RRTStarAlgorithm.h"
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
-#include <ompl/geometric/planners/astar/AStar.h>
+#include "../Behavior/Behavior.h"
+#include "../Missions/Mission.h"
+#include "../Missions/navigation-missions/R2R.h"
+#include "../Missions/factories/nav-mission-factory/NavigationMissionsFactory.h"
 
 
-//TODO: update the room file
+using namespace std;
 class RobotPlanner {
 private:
-    std::vector<Room> rooms;
-    std:: string roomConfigPath;
+    bool isInPlan;
+    RoomsContainer* roomsContainer;
     RobotWrapper *robotWrapper;
-    Route* route;
-    MapGenerator* mapGenerator;
-    RobotBehaviorFactory* robotBehaviorFactory;
+    queue<Mission*> currentPlan;
+    MapGenerator* map;
+    std::mutex mutex;
+    void planInformMission(const vector<string>& roomsIDs);
+    void planNavigationMission(const vector<string>& roomsIDs);
 
-    void goToPoint(std::pair<double, double> point);
 
 public:
-    RobotPlanner(std::string roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* mapGenerator);
-    std::vector<Room> getRooms() const;
-    std::vector<Room> setRooms(std::vector<Room> rooms);
+    RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* map);
+    ~RobotPlanner();
+    void plan(const MissionType& mission, const vector<string>& parameters);
+    void setPlanFromString(const string& plan);
     int executePlan();
+    bool isRobotOnline();
+    RobotWrapper* getRobotWrapper();
+    void initRobot();
+    bool isRobotInPlan();
 
 
 

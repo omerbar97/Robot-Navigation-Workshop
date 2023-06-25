@@ -1,0 +1,11 @@
+.robotStageForm {
+    margin-top:10%;
+}
+
+.robotItemForm{
+    width: 300px
+}
+
+.robotStageForm .item {
+    width: 300px;
+}

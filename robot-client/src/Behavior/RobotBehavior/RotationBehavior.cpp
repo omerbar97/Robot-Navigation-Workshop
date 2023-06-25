@@ -4,7 +4,7 @@
 
 #include "RotationBehavior.h"
 
-RotationBehavior::RotationBehavior(RobotWrapper *robot, std::pair<double, double> goalPoint) : RobotBehavior(robot,
+RotationBehavior::RotationBehavior(RobotWrapper *robot, std::pair<double, double>& goalPoint) : RobotBehavior(robot,
                                                                                                              goalPoint) {
 
 }
@@ -20,9 +20,9 @@ bool RotationBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
 int RotationBehavior::execute() {
     // this function will rotation the robot Yaw to the goal point.
     // getting robot instance
-    PlayerCc::PlayerClient &client = this->robot->getClient();
+    PlayerCc::PlayerClient &client = *this->robot->getClient();
     // getting robot position
-    PlayerCc::Position2dProxy &pos = this->robot->getPos();
+    PlayerCc::Position2dProxy &pos = *this->robot->getPos();
 
     // getting robot current information
     this->robot->update();

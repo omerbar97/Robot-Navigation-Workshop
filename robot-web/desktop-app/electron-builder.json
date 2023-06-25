@@ -1,0 +1,14 @@
+{
+    "appId": "com.yourappname",
+    "productName": "Your App Name",
+    "directories": {
+      "buildResources": "build"
+    },
+    "linux": {
+      "target": "deb"
+    },
+    "deb": {
+      "depends": []
+    }
+  }
+  

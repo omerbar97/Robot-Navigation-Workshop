@@ -1,0 +1,18 @@
+.configSection {
+    width: 100%;
+    display: none;
+}
+
+body {
+    overflow-y: auto;
+}
+
+.center{
+    margin:auto;
+    justify-content: center;
+}
+
+.item-config{
+    max-width: 300px;
+    left:0;
+}

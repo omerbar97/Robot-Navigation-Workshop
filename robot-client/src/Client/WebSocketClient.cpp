@@ -4,16 +4,18 @@
 
 #include "WebSocketClient.h"
 
-WebSocketClient::WebSocketClient(RobotWrapper *robot, std::string ws) {
+WebSocketClient::WebSocketClient(RobotPlanner *planner, std::string ws) {
     // init the robot websocket connection
-    this->robot = robot;
+    this->threads = std::vector<std::thread*>();
+    this->robot = planner->getRobotWrapper();
+    this->planner = planner;
     this->ws = ws;
     this->wsClient.init_asio();
     this->wsClient.set_access_channels(websocketpp::log::alevel::all);
     this->wsClient.set_error_channels(websocketpp::log::elevel::all);
     this->wsClient.set_open_handler(bind(&WebSocketClient::on_open, this, ::_1));
     this->wsClient.set_close_handler(bind(&WebSocketClient::on_close, this, ::_1));
-//    this->client.set_message_handler(bind(&WebSocketClient::on_message, this, ::_1, ::_2));
+    this->wsClient.set_message_handler(bind(&WebSocketClient::on_message, this, ::_1, ::_2));
 //    this->client.set_fail_handler(bind(&WebSocketClient::on_fail, this, ::_1));
 //    this->client.set_pong_handler(bind(&WebSocketClient::on_pong, this, ::_1, ::_2));
 //    this->client.set_interrupt_handler(bind(&WebSocketClient::on_interrupt, this, ::_1));
@@ -25,6 +27,38 @@ WebSocketClient::WebSocketClient(RobotWrapper *robot, std::string ws) {
     }
     this->wsClient.connect(con);
 }
+
+void WebSocketClient::on_message(websocketpp::connection_hdl hdl, client::message_ptr msg) {
+    std::cout << msg->get_payload() << std::endl;
+    // convert the json to a map
+    auto json = nlohmann::json::parse(msg->get_payload());
+    std::string type = json["type"];
+    if(type == "robotTravel") {
+        // sending new travel to the robot
+        std::string rooms = json["rooms"];
+        std::regex pattern("^[0-9 ]+$");
+
+        if (std::regex_match(rooms, pattern)) {
+            // calling the planner
+            this->planner->setPlanFromString(rooms);
+
+            if(!this->planner->isRobotInPlan()) {
+                // starting new thread for executing the robot movement
+                std::thread* t = new std::thread(&RobotPlanner::executePlan, this->planner);
+                this->threads.push_back(t);
+            } else {
+//                // the robot is busy with another travel, it will be executed after the current travel
+//                // creating a new thread that will wait for the current travel to finish and then execute the new travel
+//                std::thread* t = new std::thread(&RobotPlanner::executePlan, this->planner);
+            }
+        } else {
+            // the string is not in the right format
+            // TODO: sending to the client errors
+        }
+    }
+}
+
+
 
 WebSocketClient::~WebSocketClient() {
 
@@ -47,7 +81,7 @@ void WebSocketClient::sendRobotPosition() {
         jsonData["y"] = pos.second;
 
         this->wsClient.send(this->connection, jsonData.dump(), websocketpp::frame::opcode::text);
-        sleep(2);
+        sleep(3);
     }
 }
 
@@ -96,3 +130,14 @@ void WebSocketClient::sendRobotPath() {
 //        sleep(3);
 //    }
 }
+
+void WebSocketClient::waitForThread() {
+    // waiting for the thread to finish
+    for(auto t : this->threads) {
+        t->join();
+    }
+    // when finish executing the plan
+
+}
+
+

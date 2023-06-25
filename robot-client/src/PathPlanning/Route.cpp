@@ -162,6 +162,10 @@ void Route::createPath() {
 //    this->cvMap = new cv::Mat(this->mapGenerator->getBinaryMatrix());
 //    this->gridMap->setGridMatrix(this->cvMap);
 //    // getting the path from the algorithm
+    this->cvMap = new cv::Mat(this->mapGenerator->getBinaryMatrix());
+    this->gridMap = new GridMap(cvMap, 1);
+
+    // getting the path from the algorithm
     this->latestPath = getStagePath();
 
 }
@@ -175,4 +179,7 @@ std::vector<std::pair<int, int>> Route::matrixPoint() {
         return *this->algorithm->getPath();
     }
     return {};
+}
+std::pair<double, double> Route::getGoalPoint() {
+    return this->algorithm->getGoal();
 }

@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.24)
 project(Robot-Navigation-Workshop)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-dev")
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+
 
 # Find playerc++ library and headers
 find_package(playerc++ REQUIRED)
@@ -25,8 +28,6 @@ find_package(OpenSSL REQUIRED)
 # Add the executables
 add_executable(Robot-Navigation
         main.cpp
-        src/Navigate/Navigation.cpp
-        src/Navigate/Navigation.h
         src/PathPlanning/Route.cpp
         src/PathPlanning/Route.h
         src/Resources/MapGenerator.cpp
@@ -41,8 +42,8 @@ add_executable(Robot-Navigation
         src/PathPlanning/Algorithm/RRTStarAlgorithm.h
         src/Resources/Room.cpp
         src/Resources/Room.h
-        src/Resources/RoomsHandler.h
-        src/Resources/RoomsHandler.cpp
+        src/Resources/RoomsContainer.h
+        src/Resources/RoomsContainer.cpp
         src/Robot/RobotWrapper.h
         src/Robot/RobotWrapper.cpp
         src/Behavior/RobotBehavior/RobotBehavior.h
@@ -58,7 +59,20 @@ add_executable(Robot-Navigation
         Client/Client.h
         src/Client/WebSocketClient.h
         src/Client/WebSocketClient.cpp
-        )
+        src/Behavior/RobotBehavior/EnterRoomBehavior.cpp
+        src/Behavior/behaviour-functors/LinearNavigation.cpp
+        src/Behavior/behaviour-functors/LinearNavigation.h
+        src/Behavior/RobotBehavior/ExitRoomBehavior.h
+        src/Behavior/RobotBehavior/ExitRoomBehavior.cpp
+        src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp
+        src/Robot/RobotCLI.cpp
+        src/Robot/RobotCLI.h
+        src/Missions/navigation-missions/R2R.cpp
+        src/Behavior/behaviour-functors/RotateRobot.cpp
+        src/Behavior/behaviour-functors/RotateRobot.h
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.cpp
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h src/Missions/factories/MissionFactory.h)
 
 add_executable(Server
         server/main.cpp
@@ -66,6 +80,7 @@ add_executable(Server
         server/WebSocketServer.h
         server/Helper.cpp
         server/Helper.h)
+
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)

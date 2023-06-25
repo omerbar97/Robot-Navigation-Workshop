@@ -1,0 +1,22 @@
+.connection-status {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: red
+}
+
+.connection-status.connected {
+    color: green !important;
+    margin-left: 0;
+}
+
+.info{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.inputInfo{
+    max-width: 300px;
+}

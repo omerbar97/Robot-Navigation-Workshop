@@ -18,7 +18,7 @@ public:
      * constructor
      * @param robot
      */
-    RotationBehavior(RobotWrapper *robot, std::pair<double, double> goalPoint);
+    RotationBehavior(RobotWrapper *robot, std::pair<double, double>& goalPoint);
 
     ~RotationBehavior();
 

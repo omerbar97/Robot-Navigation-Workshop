@@ -5,19 +5,32 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ENTERROOMBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_ENTERROOMBEHAVIOR_H
 #include "RobotBehavior.h"
+#include "../behaviour-functors/LinearNavigation.h"
+#include "../../Resources/Room.h"
+
+using namespace std;
+using Point = std::pair<double, double>;
 
 class EnterRoomBehavior : public RobotBehavior {
+
+
+
+protected:
+    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
+    Room* goalRoom;
+
 public:
 
     /**
      * constructor
-     * @param robot
+     * @param robot the robot wrapper
+     * @param goalPoint the point to navigate to
      */
-    EnterRoomBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
+    EnterRoomBehavior(RobotWrapper *robot, Room* goalRoom);
+    ~EnterRoomBehavior() override;
 
-    /**
-     * navigation logic to navigate the robot when entering the room
-     */
+
+    /// Command methods
     int execute() override;
 };
 

@@ -1,0 +1,9 @@
+.navBar {
+    z-index: 105;
+}
+
+.toRight{
+    float: right;
+    margin:auto;
+    margin-right: 10px;
+}

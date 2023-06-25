@@ -13,28 +13,33 @@ class RobotWrapper {
 private:
 
     // robot instance
-    PlayerCc::PlayerClient& robot;
-    // robot extensions
-    PlayerCc::Position2dProxy& positionProxy;
-    PlayerCc::RangerProxy& laserProxy;
+    PlayerCc::PlayerClient* robot;
+    PlayerCc::Position2dProxy* positionProxy;
+    PlayerCc::RangerProxy* laserProxy;
+
     bool isRobotOnline;
+    int port;
+    std::string ip;
     double robotGroundSpeed;
     double robotTurnSpeed;
+    std::string ws;
     std::vector<std::pair<double, double>> robotCurrentPath;
-    void initRobot(std::string robotIp, int robotPort);
     std::mutex robotMutex;
 
 public:
 
 //    RobotWrapper(std::string robotIp = "localhost", int robotPort = 6665, int groundSpeed = 0.5, int turnSpeed = 0.1);
-    RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy, std::string ws);
-    ~RobotWrapper();
+    RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dProxy* positionProxy, PlayerCc::RangerProxy* laserProxy, std::string ws = nullptr);
+    RobotWrapper(std::string ip, int port, std::string ws = nullptr);
 
+    ~RobotWrapper();
     void setRobotPath(std::pair<double, double> path);
+
     void setRobotSpeed(double speed);
     void setRobotTurnSpeed(double speed);
     void setSpeed(double speed, double turnSpeed);
     void setCurrentPath(std::vector<std::pair<double, double>>  path);
+    void initRobot();
 
 
     double getGroundSpeed();
@@ -46,9 +51,9 @@ public:
     std::vector<std::pair<double, double>>  getRobotCurrentPath();
 
     // getRobot Extensions
-    PlayerCc::Position2dProxy& getPos();
-    PlayerCc::RangerProxy& getLaser();
-    PlayerCc::PlayerClient& getClient();
+    PlayerCc::Position2dProxy* getPos();
+    PlayerCc::RangerProxy* getLaser();
+    PlayerCc::PlayerClient* getClient();
 
     void update();
     bool isOnline();

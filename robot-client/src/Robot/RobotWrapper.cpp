@@ -4,13 +4,31 @@
 
 #include "RobotWrapper.h"
 
-RobotWrapper::RobotWrapper(PlayerCc::PlayerClient &robot, PlayerCc::Position2dProxy &positionProxy,
-                           PlayerCc::RangerProxy &laserProxy, std::string ws) :
-        robot(robot), positionProxy(positionProxy), laserProxy(laserProxy) {
+
+RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dProxy* positionProxy,
+                           PlayerCc::RangerProxy* laserProxy, std::string ws) {
+    this->robot = robot;
+    this->positionProxy = positionProxy;
+    this->laserProxy = laserProxy;
     this->robotTurnSpeed = 0.03;
     this->robotGroundSpeed = 0.1;
     this->isRobotOnline = true;
+    this->ws = ws;
+    this->port = robot->GetPort();
+    this->ip = robot->GetHostname();
 }
+
+//RobotWrapper::RobotWrapper(std::string robotIp, int robotPort, int groundSpeed, int turnSpeed) {
+//    this->initRobot(robotIp, robotPort);
+//    this->robotGroundSpeed = groundSpeed;
+//    this->robotTurnSpeed = turnSpeed;
+//}
+
+//RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy) :
+//        robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
+//    this->robotTurnSpeed = 0.03;
+//    this->robotGroundSpeed = 0.04;
+//}
 
 
 RobotWrapper::~RobotWrapper() {
@@ -37,24 +55,40 @@ void RobotWrapper::setRobotTurnSpeed(double speed) {
     this->robotTurnSpeed = speed;
 }
 
-PlayerCc::Position2dProxy &RobotWrapper::getPos() {
+PlayerCc::Position2dProxy* RobotWrapper::getPos() {
     return this->positionProxy;
 }
 
-PlayerCc::RangerProxy &RobotWrapper::getLaser() {
+PlayerCc::RangerProxy* RobotWrapper::getLaser() {
     return this->laserProxy;
 }
 
-PlayerCc::PlayerClient &RobotWrapper::getClient() {
+PlayerCc::PlayerClient* RobotWrapper::getClient() {
     return this->robot;
 }
 
-void RobotWrapper::initRobot(std::string robotIp, int robotPort) {
-//    std::cout << "connection to robot: " << robotIp << ":" << robotPort << std::endl;
-//    this->positionProxy = new PlayerCc::Position2dProxy(&this->robot, 0);
-//    std::cout << "connection to robot position proxy" << std::endl;
-//    this->laserProxy = new PlayerCc::LaserProxy(&this->robot, 0);
-//    std::cout << "connection to robot laser proxy" << std::endl;
+void RobotWrapper::initRobot() {
+    // starting the robot process
+    if(this->ip.empty() || this->port == 0){
+        std::cout << "RobotWrapper::initRobot() - Robot ip or port is empty" << std::endl;
+        return;
+    }
+    if(this->robot != nullptr){
+        std::cout << "RobotWrapper::initRobot() - Robot is already initialized" << std::endl;
+        std::cout << "RobotWrapper::initRobot() - Robot client at := ip: " << this->ip << " port: " << this->port << std::endl;
+        return;
+    }
+    try {
+        this->robot = new PlayerCc::PlayerClient(this->ip, this->port);
+        this->positionProxy = new PlayerCc::Position2dProxy(this->robot);
+        this->laserProxy = new PlayerCc::RangerProxy(this->robot);
+//        this->robot->SetDataMode(PLAYER_DATAMODE_PULL);
+//        this->robot->SetReplaceRule(true, PLAYER_MSGTYPE_DATA, -1);
+        this->isRobotOnline = true;
+    } catch (PlayerCc::PlayerError &e) {
+        std::cerr << e << std::endl;
+        this->isRobotOnline = false;
+    }
 }
 
 double RobotWrapper::getGroundSpeed() {
@@ -67,16 +101,16 @@ double RobotWrapper::getTurnSpeed() {
 
 std::pair<double, double> RobotWrapper::getCurrentPosition() {
     this->update();
-    return std::make_pair(this->positionProxy.GetXPos(), this->positionProxy.GetYPos());
+    return std::make_pair(this->positionProxy->GetXPos(), this->positionProxy->GetYPos());
 }
 
 void RobotWrapper::update() {
     // lock the robot mutex
     std::lock_guard<std::mutex> lock(this->robotMutex);
     try {
-        while (this->robot.Peek()) {
+        while (this->robot->Peek()) {
             usleep(50);
-            this->robot.Read();
+            this->robot->Read();
         }
     } catch (PlayerCc::PlayerError &e) {
 //        std::cerr << e << std::endl;
@@ -84,11 +118,11 @@ void RobotWrapper::update() {
 }
 
 bool RobotWrapper::isObstacleOnLeft() {
-    // using the rangerproxy to check if there is an obstacle on the left
+    // using the ranger proxy to check if there is an obstacle on the left
     // if there is an obstacle on the left, return true
     // else return false
     this->update();
-    PlayerCc::RangerProxy &ranger = this->getLaser();
+    PlayerCc::RangerProxy& ranger = *this->getLaser();
     // Get the total number of range readings
     int numReadings = ranger.GetRangeCount();
     // Calculate the number of readings on the left side
@@ -112,7 +146,7 @@ bool RobotWrapper::isObstacleOnRight() {
     // if there is an obstacle on the right, return true
     // else return false
     this->update();
-    PlayerCc::RangerProxy &ranger = this->getLaser();
+    PlayerCc::RangerProxy& ranger = *this->getLaser();
     // Get the total number of range readings
     int numReadings = ranger.GetRangeCount();
     // Calculate the number of readings on the left side
@@ -134,7 +168,7 @@ bool RobotWrapper::isObstacleOnRight() {
 bool RobotWrapper::hasObstaclesOnSides() {
     // Get the total number of range readings
     this->update();
-    PlayerCc::RangerProxy &ranger = this->getLaser();
+    PlayerCc::RangerProxy &ranger = *this->getLaser();
     int numReadings = ranger.GetRangeCount();
     // Define a threshold value for obstacle detection
     double obstacleThreshold = 0.5; // Adjust this value as needed
@@ -157,7 +191,7 @@ bool RobotWrapper::isOnline() {
 
 void RobotWrapper::setSpeed(double speed, double turnSpeed) {
     std::lock_guard<std::mutex> lock(this->robotMutex);
-    this->positionProxy.SetSpeed(speed, turnSpeed);
+    this->positionProxy->SetSpeed(speed, turnSpeed);
 }
 
 void RobotWrapper::setCurrentPath(std::vector<std::pair<double, double>>  path) {
@@ -166,4 +200,13 @@ void RobotWrapper::setCurrentPath(std::vector<std::pair<double, double>>  path) 
 
 std::vector<std::pair<double, double>>  RobotWrapper::getRobotCurrentPath() {
     return this->robotCurrentPath;
+}
+
+RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
+    this->port = port;
+    this->ip = ip;
+    this->ws = ws;
+    this->robotTurnSpeed = 0.03;
+    this->robotGroundSpeed = 0.1;
+    this->isRobotOnline = false;
 }

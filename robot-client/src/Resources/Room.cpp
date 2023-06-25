@@ -6,9 +6,17 @@
 
 
 
-int Room::getRoomId() const { return this->roomId; }
 
-Room::Room(std::string roomInfoLine) {
+
+Room::Room(std::pair<double, double> centerPoint, std::pair<double, double> entryPoint, std::pair<double, double> exitPoint,
+               int roomId) {
+    this->centerPoint = centerPoint;
+    this->entryPoint = entryPoint;
+    this->exitPoint = exitPoint;
+    this->roomId = roomId;
+}
+
+Room::Room(const std::string& roomInfoLine) {
     // getting line in the foramt:
     // roomname 1 x1 y1 x2 y2 x3 y3
     // where the first one (1) is the centerPoint,
@@ -39,18 +47,22 @@ Room::Room(std::string roomInfoLine) {
     this->exitPoint = std::make_pair(std::stof(tokens[6]), std::stof(tokens[7]));
 }
 
-std::pair<float, float> Room::getEntryPoint() const {
+const int& Room::getRoomId() const {
+    return this->roomId;
+}
+
+const std::pair<double, double>& Room::getEntryPoint() const {
     return this->entryPoint;
 }
 
-std::pair<float, float> Room::getCenterPoint() const {
+const std::pair<double, double>& Room::getCenterPoint() const {
     return this->centerPoint;
 }
 
-std::pair<float, float> Room::getExitPoint() const {
+const std::pair<double, double> & Room::getExitPoint() const {
     return this->exitPoint;
 }
 
-std::string Room::getRoomName() const {
+const std::string & Room::getRoomName() const {
     return this->roomName;
 }

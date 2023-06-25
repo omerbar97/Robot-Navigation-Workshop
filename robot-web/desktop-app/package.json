@@ -1,0 +1,51 @@
+{
+  "name": "robot-react",
+  "author": {
+    "name": "Omer",
+    "email": "omerbar450@gmail.com"},
+  "version": "0.1.0",
+  "main": "electron.js",
+  "homepage": "./",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^7.1.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "bootstrap-icons": "^1.10.5",
+    "child_process": "^1.0.2",
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-code-blocks": "^0.0.9-0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.11.2",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "build": "craco build",
+    "start": "electron ."
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^16.0.0",
+    "electron-builder": "^23.6.0",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

@@ -5,15 +5,24 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_MISSION_H
 #define ROBOT_NAVIGATION_WORKSHOP_MISSION_H
 
-#include "Behavior.h"
+#include "../Behavior/Behavior.h"
+#include "../Robot/RobotWrapper.h"
+#include "../Resources/Room.h"
+
+
+
+
+enum class MissionType {
+    NAVIGATION,
+    INFORM
+};
 
 /**
  * interface for a mission, a mission can be sending data or navigating.
  */
 class Mission {
-protected:
 
-    Behavior *behavior;
+
 
 public:
 
@@ -35,11 +44,6 @@ public:
      */
     virtual int doMission() = 0;
 
-    /**
-     * each mission has a behavior, this method sets the behavior for the mission.
-     * @param behavior
-     */
-    virtual void setMission(Behavior *behavior) = 0;
 
 };
 

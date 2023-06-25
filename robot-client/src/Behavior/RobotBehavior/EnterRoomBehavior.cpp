@@ -3,8 +3,7 @@
 //
 
 #include "EnterRoomBehavior.h"
-#include "RotationBehavior.h"
-#include "../behaviour-functors/RotateRobot.h"
+
 
 EnterRoomBehavior::EnterRoomBehavior(RobotWrapper *robot, Room* goalRoom) :
 RobotBehavior(robot, goalRoom->getCenterPoint()) {

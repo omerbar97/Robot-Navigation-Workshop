@@ -11,6 +11,10 @@
 #include "../../Behavior/RobotBehavior/ExitRoomBehavior.h"
 #include "../../PathPlanning/Algorithm/Algorithm.h"
 #include "../../Resources/MapGenerator.h"
+#include <boost/bind/bind.hpp>
+#include "../../PathPlanning/Route.h"
+using namespace boost::placeholders;
+
 
 using namespace std;
 using Point = std::pair<double, double>;

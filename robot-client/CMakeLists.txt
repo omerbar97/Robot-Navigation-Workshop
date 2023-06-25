@@ -56,7 +56,6 @@ add_executable(Robot-Navigation
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp
         src/Behavior/MessageBehavior/VoiceMessageBehavior.h
-        Client/Client.h
         src/Client/WebSocketClient.h
         src/Client/WebSocketClient.cpp
         src/Behavior/RobotBehavior/EnterRoomBehavior.cpp

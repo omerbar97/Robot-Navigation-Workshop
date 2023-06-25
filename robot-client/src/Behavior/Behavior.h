@@ -4,6 +4,8 @@
 
 #ifndef ROBOT_NAVIGATION_WORKSHOP_BEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_BEHAVIOR_H
+#include <boost/bind/bind.hpp>
+using namespace boost::placeholders;
 
 
 /**

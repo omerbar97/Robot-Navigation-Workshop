@@ -5,7 +5,7 @@
 #include "VoiceMessageBehavior.h"
 
 int VoiceMessageBehavior::execute() {
-
+    return 0;
 }
 
 VoiceMessageBehavior::VoiceMessageBehavior(std::string message, std::string messageTo) : MessageBehavior(message, messageTo) {

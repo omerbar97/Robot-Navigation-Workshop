@@ -5,9 +5,11 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_ROBOTWRAPPER_H
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTWRAPPER_H
 #include <libplayerc++/playerc++.h>
+#include <boost/bind/bind.hpp>
 #include <string>
 #include <nlohmann/json.hpp>
 #include <mutex>
+using namespace boost::placeholders;
 
 class RobotWrapper {
 private:

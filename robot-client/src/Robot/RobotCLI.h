@@ -10,6 +10,9 @@
 #include <vector>
 #include "RobotPlanner.h"
 #include <thread>
+#include <boost/bind/bind.hpp>
+using namespace boost::placeholders;
+
 
 class RobotCLI {
 private:

@@ -8,6 +8,9 @@
 
 #include "../../Robot/RobotWrapper.h"
 #include "../RobotBehavior/RotationBehavior.h"
+#include <boost/bind/bind.hpp>
+using namespace boost::placeholders;
+
 
 using Point = std::pair<double, double>;
 

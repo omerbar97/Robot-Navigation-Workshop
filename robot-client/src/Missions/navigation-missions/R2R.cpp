@@ -3,7 +3,6 @@
 //
 
 #include "R2R.h"
-#include "../../PathPlanning/Route.h"
 
 
 R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot, Algorithm* algorithm, MapGenerator* mapGenerator) {
@@ -33,4 +32,5 @@ int R2R::doMission() {
     for (Behavior* task : tasks) {
         task->execute();
     }
+    return 0;
 }

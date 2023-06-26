@@ -1,6 +1,6 @@
 #!/bin/bash
 
-stage_worlds_path="/home/ofirhelerman/Downloads/Stage-4.3.0/worlds"
+stage_worlds_path="/usr/local/share/stage/worlds"
 
 function run_stage() {
   answer=""

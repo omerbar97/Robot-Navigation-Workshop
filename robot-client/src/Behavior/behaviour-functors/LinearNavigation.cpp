@@ -17,6 +17,10 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     double turnSpeed = 0, lastDistance = distance;
     robot->setSpeed(groundSpeed, turnSpeed);
     // debug
+    AvoidObstacle avoidObstacle;
+    std::pair<int, int> angles;
+    angles.first = 70;
+    angles.second = 110;
     std::cout << "minDistance: " << minDistance << std::endl;
     while(distance > minDistance) {
 
@@ -27,12 +31,14 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
 //            std::cout << "laser[" <<  j << "]: " << laser[j] << std::endl;
 //
 //        }
-        std::cout << "distance to point " << distance << std::endl;
+//        std::cout << "distance to point " << distance << std::endl;
         // sense
         robot->update();
 
         // think
         // TODO: implement obstacle avoidance
+        avoidObstacle(robot, dest, groundSpeed, 0.5, angles);
+
 
         // act
         robot->setSpeed(fSpeed, turnSpeed);

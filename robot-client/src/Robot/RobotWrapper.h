@@ -42,6 +42,7 @@ public:
     void setSpeed(double speed, double turnSpeed);
     void setCurrentPath(std::vector<std::pair<double, double>>  path);
     void initRobot();
+    double getYaw();
 
 
     double getGroundSpeed();

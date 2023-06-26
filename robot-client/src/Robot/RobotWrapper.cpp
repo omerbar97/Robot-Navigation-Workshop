@@ -215,3 +215,8 @@ RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
     this->positionProxy = nullptr;
     this->laserProxy = nullptr;
 }
+
+double RobotWrapper::getYaw() {
+    this->update();
+    return this->positionProxy->GetYaw();
+}

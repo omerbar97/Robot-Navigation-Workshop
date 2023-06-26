@@ -71,7 +71,7 @@ add_executable(Robot-Navigation
         src/Behavior/behaviour-functors/RotateRobot.h
         src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.cpp
         src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h
-        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h src/Missions/factories/MissionFactory.h)
+        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h src/Missions/factories/MissionFactory.h src/Behavior/behaviour-functors/AvoidObstacle.h)
 
 add_executable(Server
         server/main.cpp

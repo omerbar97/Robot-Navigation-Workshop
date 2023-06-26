@@ -80,8 +80,8 @@ void RobotWrapper::initRobot() {
     }
     try {
         this->robot = new PlayerCc::PlayerClient(this->ip, this->port);
-        this->positionProxy = new PlayerCc::Position2dProxy(this->robot);
-        this->laserProxy = new PlayerCc::RangerProxy(this->robot);
+        this->positionProxy = new PlayerCc::Position2dProxy(this->robot, 0);
+        this->laserProxy = new PlayerCc::RangerProxy(this->robot, 1);
 //        this->robot->SetDataMode(PLAYER_DATAMODE_PULL);
 //        this->robot->SetReplaceRule(true, PLAYER_MSGTYPE_DATA, -1);
         this->isRobotOnline = true;

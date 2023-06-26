@@ -126,6 +126,7 @@ int main(int argc, char *argv[]) {
         // running the cli
         signal(SIGINT, signalHandler);
         start_program();
+        return 0;
     } else if (argc != 4) {
         // error
         std::cout << "Error: invalid number of arguments" << std::endl;

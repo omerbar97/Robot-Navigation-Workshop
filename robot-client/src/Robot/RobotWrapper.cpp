@@ -209,4 +209,7 @@ RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
     this->robotTurnSpeed = 0.03;
     this->robotGroundSpeed = 0.1;
     this->isRobotOnline = false;
+    this->robot = nullptr;
+    this->positionProxy = nullptr;
+    this->laserProxy = nullptr;
 }

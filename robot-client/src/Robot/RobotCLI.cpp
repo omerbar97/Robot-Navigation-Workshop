@@ -8,17 +8,20 @@
 
 RobotCLI::RobotCLI(RobotPlanner *robotPlanner) {
     this->robotPlanner = robotPlanner;
+    this->robotInfo.groundSpeed = 0.1;
+    this->robotInfo.rotationSpeed = 0.03;
+    this->robotInfo.robotCurrentYawInDegree = 0;
 }
 
 void RobotCLI::printIntro() {
     std::cout << "Welcome to our Robotics Seminar CLI at Bar-Ilan University!" << std::endl;
     std::cout << std::endl;
-    std::cout << "*********************************************" << std::endl;
+    std::cout << BLU << "*********************************************" << std::endl;
     std::cout << "*        Robotics Seminar Bar-Ilan          *" << std::endl;
     std::cout << "*                                           *" << std::endl;
     std::cout << "*       © Copyright Shilo Padael,           *" << std::endl;
     std::cout << "*         Omer Bar, Ofir Helerman           *" << std::endl;
-    std::cout << "*********************************************" << std::endl;
+    std::cout << "*********************************************" << RESET_COLOR << std::endl;
     std::cout << std::endl;
     std::cout << "This CLI provides access to the Robotics Seminar resources and functionalities." << std::endl;
     std::cout << "Please use the available commands to navigate and interact with the system." << std::endl;
@@ -35,9 +38,14 @@ void RobotCLI::printHelp() {
     std::cout << std::endl;
     std::cout << "help                                         : Display the available commands and their usage.";
     std::cout << std::endl;
+    std::cout << "info                                         : Display the robot information variables" << std::endl;
+    std::cout << "set yawn                                     : setting the starting yaw (default 0 degree)" << std::endl;
+    std::cout << "set ground                                   : setting the robot ground speed (default 0.1)" << std::endl;
+    std::cout << "set rotation                                 : setting the robot rotation speed (default 0.03)" << std::endl;
     std::cout << "exit                                         : Exit the CLI.";
     std::cout << std::endl << std::endl;
 }
+
 
 bool RobotCLI::parseCommand(string &input, MissionType &command, vector<string> &args) {
     stringstream ss(input);
@@ -73,7 +81,7 @@ void RobotCLI::run() {
             printHelp();
         } else if (input == "start") {
             this->robotPlanner->initRobot();
-            cout << "trying to connect to the robot interface...  ";
+            cout << RED << "trying to connect to the robot interface..." << RESET_COLOR << "\n";
             std::cout << '-' << std::flush;
             sleep(1);
             std::cout << "\b\\" << std::flush;
@@ -85,12 +93,14 @@ void RobotCLI::run() {
             std::cout << "\b-" << std::flush;
             std::cout << std::endl;
             if(this->robotPlanner->isRobotOnline()) {
-                cout << "CONNECTED!" << endl;
+                cout << GRNB << "CONNECTED!" << RESET_COLOR << endl;
             }
             else{
-                cout << "FAILED! check if the stage is running and that you are trying to connect to the correct robot ip + port" << endl;
+                cout << REDB << "FAILED! check if the stage is running and that you are trying to connect to the correct robot ip + port" << RESET_COLOR << endl;
             }
 
+        } else if(input == "info") {
+            printShowRobotInfo();
         } else {
             MissionType commandName;
             vector<string> args;
@@ -107,4 +117,27 @@ void RobotCLI::run() {
 
 void RobotCLI::setStageThread(std::thread *stageThread) {
     this->stageThread = stageThread;
+}
+
+void RobotCLI::printShowRobotInfo() {
+    // printing the robot detail settings
+    cout << CYN << "The robot starting yaw is the robot degree when first initialized based on the given map\n"
+                   "the map is an x,y coordinate system where the 90 degree is at the y axios (front)\n"
+                   "and the 0 degree is on the x axios (left, if looking at the front)" << RESET_COLOR << "\n";
+    cout << BLU << "                 Y axios 90 degree                \n"
+                   "                        ^                         \n"
+                   "                        |                         \n"
+                   "                        |                         \n"
+                   "                        |                         \n"
+                   "                        |                         \n"
+                   "            -------------------------> X axios 0 degree\n"
+                   "                        |                         \n"
+                   "                        |                         \n"
+                   "                        |                         \n"
+                   "                        |                         \n"
+                   "                        |                         \n" << RESET_COLOR;
+    cout << YEL << "Robot starting Yaw: " << this->robotInfo.robotCurrentYawInDegree << endl;
+    cout << "Robot ground speed: " << this->robotInfo.groundSpeed << endl;
+    cout << "Robot rotation speed: " << this->robotInfo.rotationSpeed << RESET_COLOR << endl;
+
 }

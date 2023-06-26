@@ -6,7 +6,7 @@
 
 
 void LinearNavigation::
-operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance ) {
+operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles) {
 
     PlayerCc::Position2dProxy& pos = *robot->getPos();
     PlayerCc::RangerProxy& laser = *robot->getLaser();
@@ -18,9 +18,6 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     robot->setSpeed(groundSpeed, turnSpeed);
     // debug
     AvoidObstacle avoidObstacle;
-    std::pair<int, int> angles;
-    angles.first = 70;
-    angles.second = 110;
     std::cout << "minDistance: " << minDistance << std::endl;
     while(distance > minDistance) {
 

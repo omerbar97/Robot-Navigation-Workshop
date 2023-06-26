@@ -75,7 +75,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
 
                 // travel to point
                 LinearNavigation linear;
-                linear(robot, point, robot->getGroundSpeed() / 2, 0.1);
+                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
                 rotate(robot, dest);
                 return;
             }
@@ -93,7 +93,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
 
             // travel to point
             LinearNavigation linear;
-            linear(robot, point, robot->getGroundSpeed() / 2, 0.1);
+            linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
             rotate(robot, dest);
             return;
 
@@ -129,7 +129,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
 
                 // travel to point
                 LinearNavigation linear;
-                linear(robot, point, robot->getGroundSpeed() / 2, 0.1);
+                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
                 rotate(robot, dest);
                 return;
 
@@ -142,7 +142,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
 
                 // travel to point
                 LinearNavigation linear;
-                linear(robot, point, robot->getGroundSpeed() / 2, 0.1);
+                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
                 rotate(robot, dest);
                 return;
 
@@ -157,7 +157,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
 
             // travel to point
             LinearNavigation linear;
-            linear(robot, point, robot->getGroundSpeed() / 2, 0.1);
+            linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
             rotate(robot, dest);
             return;
 
@@ -172,7 +172,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
 
         // travel to point
         LinearNavigation linear;
-        linear(robot, point, robot->getGroundSpeed() / 2, 0.1);
+        linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
         rotate(robot, dest);
 
     }

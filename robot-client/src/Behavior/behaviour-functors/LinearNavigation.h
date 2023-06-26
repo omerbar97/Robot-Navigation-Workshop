@@ -22,7 +22,7 @@ private:
 public:
     LinearNavigation() = default;
     ~LinearNavigation() = default;
-    void operator () (RobotWrapper* robot, Point dest, double fSpeed, const double minDistance);
+    void operator () (RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles);
 
 };
 

@@ -20,6 +20,7 @@ using namespace std;
 using Point = std::pair<double, double>;
 class R2R : public Mission {
 private:
+    Route* route;
     RobotWrapper* robot;
     vector<Behavior*> tasks;
 

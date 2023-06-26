@@ -57,6 +57,7 @@ RobotPlanner *createRobotPlanner(std::string ip, int port, std::string ws) {
     Position2dProxy *position = new Position2dProxy(client, 0);
     RangerProxy *laser = new RangerProxy(client, 1);
     RobotWrapper *wrapper = new RobotWrapper(client, position, laser, ws);
+    laser->RequestConfigure();
     std::string mapGeneratorPath = getAbsolutePath("../maps/fromServer.png");
     auto *map = new MapGenerator("../maps/fromServer.png");
     std::string pathToRoomsConfig = "../configurations/room_coordinates.txt";

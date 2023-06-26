@@ -15,7 +15,7 @@ using namespace boost::placeholders;
 using Point = std::pair<double, double>;
 
 class LinearNavigation {
-
+private:
 
 public:
     LinearNavigation() = default;

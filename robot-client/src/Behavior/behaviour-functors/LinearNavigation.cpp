@@ -9,20 +9,25 @@ void LinearNavigation::
 operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance ) {
 
     PlayerCc::Position2dProxy& pos = *robot->getPos();
+    PlayerCc::RangerProxy& laser = *robot->getLaser();
     robot->update();
-
-    double distance = sqrt(pow(dest.first - pos.GetXPos(), 2) + pow(dest.second - pos.GetYPos(), 2));
+    auto currentPosition = robot->getCurrentPosition();
+    double distance = sqrt(pow(dest.first - currentPosition.first, 2) + pow(dest.second - currentPosition.second, 2));
     double groundSpeed = robot->getGroundSpeed();
-    double turnSpeed = 0;
+    double turnSpeed = 0, lastDistance = distance;
     robot->setSpeed(groundSpeed, turnSpeed);
     // debug
     std::cout << "minDistance: " << minDistance << std::endl;
     while(distance > minDistance) {
 
         // debug
-        std::cout << "distance: " << distance << std::endl;
-
-
+//        std::cout << "distance: " << distance << std::endl;
+//        int i = laser.GetRangeCount();
+//        for(int j = 0; j < i; j++) {
+//            std::cout << "laser[" <<  j << "]: " << laser[j] << std::endl;
+//
+//        }
+        std::cout << "distance to point " << distance << std::endl;
         // sense
         robot->update();
 
@@ -33,7 +38,13 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
         robot->setSpeed(fSpeed, turnSpeed);
 
         // calculating the distance
-        distance = sqrt(pow(dest.first - pos.GetXPos(), 2) + pow(dest.second - pos.GetYPos(), 2));
+        currentPosition = robot->getCurrentPosition();
+        distance = sqrt(pow(dest.first - currentPosition.first, 2) + pow(dest.second - currentPosition.second, 2));
+        if(lastDistance < distance) {
+            break;
+        } else {
+            lastDistance = distance;
+        }
         usleep(10);
     }
 

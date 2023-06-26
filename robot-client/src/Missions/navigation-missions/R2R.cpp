@@ -13,7 +13,7 @@ R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot, Algorithm* algor
 
     this->tasks.push_back(new ExitRoomBehavior(this->robot, roomSource));
 
-    auto* route = new Route(algorithm, mapGenerator);
+    route = new Route(algorithm, mapGenerator);
     route->setStartingPoint(roomSource->getEntryPoint());
     route->setGoalPoint(roomDest->getEntryPoint());
     route->createPath();
@@ -30,7 +30,11 @@ R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot, Algorithm* algor
 
 int R2R::doMission() {
     for (Behavior* task : tasks) {
-        task->execute();
+        try {
+            task->execute();
+        } catch (ompl::Exception e) {
+            // recalculate
+        }
     }
     return 0;
 }

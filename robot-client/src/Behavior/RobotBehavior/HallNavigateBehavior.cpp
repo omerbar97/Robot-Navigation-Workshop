@@ -82,6 +82,11 @@ HallNavigateBehavior::~HallNavigateBehavior() {
     LinearNavigation navigateStraightLine;
     RotateRobot rotateTowards;
     for (Point& point : this->path) {
+        // sense
+
+        //think
+
+        // act
         rotateTowards(this->robot, point);
         navigateStraightLine(this->robot, point, 0.06, 0.1);
     }

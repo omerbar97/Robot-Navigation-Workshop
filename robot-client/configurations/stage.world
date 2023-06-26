@@ -1,5 +1,5 @@
-# simple.world - basic world file example
-# Authors: Richard Vaughan
+
+# Authors: Omer, Shilo, Ofir
 # $Id$
 
 include "pioneer.inc"
@@ -32,7 +32,7 @@ window
 # load an environment bitmap
 floorplan
 ( 
-  bitmap "bitmaps/csMap.png" 
+  bitmap "bitmaps/fromServer.png" 
   map_resolution 0.02
   size [33.600 53.400 5.000] 
   name "cs Map"

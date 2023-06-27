@@ -28,8 +28,8 @@ int EnterRoomBehavior::execute() {
 
     // setting the robot sensitivity
     std::pair<int, int> angles;
-    angles.first = 50;
-    angles.second = 130;
+    angles.first = 70;
+    angles.second = 110;
     // TODO: think about bring the robot into the entry point of the room first
 
     /// move robot into doorstep in a straight line using a straight line behaviour

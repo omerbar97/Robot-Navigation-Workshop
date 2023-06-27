@@ -16,8 +16,8 @@ int HallNavigateBehavior::execute() {
     RotateRobot rotateTowards;
     // setting the robot sensitivity
     std::pair<int, int> angles;
-    angles.first = 70;
-    angles.second = 110;
+    angles.first = 80;
+    angles.second = 100;
     for (Point& point : this->path) {
         rotateTowards(this->robot, point);
         navigateStraightLine(this->robot, point, this->robot->getGroundSpeed(), 0.1, angles);

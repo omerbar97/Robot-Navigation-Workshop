@@ -22,8 +22,8 @@ int ExitRoomBehavior::execute() {
 
     // setting the robot sensitivity
     std::pair<int, int> angles;
-    angles.first = 50;
-    angles.second = 130;
+    angles.first = 70;
+    angles.second = 110;
 
     /// move robot into the room's center using a rotation behaviour
     rotateTowards(this->robot, this->goalRoom->getExitPoint());

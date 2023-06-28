@@ -83,13 +83,13 @@ void RobotCLI::run() {
             this->robotPlanner->initRobot();
             cout << RED << "trying to connect to the robot interface..." << RESET_COLOR << "\n";
             std::cout << '-' << std::flush;
-            sleep(1);
+            usleep(300000);
             std::cout << "\b\\" << std::flush;
-            sleep(1);
+            usleep(300000);
             std::cout << "\b|" << std::flush;
-            sleep(1);
+            usleep(300000);
             std::cout << "\b/" << std::flush;
-            sleep(1);
+            usleep(300000);
             std::cout << "\b-" << std::flush;
             std::cout << std::endl;
             if(this->robotPlanner->isRobotOnline()) {

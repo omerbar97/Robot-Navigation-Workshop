@@ -19,6 +19,7 @@ private:
     PlayerCc::Position2dProxy* positionProxy;
     PlayerCc::RangerProxy* laserProxy;
 
+    bool enableFastTravel;
     bool isRobotOnline;
     int port;
     std::string ip;
@@ -42,6 +43,7 @@ public:
     void setSpeed(double speed, double turnSpeed);
     void setCurrentPath(std::vector<std::pair<double, double>>  path);
     void initRobot();
+    void setFastTravel(bool flag);
     double getYaw();
 
 
@@ -60,6 +62,7 @@ public:
 
     void update();
     bool isOnline();
+    bool isFastTravelEnable();
 
 };
 

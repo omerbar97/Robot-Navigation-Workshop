@@ -30,14 +30,14 @@ void startWs(RobotPlanner *planner, std::string ws) {
 
 // signal keyboard ctrl+c handler
 void signalHandler(int signum) {
-    std::cout << "Interrupt signal (" << signum << ") received." << std::endl;
-    std::cout << "to close the program, enter: exit" << std::endl;
+//    std::cout << "Interrupt signal (" << signum << ") received." << std::endl;
+//    std::cout << "to close the program, enter: exit" << std::endl;
     // cleanup and close up stuff here
     // terminate program
-//    if (stageThread != nullptr) {
-//        pthread_kill(stageThread->native_handle(), SIGINT);
-//    }
-//    exit(signum);
+    if (stageThread != nullptr) {
+        pthread_kill(stageThread->native_handle(), SIGINT);
+    }
+    exit(signum);
 }
 
 std::string getAbsolutePath(const std::string &relativePath) {
@@ -103,6 +103,7 @@ int main(int argc, char *argv[]) {
     if (argc == 1) {
         // running the cli
         signal(SIGINT, signalHandler);
+        signal(SIGTERM, signalHandler);
         start_program();
         return 0;
     } else if (argc != 4) {

@@ -5,16 +5,19 @@
 #include "R2R.h"
 
 
-R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot, Algorithm* algorithm, MapGenerator* mapGenerator) {
+R2R::R2R(Room *roomSource, Room *roomDest, RobotWrapper *robot, Algorithm *algorithm, MapGenerator *mapGenerator,
+         bool withExit) {
     this->robot = robot;
     this->currentRoom = roomSource;
     this->nextRoom = roomDest;
     this->algorithm = algorithm;
     robot->update();
-    this->tasks = vector<Behavior*>();
-
-    Behavior* exit = new ExitRoomBehavior(this->robot, roomSource);
-    this->tasks.push_back(exit);
+    this->tasks = vector<Behavior *>();
+    Behavior *exit;
+    if (withExit) {
+        exit = new ExitRoomBehavior(this->robot, roomSource);
+        this->tasks.push_back(exit);
+    }
 
     route = new Route(algorithm, mapGenerator);
     route->setStartingPoint(roomSource->getEntryPoint());
@@ -23,9 +26,11 @@ R2R::R2R(Room* roomSource, Room *roomDest, RobotWrapper *robot, Algorithm* algor
         route->createPath();
     } catch (std::exception &e) {
         // print some value
-        std::cout << RED << "failed to calculate path from room id: " << roomSource->getRoomId() << " to room id: " << roomDest->getRoomId() << std::endl;
-        delete(exit);
-        delete(this);
+        std::cout << RED << "failed to calculate path from room id: " << roomSource->getRoomId() << " to room id: "
+                  << roomDest->getRoomId() << COLOR_RESET << std::endl;
+        if (withExit) {
+            delete (exit);
+        }
         throw std::exception();
     }
     path = route->getLatestPath();
@@ -43,11 +48,18 @@ std::vector<std::pair<double, double>> R2R::getPath() {
 }
 
 int R2R::doMission() {
-    for (Behavior* task : tasks) {
+    int k;
+    for (Behavior *task: tasks) {
         try {
-            task->execute();
-        } catch (ompl::Exception e) {
-            // recalculate
+            k = task->execute();
+        } catch (std::exception &e) {
+            // checking the room that failed
+            std::string s = std::to_string(this->nextRoom->getRoomId());
+            throw std::invalid_argument(s);
+        }
+        if (k != 0) {
+            // error in the navigation
+            return k;
         }
     }
     return 0;
@@ -55,11 +67,9 @@ int R2R::doMission() {
 
 R2R::~R2R() {
     // deleting all the memory
-    delete(this->route);
-    for(Behavior* b : this->tasks) {
-        delete(b);
+    delete (this->route);
+    for (Behavior *b: this->tasks) {
+        delete (b);
     }
-    delete(this->currentRoom);
-    delete(this->nextRoom);
-    delete(this->algorithm);
+    delete (this->algorithm);
 }

@@ -34,11 +34,11 @@ int EnterRoomBehavior::execute() {
 
     /// move robot into doorstep in a straight line using a straight line behaviour
     rotateTowards(this->robot, this->goalRoom->getExitPoint());
-    navigateStraightLine(robot, this->goalRoom->getExitPoint(), forwardSpeed, minDistance, angles);
+    navigateStraightLine(robot, this->goalRoom->getExitPoint(), forwardSpeed, minDistance, angles, 0);
 
     /// move robot into the room's center using a rotation behaviour
     rotateTowards(this->robot, this->goalRoom->getCenterPoint());
-    navigateStraightLine(robot, this->goalRoom->getCenterPoint(), forwardSpeed, minDistance, angles);
+    navigateStraightLine(robot, this->goalRoom->getCenterPoint(), forwardSpeed, minDistance, angles, 0);
 
     return 0;
 }

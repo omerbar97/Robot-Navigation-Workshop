@@ -68,7 +68,6 @@ void RRTStarAlgorithm::calculate() {
     } else {
         // failed to find a solution
         delete(planner);
-        delete(this);
         throw std::exception();
     }
 

@@ -11,7 +11,7 @@
 
 
 
-
+using Point = std::pair<double, double>;
 enum class MissionType {
     NAVIGATION,
     INFORM

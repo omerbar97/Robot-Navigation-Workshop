@@ -20,7 +20,7 @@ private:
     double calculateTwoPointDistance(double sideA, double sideB, double angleC);
 public:
 
-    void operator()(RobotWrapper* robot, Point dest, double fSpeed, const double safeDistance, std::pair<int, int> angle);
+    void operator()(RobotWrapper* robot, Point dest, double fSpeed, const double safeDistance, std::pair<int, int> angle, int depth);
 };
 
 

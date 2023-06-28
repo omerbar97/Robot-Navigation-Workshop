@@ -5,10 +5,11 @@
 #include "AvoidObstacle.h"
 
 void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, const double safeDistance,
-                               std::pair<int, int> angle) {
+                               std::pair<int, int> angle, int depth) {
 
     PlayerCc::RangerProxy &ranger = *robot->getLaser();
     int obstacleAngle;
+    LinearNavigation linear;
     bool flag = false;
     int firstAngle = -1, secondAngle = -1;
     double minnuminDistacne = 10000;
@@ -25,8 +26,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             firstAngle = j;
         }
     }
-//    std::cout << "first angle: " << firstAngle << "\n";
-//    std::cout << "second angle: " << secondAngle << "\n";
 
     if (firstAngle == -1 && secondAngle == -1) {
         // exit
@@ -74,8 +73,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
                 rotate(robot, point);
 
                 // travel to point
-                LinearNavigation linear;
-                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
+                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
                 rotate(robot, dest);
                 return;
             }
@@ -92,8 +90,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             rotate(robot, point);
 
             // travel to point
-            LinearNavigation linear;
-            linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
+            linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
             rotate(robot, dest);
             return;
 
@@ -128,8 +125,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
                 rotate(robot, point);
 
                 // travel to point
-                LinearNavigation linear;
-                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
+                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
                 rotate(robot, dest);
                 return;
 
@@ -141,8 +137,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
                 rotate(robot, point);
 
                 // travel to point
-                LinearNavigation linear;
-                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
+                linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
                 rotate(robot, dest);
                 return;
 
@@ -156,8 +151,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             rotate(robot, point);
 
             // travel to point
-            LinearNavigation linear;
-            linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
+            linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
             rotate(robot, dest);
             return;
 
@@ -171,8 +165,7 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
         rotate(robot, point);
 
         // travel to point
-        LinearNavigation linear;
-        linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle);
+        linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
         rotate(robot, dest);
 
     }

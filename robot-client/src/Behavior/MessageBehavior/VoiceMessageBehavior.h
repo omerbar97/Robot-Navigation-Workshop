@@ -5,6 +5,8 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_VOICEMESSAGEBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_VOICEMESSAGEBEHAVIOR_H
 #include "MessageBehavior.h"
+#include <iostream>
+#include "../../Robot/Colors.h"
 
 /**
  * this class is responsible for sending voice messages from the computer using an AI generator voice and output voice
@@ -13,7 +15,7 @@
 class VoiceMessageBehavior : public MessageBehavior{
 public:
 
-    VoiceMessageBehavior(std::string message, std::string messageTo);
+    VoiceMessageBehavior(const std::string& message, std::string messageTo);
     ~VoiceMessageBehavior() override;
     int execute() override;
 };

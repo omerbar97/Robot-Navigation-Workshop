@@ -7,10 +7,19 @@
 #include "Mission.h"
 
 class CalculateTime : public Mission {
+private:
+    std::vector<std::pair<double, double>>* path;
+    double robotSpeed;
+    double time;
+
 public:
-    CalculateTime() = default;
-    ~CalculateTime() = default;
-    double operator()(std::vector<std::pair<double, double>> path, double robotSpeed);
+    CalculateTime(std::vector<std::pair<double, double>>* path, double robotSpeed);
+    ~CalculateTime();
+
+    int doMission() override;
+
+    double getTime();
+
 };
 
 

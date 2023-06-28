@@ -16,6 +16,7 @@
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
 #include "../Behavior/Behavior.h"
 #include "../Missions/Mission.h"
+#include "../Missions/CalculateTime.h"
 #include "../Missions/navigation-missions/R2R.h"
 #include "../Missions/factories/nav-mission-factory/NavigationMissionsFactory.h"
 #include <boost/bind/bind.hpp>

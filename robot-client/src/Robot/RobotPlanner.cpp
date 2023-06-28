@@ -3,6 +3,7 @@
 //
 
 #include "RobotPlanner.h"
+#include "../Missions/Inform-Missions/Inform.h"
 
 RobotPlanner::RobotPlanner(const string &roomConfigPath, RobotWrapper *robotWrapper, MapGenerator *map) {
     this->robotWrapper = robotWrapper;
@@ -40,6 +41,9 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         return;
     }
 
+    std::vector<CalculateTime*> timeVector;
+    std::vector<std::vector<Point>*> allPathVector;
+
     // first mission is to get out of the room, doing it in a different thread
     Mission *m = new R2Exit(currentLocation, this->robotWrapper);
     std::thread* exitRoomThread = new std::thread([m, ptr = this]() -> void {
@@ -63,6 +67,7 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
 
     // assumes that the robot starts inside a room
     Mission *mission;
+    R2R * r2r;
     std::vector<string> rooms;
     if (robotWrapper->isFastTravelEnable()) {
         // recalculating the rooms by sales man problem
@@ -91,13 +96,14 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         try {
             if (i == 0) {
                 // the current room, exiting via a new thread
-                mission = new R2R(currentRoom, nextRoom, this->robotWrapper,
+                r2r = new R2R(currentRoom, nextRoom, this->robotWrapper,
                                   new RRTStarAlgorithm(), this->map, false);
             } else {
                 // all the other room need to add exit behavior
-                mission = new R2R(currentRoom, nextRoom, this->robotWrapper,
+                r2r = new R2R(currentRoom, nextRoom, this->robotWrapper,
                                   new RRTStarAlgorithm(), this->map, true);
             }
+
         } catch (std::exception &e) {
             // tried 3 time to calculate route and failed skipping the room and putting it on the last
             // shifting all the rooms to the right
@@ -108,7 +114,7 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
                           << " was at the end of the plan execution list and failed to create path from room id: "
                           << currentRoom->getRoomId() << " aborting mission!" << COLOR_RESET << std::endl;
             } else {
-                std::cout << YEL << "moving room id: " << nextRoom->getRoomId() << " to the end the navigation list"
+                std::cout << YEL << "moving room id: " << nextRoom->getRoomId() << " to the end of the navigation list"
                           << COLOR_RESET << std::endl;
                 for (; j < rooms.size() - 1; j++) {
                     std::string p = rooms[j];
@@ -117,9 +123,24 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
                 }
             }
         }
+        // getting the path
+        auto points = r2r->getPath();
+        auto* currentVec = new std::vector<Point>();
+        allPathVector.push_back(currentVec);
+        // creating calculation time
+        for(auto p : points) {
+            for(auto v : allPathVector) {
+                v->push_back(p);
+            }
+        }
+
+        auto* timeCalculation = new CalculateTime(currentVec, this->robotWrapper->getGroundSpeed());
+        auto* inform = new Inform(timeCalculation, nextRoom);
         // lock the mutex
         this->missionLock.lock();
-        this->currentPlan.push(mission);
+        this->currentPlan.push(timeCalculation);
+        this->currentPlan.push(r2r);
+        this->currentPlan.push(inform);
         // unlock the mutex
         this->missionLock.unlock();
 

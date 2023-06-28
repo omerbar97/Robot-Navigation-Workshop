@@ -21,6 +21,7 @@
 #include <boost/bind/bind.hpp>
 #include "../Missions/navigation-missions/R2Exit.h"
 #include <thread>
+#include <condition_variable>
 
 using namespace boost::placeholders;
 
@@ -42,9 +43,9 @@ private:
     void planInformMission(const vector<string>& roomsIDs);
     void planNavigationMission(vector<string>& roomsIDs);
     std::vector<std::string> salesManProblem(const vector<string>& roomsIDs, Point currentLocation);
-
-
 public:
+
+
     RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* map);
     ~RobotPlanner();
     void plan(const MissionType& mission, vector<string>& parameters);
@@ -54,8 +55,7 @@ public:
     RobotWrapper* getRobotWrapper();
     void initRobot();
     bool isRobotInPlan();
-
-
+    condition_variable cv;
 
 };
 

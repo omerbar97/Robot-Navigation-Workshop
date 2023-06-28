@@ -4,7 +4,6 @@
 
 #include "RobotPlanner.h"
 
-
 RobotPlanner::RobotPlanner(const string &roomConfigPath, RobotWrapper *robotWrapper, MapGenerator *map) {
     this->robotWrapper = robotWrapper;
     this->roomsContainer = new RoomsContainer(roomConfigPath);
@@ -44,23 +43,23 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
     // first mission is to get out of the room, doing it in a different thread
     Mission *m = new R2Exit(currentLocation, this->robotWrapper);
     std::thread* exitRoomThread = new std::thread([m, ptr = this]() -> void {
-        ptr->robotLock.lock();
+        std::lock_guard<std::mutex> lock(ptr->robotLock);
         while(true) {
             try{
                 ptr->isInPlan = true;
                 m->doMission();
                 break;
             } catch (std::exception &e) {
-//                ptr->isInPlan = false;
                 std::cout << "error " << e.what();
-//                ptr->robotLock.unlock();
             }
         }
-        ptr->robotLock.unlock();
         delete(m);
         ptr->isInPlan = false;
+        ptr->cv.notify_all();
         std::cout << "finished!\n";
     });
+
+    exitRoomThread->detach();
 
     // assumes that the robot starts inside a room
     Mission *mission;
@@ -124,18 +123,20 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         // unlock the mutex
         this->missionLock.unlock();
 
-        if(!this->isInPlan) {
-            // the thread finished the job, executing the already mission queue
-            exitRoomThread = new thread([ptr = this]() -> void {
-                ptr->executePlan();
-            });
-        }
+//        if(!this->isInPlan) {
+//            std::unique_lock<std::mutex> uniqueLock(this->robotLock);
+//            cv.wait(uniqueLock);
+//            // the thread finished the job, executing the already mission queue
+//            exitRoomThread = new thread([ptr = this]() -> void {
+//                ptr->executePlan();
+//            });
+//        }
 
     }
-    if(exitRoomThread->joinable()) {
-        // the thread didn't finished yet detaching it.
-        exitRoomThread->detach();
-    }
+//    if(exitRoomThread->joinable()) {
+//        // the thread didn't finished yet detaching it.
+//        exitRoomThread->detach();
+//    }
 }
 
 void RobotPlanner::plan(const MissionType &mission, vector<std::string> &parameters) {
@@ -164,10 +165,10 @@ int RobotPlanner::executePlan() {
     queue<Mission *> tempQueue = this->currentPlan;
     this->currentPlan = queue<Mission *>();
     this->missionLock.unlock();
-    if(!this->robotLock.try_lock()) {
-        // cannot get lock
-        std::cout << YEL << "cannot receive robot-lock, waiting for the thread to finish executing the current robot plan" << RESET_COLOR << endl;
-    }
+//    if(!this->robotLock.try_lock()) {
+//        // cannot get lock
+//        std::cout << YEL << "cannot receive robot-lock, waiting for the thread to finish executing the current robot plan" << RESET_COLOR << endl;
+//    }
     this->robotLock.lock();
     while (tempQueue.size() > 0) {
         // get the next mission
@@ -186,6 +187,7 @@ int RobotPlanner::executePlan() {
     }
     this->isInPlan = false;
     this->robotLock.unlock();
+    cv.notify_all();
     return 0;
 }
 

@@ -18,6 +18,7 @@ struct robotInformation {
     double groundSpeed;
     double rotationSpeed;
     double robotCurrentYawInDegree;
+    bool optimizedPath;
 };
 
 class RobotCLI {

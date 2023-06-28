@@ -11,6 +11,7 @@ RobotCLI::RobotCLI(RobotPlanner *robotPlanner) {
     this->robotInfo.groundSpeed = 0.1;
     this->robotInfo.rotationSpeed = 0.03;
     this->robotInfo.robotCurrentYawInDegree = 0;
+    this->robotInfo.optimizedPath = true;
 }
 
 void RobotCLI::printIntro() {
@@ -42,6 +43,7 @@ void RobotCLI::printHelp() {
     std::cout << "set yawn                                     : setting the starting yaw (default 0 degree)" << std::endl;
     std::cout << "set ground                                   : setting the robot ground speed (default 0.1)" << std::endl;
     std::cout << "set rotation                                 : setting the robot rotation speed (default 0.03)" << std::endl;
+    std::cout << "set opt                                      : setting the robot optimized calculate path (default True)" << std::endl;
     std::cout << "exit                                         : Exit the CLI.";
     std::cout << std::endl << std::endl;
 }
@@ -94,6 +96,11 @@ void RobotCLI::run() {
             std::cout << std::endl;
             if(this->robotPlanner->isRobotOnline()) {
                 cout << GRNB << "CONNECTED!" << RESET_COLOR << endl;
+                this->robotPlanner->getRobotWrapper()->setRobotSpeed(this->robotInfo.groundSpeed);
+                this->robotPlanner->getRobotWrapper()->setRobotTurnSpeed(this->robotInfo.rotationSpeed);
+                this->robotPlanner->getRobotWrapper()->setFastTravel(this->robotInfo.optimizedPath);
+                this->robotPlanner->getRobotWrapper()->setStartingDegree(this->robotInfo.robotCurrentYawInDegree);
+
             }
             else{
                 cout << REDB << "FAILED! check if the stage is running and that you are trying to connect to the correct robot ip + port" << RESET_COLOR << endl;
@@ -101,7 +108,11 @@ void RobotCLI::run() {
 
         } else if(input == "info") {
             printShowRobotInfo();
-        } else {
+        } else if(input == "set") {
+            // setting for the default value.
+            // TODO:
+        }
+        else {
             MissionType commandName;
             vector<string> args;
             if (parseCommand(input, commandName, args)) {
@@ -123,7 +134,7 @@ void RobotCLI::printShowRobotInfo() {
     // printing the robot detail settings
     cout << CYN << "The robot starting yaw is the robot degree when first initialized based on the given map\n"
                    "the map is an x,y coordinate system where the 90 degree is at the y axios (front)\n"
-                   "and the 0 degree is on the x axios (left, if looking at the front)" << RESET_COLOR << "\n";
+                   "and the 0 degree is on the x axios (right, if looking at the front)" << RESET_COLOR << "\n";
     cout << BLU << "                 Y axios 90 degree                \n"
                    "                        ^                         \n"
                    "                        |                         \n"
@@ -136,8 +147,12 @@ void RobotCLI::printShowRobotInfo() {
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n" << RESET_COLOR;
-    cout << YEL << "Robot starting Yaw: " << this->robotInfo.robotCurrentYawInDegree << endl;
-    cout << "Robot ground speed: " << this->robotInfo.groundSpeed << endl;
-    cout << "Robot rotation speed: " << this->robotInfo.rotationSpeed << RESET_COLOR << endl;
-
+    cout << YEL << "Robot starting Yaw: " << RESET_COLOR << GRN << this->robotInfo.robotCurrentYawInDegree << RESET_COLOR << endl;
+    cout << YEL << "Robot ground speed: " << RESET_COLOR << GRN << this->robotInfo.groundSpeed << RESET_COLOR << endl;
+    cout << YEL << "Robot rotation speed: " << RESET_COLOR << GRN << this->robotInfo.rotationSpeed << RESET_COLOR << endl;
+    if(this->robotInfo.optimizedPath) {
+        cout << YEL << "Optimized path enable: " << RESET_COLOR << GRN << "True" << RESET_COLOR << endl;
+    } else {
+        cout << YEL << "Optimized path enable: " << RESET_COLOR << GRN << "False" << RESET_COLOR << endl;
+    }
 }

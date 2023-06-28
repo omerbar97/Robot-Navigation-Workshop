@@ -18,7 +18,8 @@ RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dPr
     this->ws = std::move(ws);
     this->port = robot->GetPort();
     this->ip = robot->GetHostname();
-    this->enableFastTravel = false;
+    this->enableFastTravel = true;
+    this->startingRobotDegree = 0;
 }
 
 
@@ -206,7 +207,8 @@ RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
     this->robot = nullptr;
     this->positionProxy = nullptr;
     this->laserProxy = nullptr;
-    this->enableFastTravel = false;
+    this->enableFastTravel = true;
+    this->startingRobotDegree = 0;
 }
 
 double RobotWrapper::getYaw() {
@@ -220,4 +222,12 @@ void RobotWrapper::setFastTravel(bool flag) {
 
 bool RobotWrapper::isFastTravelEnable() {
     return this->enableFastTravel;
+}
+
+void RobotWrapper::setStartingDegree(int degree) {
+    this->startingRobotDegree = degree;
+}
+
+void RobotWrapper::getStartingDegree() {
+    return; this->startingRobotDegree;
 }

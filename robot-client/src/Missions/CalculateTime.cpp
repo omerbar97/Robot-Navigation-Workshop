@@ -33,6 +33,8 @@ int CalculateTime::doMission() {
     // time = road / speed
 
     time = distance / robotSpeed;
+    // adding the time approximate for each professor to reach the robotic lab;
+    time += 40; // seconds
     return 0;
 }
 

@@ -48,19 +48,20 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
     Mission *m = new R2Exit(currentLocation, this->robotWrapper);
     std::thread* exitRoomThread = new std::thread([m, ptr = this]() -> void {
         std::lock_guard<std::mutex> lock(ptr->robotLock);
-        while(true) {
+        int counter = 0;
+        while(counter < 3) {
             try{
                 ptr->isInPlan = true;
                 m->doMission();
                 break;
             } catch (std::exception &e) {
-                std::cout << "error " << e.what();
+                counter++;
+                std::cout << "failed to navigate out of the room id: " << e.what() << " attempt: " << counter << std::endl;
             }
         }
         delete(m);
         ptr->isInPlan = false;
         ptr->cv.notify_all();
-        std::cout << "finished!\n";
     });
 
     exitRoomThread->detach();
@@ -68,13 +69,35 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
     // assumes that the robot starts inside a room
     Mission *mission;
     R2R * r2r;
-    std::vector<string> rooms;
+    std::vector<string> rooms = removeDuplicates(roomsIDs);
     if (robotWrapper->isFastTravelEnable()) {
         // recalculating the rooms by sales man problem
-        rooms = salesManProblem(roomsIDs, this->robotWrapper->getCurrentPosition());
-    } else {
-        rooms = roomsIDs;
+        rooms = salesManProblem(rooms, this->robotWrapper->getCurrentPosition());
     }
+
+    // shifting the rooms one to left
+    auto prev = rooms[0];
+    for(int j = 1; j <= rooms.size(); j++) {
+        if(j != rooms.size()) {
+            auto r = rooms[j];
+            rooms[j] = prev;
+            prev = r;
+        } else {
+            rooms.push_back(prev);
+            break;
+        }
+    }
+    rooms[0] = to_string(currentLocation->getRoomId());
+
+    std::cout << BMAG << "creating path: ";
+    for(int j = 0; j < rooms.size(); j++) {
+        if(j != rooms.size() - 1) {
+            std::cout << rooms[j] << "->";
+        } else {
+            std::cout << rooms[j];
+        }
+    }
+    std::cout << RESET_COLOR << std::endl;
 
     for (int i = 0; i < rooms.size() - 1; i++) {
         Room *currentRoom = this->roomsContainer->getRoomById(stoi(rooms.at(i)));
@@ -247,6 +270,11 @@ bool RobotPlanner::isRobotInPlan() {
 
 std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roomsIDs, Point currentLocation) {
     // re-arrange the rooms faster
+    std::cout << BGRN << "creating optimized path on: " << RESET_COLOR;
+    for(auto s : roomsIDs) {
+        std::cout << GRN << s << " , ";
+    }
+    std::cout << RESET_COLOR << std::endl;
     std::vector<Room *> rooms;
     std::vector<Room *> arranged;
     for (int i = 1; i < roomsIDs.size(); i++) {
@@ -262,8 +290,7 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
     // all rooms now in the vector rooms
 
     // re arrange the rooms
-    int size = roomsIDs.size();
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < roomsIDs.size() - 1; i++) {
         // calculating the distances from all the rooms
         std::vector<arrangedRoom> distances;
         for (Room *r: rooms) {
@@ -274,6 +301,10 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
             tempRoom.distance = distance;
             tempRoom.room = r;
             distances.push_back(tempRoom);
+        }
+
+        if(distances.size() == 0) {
+            break;
         }
 
         // finding the minimum of that list
@@ -287,6 +318,7 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
 
         // adding to the arranged
         arranged.push_back(minRoom.room);
+        currentLocation = minRoom.room->getCenterPoint();
 
         // finding the room
         for (int k = 0; k < rooms.size(); k++) {
@@ -298,7 +330,24 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
         }
     }
 
-    // std::vector
+    std::vector<std::string> stringsId;
+    for(auto r : arranged) {
+        stringsId.push_back(to_string(r->getRoomId()));
+    }
+    return stringsId;
+}
+
+std::vector<std::string> RobotPlanner::removeDuplicates(std::vector<std::string> &vec) {
+    std::unordered_set<std::string> uniqueElements;
+    std::vector<std::string> result;
+
+    for (const auto& str : vec) {
+        if (uniqueElements.insert(str).second) {
+            result.push_back(str);
+        }
+    }
+
+    return result;
 }
 
 

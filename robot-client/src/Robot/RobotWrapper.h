@@ -28,6 +28,7 @@ private:
     std::string ws;
     std::vector<std::pair<double, double>> robotCurrentPath;
     std::mutex robotMutex;
+    int startingRobotDegree;
 
 public:
 
@@ -63,6 +64,9 @@ public:
     void update();
     bool isOnline();
     bool isFastTravelEnable();
+
+    void setStartingDegree(int degree);
+    void getStartingDegree();
 
 };
 

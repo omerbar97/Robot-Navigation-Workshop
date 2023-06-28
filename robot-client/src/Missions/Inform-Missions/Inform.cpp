@@ -14,11 +14,7 @@ Inform::~Inform() noexcept {
 }
 
 int Inform::doMission() {
-    double timeD = time->getTime();
-    timeD = timeD * 100;
-    int newd = timeD;
-    timeD = newd;
-    timeD /= 100;
+    int timeD = time->getTime();
     std::string timeReach = std::to_string(time->getTime());
     std::string name = currentRoom->getRoomName();
     std::string lowerLettersName;

@@ -22,8 +22,9 @@ enum class MissionType {
  */
 class Mission {
 
-
-
+protected:
+    Room* currentRoom;
+    Room* nextRoom;
 public:
 
     /**

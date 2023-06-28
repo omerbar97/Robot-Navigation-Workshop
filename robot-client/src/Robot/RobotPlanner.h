@@ -32,7 +32,7 @@ private:
     MapGenerator* map;
     std::mutex mutex;
     void planInformMission(const vector<string>& roomsIDs);
-    void planNavigationMission(const vector<string>& roomsIDs);
+    void planNavigationMission(vector<string>& roomsIDs);
 
 
 public:

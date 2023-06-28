@@ -159,9 +159,11 @@ void Route::createPath() {
     // doing all the logic of the algorithm
 
     this->algorithm->calculate();
-//    this->cvMap = new cv::Mat(this->mapGenerator->getBinaryMatrix());
-//    this->gridMap->setGridMatrix(this->cvMap);
-//    // getting the path from the algorithm
+
+    // getting the path from the algorithm
+    delete(this->cvMap);
+    delete(this->gridMap);
+
     this->cvMap = new cv::Mat(this->mapGenerator->getBinaryMatrix());
     this->gridMap = new GridMap(cvMap, 1);
 
@@ -182,4 +184,12 @@ std::vector<std::pair<int, int>> Route::matrixPoint() {
 }
 std::pair<double, double> Route::getGoalPoint() {
     return this->algorithm->getGoal();
+}
+
+Route::~Route() {
+    // deleting all memory
+    if(this->gridMap != nullptr)
+        delete(this->gridMap);
+    if(this->cvMap != nullptr)
+        delete(this->cvMap);
 }

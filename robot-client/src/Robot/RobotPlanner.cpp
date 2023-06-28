@@ -31,14 +31,35 @@ void RobotPlanner::planInformMission(const vector<string>& roomsIDs) {
 }
 
 
-void RobotPlanner::planNavigationMission(const vector<string>& roomsIDs) {
+void RobotPlanner::planNavigationMission(vector<string>& roomsIDs) {
     // assumes that the robot starts inside a room
     //TODO:: plan priority queue of MissionType and parameters
+    int counter = 0;
+    Mission* mission;
     for(int i = 0; i < roomsIDs.size() - 1; i++) {
         Room *currentRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i)));
         Room *nextRoom = this->roomsContainer->getRoomById(stoi(roomsIDs.at(i + 1)));
-        Mission *mission = new R2R(currentRoom, nextRoom, this->robotWrapper,
-                                   new RRTStarAlgorithm(), this->map);
+        try {
+            mission = new R2R(currentRoom, nextRoom, this->robotWrapper,
+                                       new RRTStarAlgorithm(), this->map);
+        } catch (std::exception &e) {
+            if(counter >= 3) {
+                // tried 3 time to calculate route and failed skipping the room and putting it on the last
+                // shifiting all the rooms to the right
+                for(int j = i + 1; j < roomsIDs.size() - 1; j++) {
+                    std::string p = roomsIDs[j];
+                    roomsIDs[j] = roomsIDs[j + 1];
+                    roomsIDs[j + 1] = p;
+                }
+            }
+            // failed to calculate mission randomly changing place to try again
+
+            // then reducing i by 1 and recalculate
+            i = i-1;
+            counter += 1;
+            continue;
+        }
+        counter = 0;
         // lock the mutex
         this->mutex.lock();
         this->currentPlan.push(mission);

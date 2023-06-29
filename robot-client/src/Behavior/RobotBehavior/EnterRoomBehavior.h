@@ -19,7 +19,6 @@ class EnterRoomBehavior : public RobotBehavior {
 
 
 protected:
-    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
     Room* goalRoom;
 
 public:

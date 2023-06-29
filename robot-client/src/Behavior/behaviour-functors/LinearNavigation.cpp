@@ -6,7 +6,16 @@
 
 
 void LinearNavigation::
-operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance ) {
+operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles, int depth) {
+    std::cout << "depth: " << depth << "\n";
+    if(depth >= 7) {
+        // to many attempts
+        // backing off a little bit
+        robot->setSpeed(-robot->getGroundSpeed() / 2, 0);
+        usleep(700000);
+        robot->setSpeed(0, 0);
+        throw std::exception();
+    }
 
     PlayerCc::Position2dProxy& pos = *robot->getPos();
     PlayerCc::RangerProxy& laser = *robot->getLaser();
@@ -17,22 +26,16 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     double turnSpeed = 0, lastDistance = distance;
     robot->setSpeed(groundSpeed, turnSpeed);
     // debug
-    std::cout << "minDistance: " << minDistance << std::endl;
+    AvoidObstacle avoidObstacle;
     while(distance > minDistance) {
 
-        // debug
-//        std::cout << "distance: " << distance << std::endl;
-//        int i = laser.GetRangeCount();
-//        for(int j = 0; j < i; j++) {
-//            std::cout << "laser[" <<  j << "]: " << laser[j] << std::endl;
-//
-//        }
-        std::cout << "distance to point " << distance << std::endl;
+
         // sense
         robot->update();
 
         // think
-        // TODO: implement obstacle avoidance
+        avoidObstacle(robot, dest, groundSpeed, 0.5, angles, depth);
+
 
         // act
         robot->setSpeed(fSpeed, turnSpeed);
@@ -48,5 +51,6 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
         usleep(10);
     }
 
+    std::cout << "Reached to point: " << dest.first << " , " << dest.second << " \n";
     pos.SetSpeed(0, 0);
 }

@@ -17,14 +17,12 @@ class RobotBehavior : public Behavior {
 protected:
     RobotWrapper* robot;
     std::pair<double, double> goalPoint;
-    virtual bool avoidObstacles(double &forwardSpeed, double &turnSpeed) = 0;
 
 public:
 
     // the virtual method is still virtual
     virtual int execute() = 0;
     RobotBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
-
     virtual ~RobotBehavior() = default;
 
 };

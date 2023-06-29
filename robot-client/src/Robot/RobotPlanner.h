@@ -16,11 +16,21 @@
 #include "../Behavior/Factory/RobotBehaviorFactory.h"
 #include "../Behavior/Behavior.h"
 #include "../Missions/Mission.h"
+#include "../Missions/CalculateTime.h"
 #include "../Missions/navigation-missions/R2R.h"
 #include "../Missions/factories/nav-mission-factory/NavigationMissionsFactory.h"
 #include <boost/bind/bind.hpp>
+#include "../Missions/navigation-missions/R2Exit.h"
+#include <thread>
+#include <condition_variable>
+#include <unordered_set>
+
 using namespace boost::placeholders;
 
+struct arrangedRoom{
+    Room* room;
+    double distance;
+};
 
 using namespace std;
 class RobotPlanner {
@@ -30,23 +40,25 @@ private:
     RobotWrapper *robotWrapper;
     queue<Mission*> currentPlan;
     MapGenerator* map;
-    std::mutex mutex;
+    std::mutex robotLock;
+    std::mutex missionLock;
     void planInformMission(const vector<string>& roomsIDs);
-    void planNavigationMission(const vector<string>& roomsIDs);
-
-
+    void planNavigationMission(vector<string>& roomsIDs);
+    std::vector<std::string> salesManProblem(const vector<string>& roomsIDs, Point currentLocation);
+    std::vector<std::string> removeDuplicates(std::vector<std::string>& vec);
 public:
+
+
     RobotPlanner(const string& roomConfigPath, RobotWrapper* robotWrapper, MapGenerator* map);
     ~RobotPlanner();
-    void plan(const MissionType& mission, const vector<string>& parameters);
+    void plan(const MissionType& mission, vector<string>& parameters);
     void setPlanFromString(const string& plan);
     int executePlan();
     bool isRobotOnline();
     RobotWrapper* getRobotWrapper();
     void initRobot();
     bool isRobotInPlan();
-
-
+    condition_variable cv;
 
 };
 

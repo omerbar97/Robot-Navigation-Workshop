@@ -13,9 +13,6 @@ RotationBehavior::~RotationBehavior() {
 
 }
 
-bool RotationBehavior::avoidObstacles(double &forwardSpeed, double &turnSpeed) {
-
-}
 
 int RotationBehavior::execute() {
     // this function will rotation the robot Yaw to the goal point.

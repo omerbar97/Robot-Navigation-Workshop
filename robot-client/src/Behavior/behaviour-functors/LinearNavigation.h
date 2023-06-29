@@ -9,6 +9,8 @@
 #include "../../Robot/RobotWrapper.h"
 #include "../RobotBehavior/RotationBehavior.h"
 #include <boost/bind/bind.hpp>
+#include "AvoidObstacle.h"
+
 using namespace boost::placeholders;
 
 
@@ -20,7 +22,7 @@ private:
 public:
     LinearNavigation() = default;
     ~LinearNavigation() = default;
-    void operator () (RobotWrapper* robot, Point dest, double fSpeed, const double minDistance);
+    void operator () (RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles, int depth);
 
 };
 

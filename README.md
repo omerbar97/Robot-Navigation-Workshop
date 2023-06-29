@@ -56,3 +56,6 @@ Make sure to install all the dependances to be able to run our program
 | Espeak | [https://espeak.sourceforge.net/]|
 | Json for C++ | [https://github.com/nlohmann/json]|
 | cmake | [https://cmake.org/download/]|
+| curl | [https://curl.se/libcurl/c/]|
+
+

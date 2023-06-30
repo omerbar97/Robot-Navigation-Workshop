@@ -6,24 +6,34 @@
 #define ROBOT_NAVIGATION_WORKSHOP_ROBOTPATHPRODUCER_H
 
 #include <vector>
-#include "../Resources/Room.h"
+#include <thread>
+
+#include "../../Resources/Room.h"
+#include "../../Resources/RoomsContainer.h"
+#include "../../Resources/MapGenerator.h"
+#include "PathCreator.h"
+
 using Point = std::pair<double, double>;
 using MissionPathList = std::vector<std::vector<Point>>;
+using MissionData = std::pair<int, int>;
+using MissionDataList = std::vector<MissionData>;
 class RobotPathProducer {
 
 
 private:
     MissionPathList *path;
-
-
-
+    MissionDataList *data;
+    RoomsContainer* roomsContainer;
+    MapGenerator *map;
 
 public:
-    RobotPathProducer();
+    RobotPathProducer(MissionDataList *data, RoomsContainer* roomsContainer, MapGenerator *map);
 
     ~RobotPathProducer() = default;
     MissionPathList getPath();
     void setPath(MissionPathList path);
+
+    MissionPathList* createPaths();
 
 
 

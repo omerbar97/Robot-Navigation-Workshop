@@ -27,6 +27,10 @@ int HallNavigateBehavior::execute() {
 
 HallNavigateBehavior::~HallNavigateBehavior() {
 
+    // No obstacles, proceed with normal navigation
+//    turnSpeed = 0;
+//    forwardSpeed = this->robot->getGroundSpeed();
+//    return false;
 }
 
 

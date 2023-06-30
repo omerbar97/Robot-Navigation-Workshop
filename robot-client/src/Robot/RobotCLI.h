@@ -8,6 +8,8 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <chrono>
+#include <ctime>
 #include "RobotPlanner.h"
 #include <thread>
 #include <boost/bind/bind.hpp>
@@ -19,6 +21,7 @@ struct robotInformation {
     double rotationSpeed;
     double robotCurrentYawInDegree;
     bool optimizedPath;
+
 };
 
 class RobotCLI {

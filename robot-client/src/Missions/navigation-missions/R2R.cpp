@@ -22,24 +22,7 @@ R2R::R2R(Room *roomSource, Room *roomDest, RobotWrapper *robot, Algorithm *algor
     route = new Route(algorithm, mapGenerator);
     route->setStartingPoint(roomSource->getEntryPoint());
     route->setGoalPoint(roomDest->getEntryPoint());
-    try {
-        route->createPath();
-    } catch (std::exception &e) {
-        // print some value
-        std::cout << RED << "failed to calculate path from room id: " << roomSource->getRoomId() << " to room id: "
-                  << roomDest->getRoomId() << COLOR_RESET << std::endl;
-        if (withExit) {
-            delete (exit);
-        }
-        throw std::exception();
-    }
-    path = route->getLatestPath();
-    if (!path.empty()) {
-        path.erase(path.begin());
-    }
-    this->tasks.push_back(new HallNavigateBehavior(this->robot, path));
 
-    this->tasks.push_back(new EnterRoomBehavior(robot, roomDest));
 
 }
 
@@ -48,6 +31,21 @@ std::vector<std::pair<double, double>> R2R::getPath() {
 }
 
 int R2R::doMission() {
+    try {
+        route->createPath();
+    } catch (std::exception &e) {
+        // print some value
+        std::cout << RED << "failed to calculate path from room id: " << this->currentRoom->getRoomId() << " to room id: "
+                  << this->nextRoom->getRoomId() << COLOR_RESET << std::endl;
+
+        throw std::exception();
+    }
+    path = route->getLatestPath();
+    if (!path.empty()) {
+        path.erase(path.begin());
+    }
+    this->tasks.push_back(new HallNavigateBehavior(this->robot, path));
+    this->tasks.push_back(new EnterRoomBehavior(robot, this->nextRoom));
     int k;
     for (Behavior *task: tasks) {
         try {

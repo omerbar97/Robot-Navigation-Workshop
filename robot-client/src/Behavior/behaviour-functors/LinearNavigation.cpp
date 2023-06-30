@@ -7,7 +7,7 @@
 
 void LinearNavigation::
 operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles, int depth) {
-    std::cout << "depth: " << depth << "\n";
+//    std::cout << "depth: " << depth << "\n";
     if(depth >= 7) {
         // to many attempts
         // backing off a little bit
@@ -22,7 +22,7 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     robot->update();
     auto currentPosition = robot->getCurrentPosition();
     double distance = sqrt(pow(dest.first - currentPosition.first, 2) + pow(dest.second - currentPosition.second, 2));
-    double groundSpeed = robot->getGroundSpeed();
+    double groundSpeed = 0.05;
     double turnSpeed = 0, lastDistance = distance;
     robot->setSpeed(groundSpeed, turnSpeed);
     // debug
@@ -51,6 +51,6 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
         usleep(10);
     }
 
-    std::cout << "Reached to point: " << dest.first << " , " << dest.second << " \n";
+//    std::cout << "Reached to point: " << dest.first << " , " << dest.second << " \n";
     pos.SetSpeed(0, 0);
 }

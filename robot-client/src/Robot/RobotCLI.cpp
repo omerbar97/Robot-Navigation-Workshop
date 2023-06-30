@@ -82,6 +82,26 @@ void RobotCLI::run() {
         } else if (input == "help" || input == "?") {
             printHelp();
         } else if (input == "start") {
+            cout<<"How long until the meeting? (in seconds)"<<endl;
+            cout << ">> ";
+            getline(cin, input);
+
+            while (std::stoi(input) == 0) {
+                cout<<"Please enter a valid number"<<endl;
+                cout << ">> ";
+                getline(cin, input);
+            }
+            int time = std::stoi(input);
+
+            // Get the current system time
+            std::chrono::system_clock::time_point now = this->robotPlanner->getChronoTime()->getCurrentTime();
+
+            // Add the time until the meeting and set meeting time
+            now += std::chrono::seconds(time);
+            this->robotPlanner->getChronoTime()->setMeetingTime(now);
+
+
+            //init robot planner
             this->robotPlanner->initRobot();
             cout << RED << "trying to connect to the robot interface..." << RESET_COLOR << "\n";
             std::cout << '-' << std::flush;

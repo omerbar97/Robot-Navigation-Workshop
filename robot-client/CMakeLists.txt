@@ -66,6 +66,8 @@ add_executable(Robot-Navigation
         src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp
         src/Robot/RobotCLI.cpp
         src/Robot/RobotCLI.h
+        src/Resources/ChronoTime.cpp
+        src/Resources/ChronoTime.h
         src/Missions/navigation-missions/R2R.cpp
         src/Behavior/behaviour-functors/RotateRobot.cpp
         src/Behavior/behaviour-functors/RotateRobot.h

@@ -20,7 +20,7 @@ int HallNavigateBehavior::execute() {
     angles.second = 100;
     for (Point& point : this->path) {
         rotateTowards(this->robot, point);
-        navigateStraightLine(this->robot, point, this->robot->getGroundSpeed(), 0.1, angles, 0);
+        navigateStraightLine(this->robot, point, 0.04, 0.1, angles, 0);
     }
     return 0;
 }

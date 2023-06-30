@@ -10,6 +10,7 @@ RobotPlanner::RobotPlanner(const string &roomConfigPath, RobotWrapper *robotWrap
     this->roomsContainer = new RoomsContainer(roomConfigPath);
     this->map = map;
     this->isInPlan = false;
+    this->chronoTime = new ChronoTime();
 }
 
 RobotPlanner::~RobotPlanner() = default;
@@ -40,9 +41,9 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
                   << endl;
         return;
     }
-
-    std::vector<CalculateTime*> timeVector;
-    std::vector<std::vector<Point>*> allPathVector;
+//
+//    std::vector<CalculateTime*> timeVector;
+//    std::vector<std::vector<Point>*> allPathVector;
 
     // first mission is to get out of the room, doing it in a different thread
     Mission *m = new R2Exit(currentLocation, this->robotWrapper);
@@ -99,6 +100,8 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
     }
     std::cout << RESET_COLOR << std::endl;
 
+
+
     for (int i = 0; i < rooms.size() - 1; i++) {
         Room *currentRoom = this->roomsContainer->getRoomById(stoi(rooms.at(i)));
         Room *nextRoom = this->roomsContainer->getRoomById(stoi(rooms.at(i + 1)));
@@ -146,19 +149,28 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
                 }
             }
         }
-        // getting the path
-        auto points = r2r->getPath();
-        auto* currentVec = new std::vector<Point>();
-        allPathVector.push_back(currentVec);
-        // creating calculation time
-        for(auto p : points) {
-            for(auto v : allPathVector) {
-                v->push_back(p);
-            }
-        }
+        //add the path to the vector
+        std::vector<Point> points;
 
-        auto* timeCalculation = new CalculateTime(currentVec, this->robotWrapper->getGroundSpeed());
-        auto* inform = new Inform(timeCalculation, nextRoom);
+
+
+
+//        // getting the path
+//        auto points = r2r->getPath();
+//        auto* currentVec = new std::vector<Point>();
+//        allPathVector.push_back(currentVec);
+//        // creating calculation time
+//        for(auto p : points) {
+//            for(auto v : allPathVector) {
+//                v->push_back(p);
+//            }
+//        }
+
+//        // creating the time calculation
+//        auto* timeCalculation = new CalculateTime(currentVec, this->robotWrapper->getGroundSpeed());
+        auto* timeCalculation = new CalculateTime(this->chronoTime);
+//        auto* inform = new Inform(timeCalculation, nextRoom);
+        auto* inform = new Inform(this->chronoTime, nextRoom);
         // lock the mutex
         this->missionLock.lock();
         this->currentPlan.push(timeCalculation);
@@ -221,13 +233,14 @@ int RobotPlanner::executePlan() {
         tempQueue.pop();
         // do the mission
         try {
+
             mission->doMission();
         } catch (std::exception &e) {
             // printing the room id that failed
             std::cout << "error " << e.what();
         }
         // delete the mission
-        delete mission;
+//        delete mission;
     }
     this->isInPlan = false;
     this->robotLock.unlock();
@@ -349,6 +362,21 @@ std::vector<std::string> RobotPlanner::removeDuplicates(std::vector<std::string>
 
     return result;
 }
+
+ChronoTime *RobotPlanner::getChronoTime() const {
+    return chronoTime;
+}
+
+void RobotPlanner::setChronoTime(ChronoTime *chronoTime) {
+    RobotPlanner::chronoTime = chronoTime;
+}
+
+
+
+
+
+
+
 
 
 

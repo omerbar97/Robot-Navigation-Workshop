@@ -27,6 +27,7 @@ private:
     vector<Behavior*> tasks;
     Algorithm* algorithm;
     std::vector<std::pair<double, double>> path;
+    bool withExit;
 
 
 public:

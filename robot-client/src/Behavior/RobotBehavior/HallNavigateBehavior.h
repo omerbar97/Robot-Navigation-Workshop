@@ -12,7 +12,6 @@ using Point = std::pair<double, double>;
 class HallNavigateBehavior : public RobotBehavior {
 protected:
     vector<Point> path;
-    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
 
 public:
 

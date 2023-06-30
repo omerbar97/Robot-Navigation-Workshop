@@ -11,7 +11,6 @@
 #include <opencv2/imgproc.hpp>
 #include <fstream>
 #include "../PathPlanning/GridMap.h"
-#include "../PathPlanning/Algorithm/AStarAlgorithm.h"
 #include "GlobalsDefines.h"
 
 class MapGenerator {

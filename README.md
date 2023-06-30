@@ -56,3 +56,10 @@ Make sure to install all the dependances to be able to run our program
 | Espeak | [https://espeak.sourceforge.net/]|
 | Json for C++ | [https://github.com/nlohmann/json]|
 | cmake | [https://cmake.org/download/]|
+<<<<<<< HEAD
+| websocketcpp | [[https://cmake.org/download/](https://github.com/zaphoyd/websocketpp/)]|
+=======
+| curl | [https://curl.se/libcurl/c/]|
+
+
+>>>>>>> origin/omer-branch-final

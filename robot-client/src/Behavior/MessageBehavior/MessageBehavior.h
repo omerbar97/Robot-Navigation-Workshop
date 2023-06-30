@@ -11,7 +11,7 @@
  * this interface is for sending a message to a specific person. (string)
  */
 class MessageBehavior : public Behavior {
-private:
+protected:
 
     /**
      * all the fields are for the message.
@@ -31,8 +31,8 @@ public:
         this->message = message;
         this->messageTo = messageTo;
     }
-    virtual ~MessageBehavior() = default;
-    int execute() = 0;
+    ~MessageBehavior() override = default;
+    int execute() override = 0;
 };
 
 #endif //ROBOT_NAVIGATION_WORKSHOP_MESSAGEBEHAVIOR_H

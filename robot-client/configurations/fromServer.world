@@ -46,7 +46,7 @@ pioneer2dx
 (		  
   # can refer to the robot by this name
   name "r0"
-  pose [ -14 -3 0 45.000 ] 
+  pose [ -14 -3 0 0 ] 
   
   size [0.4 0.4 0.4]
 

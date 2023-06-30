@@ -4,6 +4,8 @@
 
 #include "RobotWrapper.h"
 
+#include <utility>
+
 
 RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dProxy* positionProxy,
                            PlayerCc::RangerProxy* laserProxy, std::string ws) {
@@ -13,22 +15,13 @@ RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dPr
     this->robotTurnSpeed = 0.03;
     this->robotGroundSpeed = 0.1;
     this->isRobotOnline = true;
-    this->ws = ws;
+    this->ws = std::move(ws);
     this->port = robot->GetPort();
     this->ip = robot->GetHostname();
+    this->enableFastTravel = true;
+    this->startingRobotDegree = 0;
 }
 
-//RobotWrapper::RobotWrapper(std::string robotIp, int robotPort, int groundSpeed, int turnSpeed) {
-//    this->initRobot(robotIp, robotPort);
-//    this->robotGroundSpeed = groundSpeed;
-//    this->robotTurnSpeed = turnSpeed;
-//}
-
-//RobotWrapper::RobotWrapper(PlayerCc::PlayerClient& robot, PlayerCc::Position2dProxy& positionProxy, PlayerCc::RangerProxy& laserProxy) :
-//        robot(robot) , positionProxy(positionProxy) , laserProxy(laserProxy){
-//    this->robotTurnSpeed = 0.03;
-//    this->robotGroundSpeed = 0.04;
-//}
 
 
 RobotWrapper::~RobotWrapper() {
@@ -82,6 +75,8 @@ void RobotWrapper::initRobot() {
         this->robot = new PlayerCc::PlayerClient(this->ip, this->port);
         this->positionProxy = new PlayerCc::Position2dProxy(this->robot, 0);
         this->laserProxy = new PlayerCc::RangerProxy(this->robot, 1);
+        this->laserProxy->RequestConfigure();
+
 //        this->robot->SetDataMode(PLAYER_DATAMODE_PULL);
 //        this->robot->SetReplaceRule(true, PLAYER_MSGTYPE_DATA, -1);
         this->isRobotOnline = true;
@@ -204,12 +199,35 @@ std::vector<std::pair<double, double>>  RobotWrapper::getRobotCurrentPath() {
 
 RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
     this->port = port;
-    this->ip = ip;
-    this->ws = ws;
+    this->ip = std::move(ip);
+    this->ws = std::move(ws);
     this->robotTurnSpeed = 0.03;
     this->robotGroundSpeed = 0.1;
     this->isRobotOnline = false;
     this->robot = nullptr;
     this->positionProxy = nullptr;
     this->laserProxy = nullptr;
+    this->enableFastTravel = true;
+    this->startingRobotDegree = 0;
+}
+
+double RobotWrapper::getYaw() {
+    this->update();
+    return this->positionProxy->GetYaw();
+}
+
+void RobotWrapper::setFastTravel(bool flag) {
+    this->enableFastTravel = flag;
+}
+
+bool RobotWrapper::isFastTravelEnable() {
+    return this->enableFastTravel;
+}
+
+void RobotWrapper::setStartingDegree(int degree) {
+    this->startingRobotDegree = degree;
+}
+
+void RobotWrapper::getStartingDegree() {
+    return; this->startingRobotDegree;
 }

@@ -36,16 +36,16 @@ void RobotCLI::printIntro() {
 void RobotCLI::printHelp() {
     std::cout << "Available Commands:" << std::endl;
     std::cout << "-------------------" << std::endl;
-    std::cout << "start                                        : Start the robot. (Only if stage is running)" << std::endl;
+    std::cout << "start                                             : Start the robot. (Only if stage is running)" << std::endl;
     std::cout << "navigate <current room ID> <roomID> ... <roomID>  : Navigate the robot to the specified rooms.";
     std::cout << std::endl;
-    std::cout << "help                                         : Display the available commands and their usage.";
+    std::cout << "help                                              : Display the available commands and their usage.";
     std::cout << std::endl;
-    std::cout << "info                                         : Display the robot information variables" << std::endl;
-    std::cout << "set ground                                   : setting the robot ground speed (default 0.1)" << std::endl;
-    std::cout << "set rotation                                 : setting the robot rotation speed (default 0.03)" << std::endl;
-    std::cout << "set opt                                      : setting the robot optimized calculate path (default True)" << std::endl;
-    std::cout << "exit                                         : Exit the CLI.";
+    std::cout << "info                                              : Display the robot information variables" << std::endl;
+    std::cout << "set ground                                        : setting the robot ground speed (default 0.1)" << std::endl;
+    std::cout << "set rotation                                      : setting the robot rotation speed (default 0.03)" << std::endl;
+    std::cout << "set opt                                           : setting the robot optimized calculate path (default True)" << std::endl;
+    std::cout << "exit                                              : Exit the CLI.";
     std::cout << std::endl << std::endl;
 }
 
@@ -160,13 +160,13 @@ void RobotCLI::printShowRobotInfo() {
     cout << CYN << "The robot starting yaw is the robot degree when first initialized based on the given map\n"
                    "the map is an x,y coordinate system where the 90 degree is at the y axios (front)\n"
                    "and the 0 degree is on the x axios (right, if looking at the front)" << RESET_COLOR << "\n";
-    cout << BLU << "                 Y axios 90 degree                \n"
+    cout << BLU << "                 Y axis 90 degree                 \n"
                    "                        ^                         \n"
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n"
-                   "            -------------------------> X axios 0 degree\n"
+                   "            -------------------------> X axis 0 degree\n"
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n"

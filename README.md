@@ -47,7 +47,7 @@ make                                        // compiling the program
 **Do the example to avoid changes to do in the backend server.**
 
 ### Alternative (simple version)
-if you wish to install this program without the unnecessary depandances you will need to install only 4 thing:
+If you wish to run this program without the unnecessary depandances of the server side you will need to install only those things:
 <ul>
   <li>Player + Stage</li>
   <li>cmake</li>
@@ -55,6 +55,8 @@ if you wish to install this program without the unnecessary depandances you will
   <li>Espeak (for text to speach)</li>
   <li>OpenCv (for img handle)</li>
 </ul>
+
+Afterward you should be able to run the CLI version only in the robot-client-simple folder.
 
 Inside the project folder go to robot-client-simple and do:
 ```

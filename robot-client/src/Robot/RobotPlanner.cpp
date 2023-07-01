@@ -175,18 +175,41 @@ int RobotPlanner::executePlan() {
         // delete the mission from the queue
         tempQueue.pop();
         // do the mission
+        int err;
         try {
-            mission->doMission();
+            err = mission->doMission();
         } catch (std::exception &e) {
             // printing the room id that failed
             std::cout << "while doing a mission failed in room_id: " << e.what();
+            finishGracefully(tempQueue);
+            this->isInPlan = false;
+            delete mission;
+            this->robotLock.unlock();
+            return -1;
         }
         // delete the mission
+        if (err == -2) {
+            std::cerr << RED << "mission failed: robot couldn't exit the room it is in." << std::endl;
+            std::cerr << "maybe the current room you've entered is not the room it's currently in." << RESET_COLOR <<std::endl;
+            finishGracefully(tempQueue);
+            this->isInPlan = false;
+            delete mission;
+            this->robotLock.unlock();
+            return -1;
+        }
         delete mission;
     }
     this->isInPlan = false;
     this->robotLock.unlock();
     return 0;
+}
+
+void RobotPlanner::finishGracefully(queue<Mission *>& queue) {
+    while(!queue.empty()) {
+        Mission *mission = queue.front();
+        queue.pop();
+        delete mission;
+    }
 }
 
 void RobotPlanner::initRobot() {

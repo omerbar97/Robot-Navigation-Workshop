@@ -49,6 +49,7 @@ private:
     void planNavigationMission(vector<string>& roomsIDs);
     std::vector<std::string> salesManProblem(const vector<string>& roomsIDs, Point currentLocation);
     std::vector<std::string> removeDuplicates(std::vector<std::string>& vec);
+    void finishGracefully(queue<Mission *>& queue);
     ChronoTime* chronoTime;
 public:
 

@@ -42,8 +42,9 @@ mkdir build                                 // creating a new folder
 cd build                                    
 cmake ../                                   // creating the makefile
 make                                        // compiling the program
-./Server 'ip' 'port'
+./Server 'ip' 'port'                        // example ./Server localhost 9000
 ```
+**Do the example to avoid changes to do in the backend server.**
 
 ### Alternative (simple version)
 if you wish to install this program without the unnecessary depandances you will need to install only 4 thing:

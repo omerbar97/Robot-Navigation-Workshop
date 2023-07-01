@@ -37,5 +37,4 @@ robot-client/cmake-build-debug
 robot-web/backend/node_modules
 robot-web/frontend/node_modules
 robot-web/desktop-app/node_modules
-robot
 

@@ -9,27 +9,10 @@
 #include <string>
 #include <filesystem>
 #include <iostream>
-#include "src/Client/WebSocketClient.h"
 
 
 using namespace PlayerCc;
 
-/**
- * different thread to start the WebSocketClient that is connected to the react live data.
- * @param planner - RobotPlanner
- * @param ws - string
- */
-void startWs(RobotPlanner *planner, std::string ws) {
-    auto *client = new WebSocketClient(planner, ws);
-
-    // setting another thread for the position sending
-    std::thread wsThread(&WebSocketClient::sendRobotPosition, client);
-
-    // running the thread to handle the client requests
-
-    client->run();
-    wsThread.join();
-}
 
 // signal keyboard ctrl+c handler
 void signalHandler(int signum) {
@@ -42,19 +25,6 @@ std::string getAbsolutePath(const std::string &relativePath) {
     std::filesystem::path currentPath = std::filesystem::current_path();
     std::filesystem::path absolutePath = currentPath / relativePath;
     return absolutePath.string();
-}
-
-RobotPlanner *createRobotPlanner(std::string ip, int port, std::string ws) {
-    PlayerClient *client = new PlayerClient(std::move(ip), port);
-    Position2dProxy *position = new Position2dProxy(client, 0);
-    RangerProxy *laser = new RangerProxy(client, 1);
-    RobotWrapper *wrapper = new RobotWrapper(client, position, laser, ws);
-    laser->RequestConfigure();
-    std::string mapGeneratorPath = getAbsolutePath("../maps/fromServer.png");
-    auto *map = new MapGenerator("../maps/fromServer.png");
-    std::string pathToRoomsConfig = "../configurations/room_coordinates.txt";
-    auto *robotPlanner = new RobotPlanner(pathToRoomsConfig, wrapper, map);
-    return robotPlanner;
 }
 
 void launch_robotCLI() {
@@ -94,26 +64,10 @@ int main(int argc, char *argv[]) {
         signal(SIGINT, signalHandler);
         signal(SIGTERM, signalHandler);
         start_program();
-        return 0;
-    } else if (argc != 4) {
+    } else {
         // error
-        std::cout << "Error: invalid number of arguments" << std::endl;
+        std::cout << "Error: do not enter any arguments!" << std::endl;
         return 1;
     }
-
-    // running the robot client from the server
-    std::string ip = argv[1];
-    int port= atoi(argv[2]);
-    std::string ws = argv[3];
-    RobotPlanner *robotPlanner = createRobotPlanner(ip, port, ws);
-
-    // creating thread to send location
-    std::thread *thread;
-    thread = new std::thread(startWs, robotPlanner, ws);
-
-    // handle mission from the server
-
-    thread->join();
-    delete(thread);
     return 0;
 }

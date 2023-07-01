@@ -9,7 +9,7 @@ GridMapValidityChecker::GridMapValidityChecker(const ompl::base::SpaceInformatio
 }
 
 bool GridMapValidityChecker::isValid(const ompl::base::State *state) const {
-    return this->clearance(state, 14);
+    return this->clearance(state, 10);
 }
 
 double GridMapValidityChecker::clearance(const ompl::base::State *state, int radius) const {

@@ -41,7 +41,6 @@ int R2R::doMission() {
         // print some value
         std::cout << RED << "failed to calculate path from room id: " << this->currentRoom->getRoomId() << " to room id: "
                   << this->nextRoom->getRoomId() << COLOR_RESET << std::endl;
-
         throw std::exception();
     }
 

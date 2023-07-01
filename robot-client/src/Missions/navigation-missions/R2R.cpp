@@ -28,7 +28,11 @@ int R2R::doMission() {
     R2Exit *r2Exit = nullptr;
     if(this->withExit) {
         r2Exit = new R2Exit(this->currentRoom, this->robot);
-        t = new std::thread(&R2Exit::doMission, r2Exit);
+        try{
+            t = new std::thread(&R2Exit::doMission, r2Exit);
+        } catch (std::exception &e) {
+            this->succed = false;
+        }
     }
     try {
         route->createPath();
@@ -45,14 +49,18 @@ int R2R::doMission() {
         // deleting the first point (the current point)
         path.erase(path.begin());
     }
-    this->tasks.push_back(new HallNavigateBehavior(this->robot, path));
-    this->tasks.push_back(new EnterRoomBehavior(robot, this->nextRoom));
-    int k;
     if(t != nullptr) {
         t->join();
         delete(r2Exit);
         delete(t);
+        if(!this->succed) {
+            // aborting the mission
+            return -2; // error in exiting room
+        }
     }
+    this->tasks.push_back(new HallNavigateBehavior(this->robot, path));
+    this->tasks.push_back(new EnterRoomBehavior(robot, this->nextRoom));
+    int k;
     for (Behavior *task: tasks) {
         try {
             k = task->execute();

@@ -8,7 +8,7 @@
 void LinearNavigation::
 operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles, int depth) {
 //    std::cout << "depth: " << depth << "\n";
-    if(depth >= 7) {
+    if(depth >= 10) {
         // to many attempts
         // backing off a little bit
         robot->setSpeed(-robot->getGroundSpeed() / 2, 0);

@@ -273,7 +273,7 @@ bool WebSocketServer::startRobotControllerProcess(websocketpp::connection_hdl hd
         std::string roomConfig = jsonData["roomConfig"];
 
         // opening the file
-        std::ofstream file("../configures/room_coordinates.txt");
+        std::ofstream file("../configurations/room_coordinates.txt");
         if (!file.is_open()) {
             // error in opening the file
             // sending backToTheClient the error message

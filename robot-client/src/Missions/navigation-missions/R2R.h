@@ -30,6 +30,7 @@ private:
     Algorithm* algorithm;
     std::vector<std::pair<double, double>> path;
     bool withExit;
+    bool succed:
 
 
 public:

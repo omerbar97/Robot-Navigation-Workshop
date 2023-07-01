@@ -118,9 +118,6 @@ void RobotWrapper::setSpeed(double speed, double turnSpeed) {
     this->positionProxy->SetSpeed(speed, turnSpeed);
 }
 
-void RobotWrapper::setCurrentPath(std::vector<std::pair<double, double>>  path) {
-    this->robotCurrentPath = path;
-}
 
 RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
     this->port = port;

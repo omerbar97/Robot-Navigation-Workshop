@@ -4,7 +4,6 @@
 
 #include "RobotCLI.h"
 
-// signal keyboard handler
 
 RobotCLI::RobotCLI(RobotPlanner *robotPlanner) {
     this->robotPlanner = robotPlanner;
@@ -160,9 +159,6 @@ void RobotCLI::doStartCommand(string& input) {
     }
 }
 
-void RobotCLI::setStageThread(std::thread *stageThread) {
-    this->stageThread = stageThread;
-}
 
 void RobotCLI::printShowRobotInfo() {
     // printing the robot detail settings
@@ -257,10 +253,6 @@ void RobotCLI::setSettings(const string &settings) {
 
 }
 
-void RobotCLI::exitCLI() {
-    // deleting the CLI
-
-}
 
 RobotCLI::~RobotCLI() {
     // deleting the memory of the CLI

@@ -13,11 +13,6 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *res
 Helper::Helper() {
     this->base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 }
-
-Helper::~Helper() {
-
-}
-
 std::string Helper::getResponse(const std::string &url) {
     CURL *curl;
     CURLcode res;

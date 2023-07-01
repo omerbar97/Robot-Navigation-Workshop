@@ -26,21 +26,6 @@ RobotPlanner::~RobotPlanner() {
     delete (this->robotWrapper);
 }
 
-/**
- * plan the inform mission
- * @param roomsIDs - the order of the rooms to visit
- */
-void RobotPlanner::planInformMission(const vector<string> &roomsIDs) {
-    // currently, the function assumes that inform mission is only to move between rooms.
-
-    // if inside a room -
-    // if inside if the first room - then inform the person in the room
-    // if inside any other room - then navigate regularly, but first exit the room
-
-    // if in the hallway - navigate to the next room regularly
-
-
-}
 
 
 void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
@@ -145,9 +130,6 @@ void RobotPlanner::plan(const MissionType &mission, vector<std::string> &paramet
     switch (mission) {
         case MissionType::NAVIGATION:
             planNavigationMission(parameters);
-            break;
-        case MissionType::INFORM:
-            planInformMission(parameters);
             break;
         default:
             cout << "mission type not supported" << endl;

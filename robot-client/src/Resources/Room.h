@@ -58,7 +58,10 @@ public:
      */
     const int& getRoomId() const;
 
-
+    /**
+     * getter for the room name
+     * @return
+     */
     const std::string & getRoomName() const;
 };
 

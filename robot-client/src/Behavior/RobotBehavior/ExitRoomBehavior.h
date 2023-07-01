@@ -8,7 +8,9 @@
 #include "../behaviour-functors/LinearNavigation.h"
 #include "../../Resources/Room.h"
 
-
+/**
+ * this class responsible for navigating the robot out of the room.
+ */
 class ExitRoomBehavior : public RobotBehavior{
 
 protected:
@@ -28,7 +30,7 @@ public:
      * navigation logic to navigate the robot when exiting the room.
      *
      * @Assumptions
-     * 1. the robot is currently near the center point of the room
+     *  - the robot is currently near the center point of the room
      */
     int execute() override;
 };

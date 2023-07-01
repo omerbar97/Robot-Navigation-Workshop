@@ -12,12 +12,7 @@ RobotBehavior(robot, goalRoom->getCenterPoint()) {
 
 EnterRoomBehavior::~EnterRoomBehavior()= default;
 
-/**
- * navigation logic to navigate the robot inside the room
- *
- * Assumptions:
- * 1. the robot is currently near the entry point of the room
- */
+
 int EnterRoomBehavior::execute() {
 
     // create a straight line behaviour to move the robot into the room and additional data

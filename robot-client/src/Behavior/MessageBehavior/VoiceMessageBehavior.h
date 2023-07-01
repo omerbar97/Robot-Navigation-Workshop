@@ -16,8 +16,18 @@
 class VoiceMessageBehavior : public MessageBehavior{
 public:
 
+    /**
+     * constructor for the voice message behavior.
+     * @param message the message to send.
+     * @param messageTo the name of the person to send the message to.
+     */
     VoiceMessageBehavior(const std::string& message, std::string messageTo);
+    //destructor
     ~VoiceMessageBehavior() override;
+    /**
+     * this function is responsible for sending the message.
+     * @return 0 if the message was sent successfully.
+     */
     int execute() override;
 };
 

@@ -4,7 +4,6 @@
 
 #include "RobotWrapper.h"
 
-#include <utility>
 
 
 RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dProxy* positionProxy,
@@ -21,7 +20,6 @@ RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dPr
     this->enableFastTravel = true;
     this->startingRobotDegree = 0;
 }
-
 
 
 RobotWrapper::~RobotWrapper() {
@@ -124,10 +122,6 @@ void RobotWrapper::setCurrentPath(std::vector<std::pair<double, double>>  path) 
     this->robotCurrentPath = path;
 }
 
-std::vector<std::pair<double, double>>  RobotWrapper::getRobotCurrentPath() {
-    return this->robotCurrentPath;
-}
-
 RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
     this->port = port;
     this->ip = std::move(ip);
@@ -157,10 +151,6 @@ bool RobotWrapper::isFastTravelEnable() {
 
 void RobotWrapper::setStartingDegree(int degree) {
     this->startingRobotDegree = degree;
-}
-
-int RobotWrapper::getStartingDegree() {
-    return this->startingRobotDegree;
 }
 
 void RobotWrapper::setOnline(bool flag) {

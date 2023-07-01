@@ -24,7 +24,6 @@ MapGenerator::MapGenerator(std::string pngImage , int sailSize) {
 int MapGenerator::classifyCell(int row, int col) {
 
 
-// TODO: Define the function to classify the scopes in the map Classify the cell based on the binary matrix
     // Functionality:
     // - Check if the cell is a wall
     // - Check if the cell is a door
@@ -157,92 +156,9 @@ int MapGenerator::setImage() {
     cv::resize(image, image, newSize);
 }
 
-//void MapGenrator::binaryStrToBmp(std::string binaryString, std::string path) {
-//    // Calculate number of rows and columns based on the length of binary string
-//    int numCols = 0;
-//    int numRows = 1;
-//    for (char c : binaryString) {
-//        if (c == '\n') {
-//            ++numRows;
-//        } else {
-//            ++numCols;
-//        }
-//    }
-//
-//    // Create image matrix
-//    cv::Mat image2(numRows, numCols, CV_8UC1);
-//
-//    int row = 0;
-//    int col = 0;
-//
-//    // Loop through binary string and set pixel values in image
-//    for (char c : binaryString) {
-//        if (c == '\n') {
-//            ++row;
-//            col = 0;
-//            continue;
-//        }
-//
-//        uchar pixelValue = (c == '1') ? 255 : 0;
-//        image2.at<uchar>(row, col) = pixelValue;
-//        ++col;
-//    }
-//
-//    // Save image to BMP
-//    cv::imwrite(path, image2);
-//
-//    std::cout << "Image saved to" << path << " : " << std::endl;
-//}
+MapGenerator::~MapGenerator() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//// Load PNG image
-// Getter for room_map
-
-//// Set the desired sail size (1x1 pixels)
-//int sailSize = 1;
-//
-
-//
-//
-
-
-
-
-
-//void MapGenrator::binaryStrToBmp(std::string binaryString, std::string path) {
-//// Create image matrix
-//    cv::Mat image2(numRows, numCols, CV_8UC1);
-//
-//// Loop through binary string and set pixel values in image
-//    for (int row = 0; row < numRows; ++row) {
-//        for (int col = 0; col < numCols; ++col) {
-//            uchar pixelValue = (binaryString[row * numCols + col] == '1') ? 255 : 0;
-//            image2.at<uchar>(row, col) = pixelValue;
-//        }
-//    }
-//
-//// Save image to BMP
-//    cv::imwrite("image.bmp", image2);
-//
-//    std::cout << "Image saved to image.bmp" << std::endl;
-//
-//}
-
-
-
-
+}
 
 
 

@@ -11,9 +11,13 @@
 #include <websocketpp/config/asio_client.hpp>
 #include <nlohmann/json.hpp>
 #include <regex>
+#include <utility>
 
 
 typedef websocketpp::client<websocketpp::config::asio_client> client;
+/**
+ * class to communicate with live data and sending it to the react using sockets.
+ */
 class WebSocketClient {
 private:
     RobotWrapper* robot;
@@ -26,35 +30,17 @@ private:
     void on_open(websocketpp::connection_hdl hdl);
     void on_close(websocketpp::connection_hdl hdl);
     void on_message(websocketpp::connection_hdl hdl, client::message_ptr msg);
-    void on_fail(websocketpp::connection_hdl hdl);
-    void on_pong(websocketpp::connection_hdl hdl, std::string msg);
-    void on_interrupt(websocketpp::connection_hdl hdl);
+
 
 public:
+
     WebSocketClient(RobotPlanner* robot, std::string ws);
-
     ~WebSocketClient();
-
     void run();
-
     void sendRobotPosition();
-    void sendRobotPath();
-
     void close();
-
-    void update();
-
     bool isOnline();
 
-    void waitForThread();
-
-    void setRobot(RobotWrapper* robot);
-
-    void setWs(std::string ws);
-
-    RobotWrapper* getRobot();
-
-    std::string getWs();
 
 };
 

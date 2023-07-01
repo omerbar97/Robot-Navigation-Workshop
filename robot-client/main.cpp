@@ -13,16 +13,14 @@
 
 
 using namespace PlayerCc;
-std::thread *stageThread;
 
 void startWs(RobotPlanner *planner, std::string ws) {
-    WebSocketClient *client = new WebSocketClient(planner, ws);
+    auto *client = new WebSocketClient(planner, ws);
 
     // setting another thread for the position sending
     std::thread wsThread(&WebSocketClient::sendRobotPosition, client);
 
     // running the thread to handle the client requests
-
 
     client->run();
     wsThread.join();
@@ -30,14 +28,9 @@ void startWs(RobotPlanner *planner, std::string ws) {
 
 // signal keyboard ctrl+c handler
 void signalHandler(int signum) {
-//    std::cout << "Interrupt signal (" << signum << ") received." << std::endl;
-//    std::cout << "to close the program, enter: exit" << std::endl;
-    // cleanup and close up stuff here
-    // terminate program
-    if (stageThread != nullptr) {
-        pthread_kill(stageThread->native_handle(), SIGINT);
-    }
-    exit(signum);
+    std::cout << "Interrupt signal (" << signum << ") received." << std::endl;
+    std::cout << "closing program..." << std::endl;
+    exit(0);
 }
 
 std::string getAbsolutePath(const std::string &relativePath) {
@@ -65,7 +58,7 @@ RobotPlanner *createRobotPlanner(std::string ip, int port, std::string ws) {
     return robotPlanner;
 }
 
-void launch_robotCLI(std::thread *stageThread) {
+void launch_robotCLI() {
     std::string mapGeneratorPath = getAbsolutePath("../maps/fromServer.png");
     auto *map = new MapGenerator("../maps/fromServer.png");
     std::string path = "localhost";
@@ -74,13 +67,11 @@ void launch_robotCLI(std::thread *stageThread) {
     std::string pathToRoomsConfig = getAbsolutePath("../configurations/room_coordinates.txt");
     auto *robotPlanner = new RobotPlanner("../configurations/room_coordinates.txt", robotWrapper, map);
     auto *robotCLI = new RobotCLI(robotPlanner);
-    robotCLI->setStageThread(stageThread);
     robotCLI->run();
-    delete(robotCLI);
+    delete (robotCLI);
 }
 
 void start_program() {
-    stageThread = new std::thread(runStageScript);
     std::cout << "Launch robot's CLI? [Y/n]: ";
     std::string answer;
     std::cin >> answer;
@@ -90,14 +81,12 @@ void start_program() {
         // Clear the input buffer
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin.clear();
-        launch_robotCLI(stageThread);
+        launch_robotCLI();
     } else {
         std::cout << "Exiting robot's CLI launcher..." << std::endl;
     }
     std::cout << "waiting for stage to finish..." << std::endl;
-    stageThread->join();
 }
-
 
 
 int main(int argc, char *argv[]) {
@@ -115,16 +104,17 @@ int main(int argc, char *argv[]) {
 
     // running the robot client from the server
     std::string ip = argv[1];
-    int port = atoi(argv[2]);
+    int port= atoi(argv[2]);
     std::string ws = argv[3];
     RobotPlanner *robotPlanner = createRobotPlanner(ip, port, ws);
 
     // creating thread to send location
-    std::thread* thread;
+    std::thread *thread;
     thread = new std::thread(startWs, robotPlanner, ws);
 
     // handle mission from the server
 
     thread->join();
+    delete(thread);
     return 0;
 }

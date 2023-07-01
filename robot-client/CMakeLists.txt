@@ -49,8 +49,6 @@ add_executable(Robot-Navigation
         src/Behavior/RobotBehavior/RobotBehavior.cpp
         src/Behavior/RobotBehavior/HallNavigateBehavior.cpp
         src/Behavior/RobotBehavior/HallNavigateBehavior.h
-        src/Behavior/RobotBehavior/RotationBehavior.h
-        src/Behavior/RobotBehavior/RotationBehavior.cpp
         src/Behavior/Behavior.h
         src/Behavior/MessageBehavior/MessageBehavior.h
         src/Behavior/MessageBehavior/VoiceMessageBehavior.cpp

@@ -14,6 +14,11 @@
 
 using namespace PlayerCc;
 
+/**
+ * different thread to start the WebSocketClient that is connected to the react live data.
+ * @param planner - RobotPlanner
+ * @param ws - string
+ */
 void startWs(RobotPlanner *planner, std::string ws) {
     auto *client = new WebSocketClient(planner, ws);
 
@@ -40,7 +45,7 @@ std::string getAbsolutePath(const std::string &relativePath) {
 }
 
 RobotPlanner *createRobotPlanner(std::string ip, int port, std::string ws) {
-    PlayerClient *client = new PlayerClient(ip, port);
+    PlayerClient *client = new PlayerClient(std::move(ip), port);
     Position2dProxy *position = new Position2dProxy(client, 0);
     RangerProxy *laser = new RangerProxy(client, 1);
     RobotWrapper *wrapper = new RobotWrapper(client, position, laser, ws);

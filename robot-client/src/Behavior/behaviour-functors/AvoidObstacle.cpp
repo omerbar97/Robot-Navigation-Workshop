@@ -8,7 +8,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
                                std::pair<int, int> angle, int depth) {
 
     PlayerCc::RangerProxy &ranger = *robot->getLaser();
-    int obstacleAngle;
     LinearNavigation linear;
     bool flag = false;
     int firstAngle = -1, secondAngle = -1;

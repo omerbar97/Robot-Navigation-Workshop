@@ -7,7 +7,6 @@
 
 void LinearNavigation::
 operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles, int depth) {
-//    std::cout << "depth: " << depth << "\n";
     if(depth >= 10) {
         // to many attempts
         // backing off a little bit
@@ -17,9 +16,6 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
         throw std::exception();
     }
 
-    PlayerCc::Position2dProxy& pos = *robot->getPos();
-    PlayerCc::RangerProxy& laser = *robot->getLaser();
-    robot->update();
     auto currentPosition = robot->getCurrentPosition();
     double distance = sqrt(pow(dest.first - currentPosition.first, 2) + pow(dest.second - currentPosition.second, 2));
     double groundSpeed = 0.05;
@@ -29,14 +25,10 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
     AvoidObstacle avoidObstacle;
     while(distance > minDistance) {
 
-
         // sense
         robot->update();
-
         // think
         avoidObstacle(robot, dest, groundSpeed, 0.5, angles, depth);
-
-
         // act
         robot->setSpeed(fSpeed, turnSpeed);
 
@@ -51,6 +43,6 @@ operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDist
         usleep(10);
     }
 
-//    std::cout << "Reached to point: " << dest.first << " , " << dest.second << " \n";
-    pos.SetSpeed(0, 0);
+    robot->setSpeed(0, 0);
+
 }

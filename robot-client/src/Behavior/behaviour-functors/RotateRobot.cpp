@@ -6,21 +6,20 @@
 
 void RotateRobot::operator()(RobotWrapper *robot, const Point& goalPoint) {
     // getting robot position
-    PlayerCc::Position2dProxy &pos = *robot->getPos();
 
     // getting robot current information
     robot->update();
 
     // turning the robot to the goal point
-    double desiredRelativeAngle = atan2(goalPoint.second - pos.GetYPos(), goalPoint.first - pos.GetXPos());
+    Point currentPos = robot->getCurrentPosition();
+    double desiredRelativeAngle = atan2(goalPoint.second - currentPos.second, goalPoint.first - currentPos.first);
     double currentOrientation;
     double rotationSpeed = robot->getTurnSpeed();
     double angleDiff;
 
     while (true) {
         // getting robot current information
-        robot->update();
-        currentOrientation = pos.GetYaw();
+        currentOrientation = robot->getYaw();
         angleDiff = desiredRelativeAngle - currentOrientation;
 
         // Handle angle wrapping
@@ -35,13 +34,12 @@ void RotateRobot::operator()(RobotWrapper *robot, const Point& goalPoint) {
 
         // Determine rotation direction based on the sign of angleDiff
         if (angleDiff > 0) {
-            pos.SetSpeed(0, rotationSpeed);  // Rotate right
+            robot->setSpeed(0, rotationSpeed); // Rotate right
         } else if(angleDiff <= 0){
-            pos.SetSpeed(0, -rotationSpeed);  // Rotate left
+            robot->setSpeed(0, -rotationSpeed); // Rotate left
         }
 
         usleep(100);
     }
-
-    pos.SetSpeed(0, 0);
+    robot->setSpeed(0, 0);
 }

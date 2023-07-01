@@ -320,7 +320,7 @@ void RobotPlanner::robotTimeout() {
     // sending data to the robot every 5 sec to avoid timeout
     while (this->isRobotOnline()) {
         std::this_thread::sleep_for(std::chrono::seconds(5));
-        this->robotWrapper->update();
+        this->robotWrapper->getClient()->Connected();
     }
     // deleting the robotWrapper
     delete this->robotWrapper;

@@ -11,8 +11,8 @@ RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dPr
     this->robot = robot;
     this->positionProxy = positionProxy;
     this->laserProxy = laserProxy;
-    this->robotTurnSpeed = 0.03;
-    this->robotGroundSpeed = 0.1;
+    this->robotTurnSpeed = 0.03; // default
+    this->robotGroundSpeed = 0.1; // default
     this->isRobotOnline = true;
     this->ws = std::move(ws);
     this->port = robot->GetPort();
@@ -99,7 +99,7 @@ void RobotWrapper::update() {
     // lock the robot mutex
     std::lock_guard<std::mutex> lock(this->robotMutex);
     try {
-        while (this->robot->Peek()) {
+        while (this->robot->Peek(0)) {
             usleep(50);
             this->robot->Read();
         }

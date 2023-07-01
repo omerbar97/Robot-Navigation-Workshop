@@ -47,7 +47,7 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
 
     // first mission is to get out of the room, doing it in a different thread
     Mission *m = new R2Exit(currentLocation, this->robotWrapper);
-    std::thread* exitRoomThread = new std::thread([m, ptr = this]() -> void {
+    auto* exitRoomThread = new std::thread([m, ptr = this]() -> void {
         std::lock_guard<std::mutex> lock(ptr->robotLock);
         int counter = 0;
         while(counter < 3) {
@@ -310,13 +310,13 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
             Point dest = r->getCenterPoint();
             double distance = sqrt(
                     pow((currentLocation.first - dest.first), 2) + pow((currentLocation.second - dest.second), 2));
-            arrangedRoom tempRoom;
+            arrangedRoom tempRoom{};
             tempRoom.distance = distance;
             tempRoom.room = r;
             distances.push_back(tempRoom);
         }
 
-        if(distances.size() == 0) {
+        if(distances.empty()) {
             break;
         }
 

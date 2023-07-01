@@ -48,7 +48,7 @@ private:
     void planInformMission(const vector<string>& roomsIDs);
     void planNavigationMission(vector<string>& roomsIDs);
     std::vector<std::string> salesManProblem(const vector<string>& roomsIDs, Point currentLocation);
-    std::vector<std::string> removeDuplicates(std::vector<std::string>& vec);
+    static std::vector<std::string> removeDuplicates(std::vector<std::string>& vec);
 //    std::chrono::system_clock::time_point meetingTime;
 //    //instance for the current time it the world.
 //    std::chrono::system_clock::time_point  currentTime;

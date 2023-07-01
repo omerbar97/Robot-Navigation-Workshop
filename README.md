@@ -62,7 +62,7 @@ mkdir build                                 // creating a new folder
 cd build                                    
 cmake ../                                   // creating the makefile
 make                                        // compiling the program
-./Robot-Navigation                         // starting the robot CLI
+./Robot-Navigation                          // starting the robot CLI
 ```
 
 ## Dependances
@@ -78,4 +78,4 @@ Make sure to install all the dependances to be able to run our program
 | cmake | [https://cmake.org/download/]|
 | websocketcpp | [[https://cmake.org/download/](https://github.com/zaphoyd/websocketpp/)]|
 | curl | [https://curl.se/libcurl/c/]|
-| opencv | [[https://github.com/opencv/opencv/tree/4.7.0]|
+| opencv | [https://github.com/opencv/opencv/tree/4.7.0]|

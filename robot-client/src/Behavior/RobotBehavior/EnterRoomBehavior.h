@@ -7,7 +7,6 @@
 #include "RobotBehavior.h"
 #include "../behaviour-functors/LinearNavigation.h"
 #include "../../Resources/Room.h"
-#include "RotationBehavior.h"
 #include "../behaviour-functors/RotateRobot.h"
 
 

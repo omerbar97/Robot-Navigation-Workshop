@@ -7,7 +7,6 @@
 
 
 #include "../../Robot/RobotWrapper.h"
-#include "../RobotBehavior/RotationBehavior.h"
 #include <boost/bind/bind.hpp>
 #include "AvoidObstacle.h"
 

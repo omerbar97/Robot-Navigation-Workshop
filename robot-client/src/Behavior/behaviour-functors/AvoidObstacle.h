@@ -5,7 +5,6 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_AVOIDOBSTACLE_H
 #define ROBOT_NAVIGATION_WORKSHOP_AVOIDOBSTACLE_H
 #include "../../Robot/RobotWrapper.h"
-#include "../RobotBehavior/RotationBehavior.h"
 #include "LinearNavigation.h"
 #include "RotateRobot.h"
 

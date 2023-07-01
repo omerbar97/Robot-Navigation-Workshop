@@ -77,11 +77,7 @@ add_executable(Robot-Navigation
         src/Missions/navigation-missions/R2Exit.h
         src/Missions/navigation-missions/R2Exit.cpp
         src/Missions/Inform-Missions/Inform.h
-        src/Missions/Inform-Missions/Inform.cpp
-        src/Robot/fast_calc_path/RobotPathProducer.h
-        src/Robot/fast_calc_path/RobotPathProducer.cpp
-        src/Robot/fast_calc_path/PathCreator.cpp
-        src/Robot/fast_calc_path/PathCreator.h)
+        src/Missions/Inform-Missions/Inform.cpp)
 
 add_executable(Server
         server/main.cpp

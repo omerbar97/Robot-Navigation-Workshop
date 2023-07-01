@@ -5,7 +5,6 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #include "RobotBehavior.h"
-#include "RotationBehavior.h"
 #include "../behaviour-functors/LinearNavigation.h"
 using namespace std;
 using Point = std::pair<double, double>;

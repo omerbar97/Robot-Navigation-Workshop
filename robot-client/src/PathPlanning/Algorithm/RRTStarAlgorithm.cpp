@@ -52,7 +52,7 @@ void RRTStarAlgorithm::calculate() {
 
     problemDefinition->setStartAndGoalStates(start, goal);
 
-    ompl::geometric::RRTstar* planner = new ompl::geometric::RRTstar(spaceInformation);
+    auto* planner = new ompl::geometric::RRTstar(spaceInformation);
 
     planner->setProblemDefinition(problemDefinition);
     ompl::base::PlannerTerminationCondition ptc = ompl::base::timedPlannerTerminationCondition(10.0);

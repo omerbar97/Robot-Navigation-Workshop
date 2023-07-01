@@ -17,9 +17,8 @@ using Point = std::pair<double, double>;
 using MissionPathList = std::vector<std::vector<Point>>;
 using MissionData = std::pair<int, int>;
 using MissionDataList = std::vector<MissionData>;
+
 class RobotPathProducer {
-
-
 private:
     MissionPathList *path;
     MissionDataList *data;
@@ -30,12 +29,8 @@ public:
     RobotPathProducer(MissionDataList *data, RoomsContainer* roomsContainer, MapGenerator *map);
 
     ~RobotPathProducer() = default;
-    MissionPathList getPath();
-    void setPath(MissionPathList path);
 
     MissionPathList* createPaths();
-
-
 
 };
 

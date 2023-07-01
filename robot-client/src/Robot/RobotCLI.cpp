@@ -36,16 +36,16 @@ void RobotCLI::printIntro() {
 void RobotCLI::printHelp() {
     std::cout << "Available Commands:" << std::endl;
     std::cout << "-------------------" << std::endl;
-    std::cout << "start                                        : Start the robot. (Only if stage is running)" << std::endl;
+    std::cout << "start                                             : Start the robot. (Only if stage is running)" << std::endl;
     std::cout << "navigate <current room ID> <roomID> ... <roomID>  : Navigate the robot to the specified rooms.";
     std::cout << std::endl;
-    std::cout << "help                                         : Display the available commands and their usage.";
+    std::cout << "help                                              : Display the available commands and their usage.";
     std::cout << std::endl;
-    std::cout << "info                                         : Display the robot information variables" << std::endl;
-    std::cout << "set ground                                   : setting the robot ground speed (default 0.1)" << std::endl;
-    std::cout << "set rotation                                 : setting the robot rotation speed (default 0.03)" << std::endl;
-    std::cout << "set opt                                      : setting the robot optimized calculate path (default True)" << std::endl;
-    std::cout << "exit                                         : Exit the CLI.";
+    std::cout << "info                                              : Display the robot information variables" << std::endl;
+    std::cout << "set ground                                        : setting the robot ground speed (default 0.1)" << std::endl;
+    std::cout << "set rotation                                      : setting the robot rotation speed (default 0.03)" << std::endl;
+    std::cout << "set opt                                           : setting the robot optimized calculate path (default True)" << std::endl;
+    std::cout << "exit                                              : Exit the CLI.";
     std::cout << std::endl << std::endl;
 }
 
@@ -83,70 +83,79 @@ void RobotCLI::run() {
         } else if (input == "help" || input == "?") {
             printHelp();
         } else if (input == "start") {
-            cout<<"How long until the meeting? (in seconds)"<<endl;
-            cout << ">> ";
-            getline(cin, input);
-
-            while (std::stoi(input) == 0) {
-                cout<<"Please enter a valid number"<<endl;
-                cout << ">> ";
-                getline(cin, input);
-            }
-            int time = std::stoi(input);
-
-            // Get the current system time
-            std::chrono::system_clock::time_point now = this->robotPlanner->getChronoTime()->getCurrentTime();
-
-            // Add the time until the meeting and set meeting time
-            now += std::chrono::seconds(time);
-            this->robotPlanner->getChronoTime()->setMeetingTime(now);
-
-            // init robot planner
-            if(this->robotPlanner->isRobotOnline()) {
-                // robot already online
-                cout << CYNB << "robot already online" << RESET_COLOR << endl;
-                cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
-            } else {
-                this->robotPlanner->initRobot();
-                cout << RED << "trying to connect to the robot interface... " ;
-                std::cout << '-' << std::flush;
-                usleep(300000);
-                std::cout << "\b\\" << std::flush;
-                usleep(300000);
-                std::cout << "\b|" << std::flush;
-                usleep(300000);
-                std::cout << "\b/" << std::flush;
-                usleep(300000);
-                std::cout << "\b-" << std::flush;
-                std::cout << RESET_COLOR << std::endl;
-                if(this->robotPlanner->isRobotOnline()) {
-                    cout << GRNB << "CONNECTED!" << RESET_COLOR << endl;
-                    this->robotPlanner->getRobotWrapper()->setRobotSpeed(this->robotInfo.groundSpeed);
-                    this->robotPlanner->getRobotWrapper()->setRobotTurnSpeed(this->robotInfo.rotationSpeed);
-                    this->robotPlanner->getRobotWrapper()->setFastTravel(this->robotInfo.optimizedPath);
-                    this->robotPlanner->getRobotWrapper()->setStartingDegree(this->robotInfo.robotCurrentYawInDegree);
-                    cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
-                }
-                else {
-                    cout << REDB << "FAILED! check if the stage is running and that you are trying to connect to the correct robot ip + port" << RESET_COLOR << endl;
-                }
-            }
-
+            doStartCommand(input);
         } else if(input == "info") {
             printShowRobotInfo();
         }  else if (input == "set yaw" || input == "set ground" || input == "set rotation" || input == "set opt") {
             setSettings(input);
         }
         else {
-            MissionType commandName;
-            vector<string> args;
-            if (parseCommand(input, commandName, args)) {
-                cout << "create plan..." << endl;
-                this->robotPlanner->plan(commandName, args);
-                cout << "execute plan..." << endl;
-                this->robotPlanner->executePlan();
-                cout << "done!" << endl;
+            try {
+                MissionType commandName;
+                vector<string> args;
+                if (parseCommand(input, commandName, args)) {
+                    cout << "create plan..." << endl;
+                    this->robotPlanner->plan(commandName, args);
+                    cout << "execute plan..." << endl;
+                    this->robotPlanner->executePlan();
+                    cout << "done!" << endl;
+                }
+            } catch (const std::exception& e) {
+                std::cerr << "Error in executing plan. The error that have occurred was: " << e.what() << '\n';
+                std::cout << "Please try again." << std::endl;
             }
+
+        }
+    }
+}
+
+void RobotCLI::doStartCommand(string& input) {
+    cout<<"How long until the meeting? (in seconds)"<<endl;
+    cout << ">> ";
+    getline(cin, input);
+
+    while (std::stoi(input) == 0) {
+        cout<<"Please enter a valid number"<<endl;
+        cout << ">> ";
+        getline(cin, input);
+    }
+    int time = std::stoi(input);
+
+    // Get the current system time
+    std::chrono::system_clock::time_point now = this->robotPlanner->getChronoTime()->getCurrentTime();
+
+    // Add the time until the meeting and set meeting time
+    now += std::chrono::seconds(time);
+    this->robotPlanner->getChronoTime()->setMeetingTime(now);
+
+    // init robot planner
+    if(this->robotPlanner->isRobotOnline()) {
+        // robot already online
+        cout << CYNB << "robot already online" << RESET_COLOR << endl;
+        cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
+    } else {
+        this->robotPlanner->initRobot();
+        cout << RED << "trying to connect to the robot interface... " ;
+        std::cout << '-' << std::flush;
+        usleep(300000);
+        std::cout << "\b\\" << std::flush;
+        usleep(300000);
+        std::cout << "\b|" << std::flush;
+        usleep(300000);
+        std::cout << "\b/" << std::flush;
+        usleep(300000);
+        std::cout << "\b-" << std::flush;
+        std::cout << RESET_COLOR << std::endl;
+        if(this->robotPlanner->isRobotOnline()) {
+            cout << GRNB << "CONNECTED!" << RESET_COLOR << endl;
+            this->robotPlanner->getRobotWrapper()->setRobotSpeed(this->robotInfo.groundSpeed);
+            this->robotPlanner->getRobotWrapper()->setRobotTurnSpeed(this->robotInfo.rotationSpeed);
+            this->robotPlanner->getRobotWrapper()->setFastTravel(this->robotInfo.optimizedPath);
+            this->robotPlanner->getRobotWrapper()->setStartingDegree(this->robotInfo.robotCurrentYawInDegree);
+            cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
+        }
+        else {
+            cout << REDB << "FAILED! check if the stage is running and that you are trying to connect to the correct robot ip + port" << RESET_COLOR << endl;
         }
     }
 }
@@ -160,13 +169,13 @@ void RobotCLI::printShowRobotInfo() {
     cout << CYN << "The robot starting yaw is the robot degree when first initialized based on the given map\n"
                    "the map is an x,y coordinate system where the 90 degree is at the y axios (front)\n"
                    "and the 0 degree is on the x axios (right, if looking at the front)" << RESET_COLOR << "\n";
-    cout << BLU << "                 Y axios 90 degree                \n"
+    cout << BLU << "                 Y axis 90 degree                 \n"
                    "                        ^                         \n"
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n"
-                   "            -------------------------> X axios 0 degree\n"
+                   "            -------------------------> X axis 0 degree\n"
                    "                        |                         \n"
                    "                        |                         \n"
                    "                        |                         \n"

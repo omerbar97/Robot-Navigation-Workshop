@@ -20,6 +20,8 @@ struct robotInformation {
     double groundSpeed;
     double rotationSpeed;
     double robotCurrentYawInDegree;
+    std::string ip;
+    int port;
     bool optimizedPath;
 
 };

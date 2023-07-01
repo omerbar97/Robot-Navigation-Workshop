@@ -79,7 +79,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             else {
                 // flag that indicates if the robot need to try the right side
                 flag = true;
-//                std::cout << "trying left side\n";
             }
         } else {
             // rotating the robot 30 degree
@@ -91,8 +90,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
             rotate(robot, dest);
             return;
-
-
         }
     } if((f2 > f1 && f2 != 0) || flag) {
         // scanning left

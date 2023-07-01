@@ -319,6 +319,13 @@ void RobotPlanner::robotTimeout() {
     delete this->robotWrapper;
 }
 
+void RobotPlanner::setRobotWrapper(RobotWrapper *robot) {
+    if(this->robotWrapper != nullptr) {
+        delete(this->robotWrapper);
+    }
+    this->robotWrapper = robot;
+}
+
 
 
 

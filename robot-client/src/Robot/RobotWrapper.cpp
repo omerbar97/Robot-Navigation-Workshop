@@ -77,7 +77,6 @@ void RobotWrapper::initRobot() {
         this->positionProxy = new PlayerCc::Position2dProxy(this->robot, 0);
         this->laserProxy = new PlayerCc::RangerProxy(this->robot, 1);
         this->laserProxy->RequestConfigure();
-
         this->isRobotOnline = true;
     } catch (PlayerCc::PlayerError &e) {
         std::cerr << e << std::endl;
@@ -107,7 +106,6 @@ void RobotWrapper::update() {
             this->robot->Read();
         }
     } catch (PlayerCc::PlayerError &e) {
-//        std::cerr << e << std::endl;
     }
 }
 

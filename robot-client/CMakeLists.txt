@@ -4,12 +4,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-dev")
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-
-
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/include/player-3.0)
 
 # Find playerc++ library and headers
 find_package(playerc++ REQUIRED)
-include_directories(${PLAYERCXX_INCLUDE_DIRS})
+include_directories(${PLAYERCXX_INCLUDE_DIRS} /usr/local/include/player-3.0)
 
 # Find OpenCV library
 set(OpenCV_DIR /usr/local/lib)
@@ -94,8 +93,9 @@ add_executable(Server
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp} ${jsoncpp_INCLUDE_DIRS})
-target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY} OpenSSL::SSL OpenSSL::Crypto)
+include_directories(${PLAYERCXX_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${jsoncpp_INCLUDE_DIRS})
+target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp_INCLUDE_DIRS})
+target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY} OpenSSL::SSL OpenSSL::Crypto ${PLAYERCXX_LIBRARIES})
 target_link_libraries(Server PRIVATE curl ssl crypto)
+
 

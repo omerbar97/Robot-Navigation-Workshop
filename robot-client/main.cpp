@@ -39,12 +39,6 @@ std::string getAbsolutePath(const std::string &relativePath) {
     return absolutePath.string();
 }
 
-bool runStageScript() {
-    const std::string command = "gnome-terminal -- bash -c '../../general-use/run_stage.sh; exec bash'";
-    int result = std::system(command.c_str());
-    return result == 0;
-}
-
 RobotPlanner *createRobotPlanner(std::string ip, int port, std::string ws) {
     PlayerClient *client = new PlayerClient(ip, port);
     Position2dProxy *position = new Position2dProxy(client, 0);

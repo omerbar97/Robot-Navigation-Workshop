@@ -22,8 +22,6 @@ R2R::R2R(Room *roomSource, Room *roomDest, RobotWrapper *robot, Algorithm *algor
     route = new Route(algorithm, mapGenerator);
     route->setStartingPoint(roomSource->getEntryPoint());
     route->setGoalPoint(roomDest->getEntryPoint());
-
-
 }
 
 std::vector<std::pair<double, double>> R2R::getPath() {
@@ -31,6 +29,12 @@ std::vector<std::pair<double, double>> R2R::getPath() {
 }
 
 int R2R::doMission() {
+    std::thread* t = nullptr;
+    if(this->withExit) {
+        R2Exit r2e = R2Exit(this->currentRoom, this->robot);
+        t = new std::thread(&R2Exit::doMission, &r2e);
+        t->detach();
+    }
     try {
         route->createPath();
     } catch (std::exception &e) {

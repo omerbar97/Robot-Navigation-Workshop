@@ -12,7 +12,6 @@ R2Exit::R2Exit(Room *currentRoom, RobotWrapper *robot) {
 
 int R2Exit::doMission() {
     return behavior->execute();
-    delete(this);
 }
 
 R2Exit::~R2Exit() noexcept {

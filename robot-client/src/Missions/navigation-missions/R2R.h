@@ -14,6 +14,8 @@
 #include <boost/bind/bind.hpp>
 #include "../../PathPlanning/Route.h"
 #include "../../Robot/Colors.h"
+#include "R2Exit.h"
+#include <thread>
 
 using namespace boost::placeholders;
 

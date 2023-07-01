@@ -5,14 +5,16 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_HALLNAVIGATEBEHAVIOR_H
 #include "RobotBehavior.h"
-#include "RotationBehavior.h"
 #include "../behaviour-functors/LinearNavigation.h"
 using namespace std;
 using Point = std::pair<double, double>;
+
+/**
+ * this class responsible for navigating the robot inside the hall.
+ */
 class HallNavigateBehavior : public RobotBehavior {
 protected:
     vector<Point> path;
-    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
 
 public:
 

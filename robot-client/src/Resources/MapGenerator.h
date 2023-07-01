@@ -11,7 +11,6 @@
 #include <opencv2/imgproc.hpp>
 #include <fstream>
 #include "../PathPlanning/GridMap.h"
-#include "../PathPlanning/Algorithm/AStarAlgorithm.h"
 #include "GlobalsDefines.h"
 
 class MapGenerator {
@@ -29,10 +28,7 @@ private:
     // - Sets the binary matrix using setBinaryMatrix() function
     void pngToMatrix();
     int sailSIze;
-
     int classifyCell(int row, int col);
-
-
 
 
 public:
@@ -74,6 +70,7 @@ public:
     // - Calls setImage() to load and resize the image
     // - Calls pngToMatrix() to convert the image to a binary matrix */
     MapGenerator(std::string pngImage , int sailSIze = 1);
+    ~MapGenerator();
 
     // Getter for room_map
     std::string getRoomMap() const;

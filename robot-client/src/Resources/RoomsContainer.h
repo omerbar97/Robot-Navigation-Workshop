@@ -20,15 +20,39 @@ using namespace std;
 class RoomsContainer {
     // private member
 private:
+
     map<int, Room*> rooms;
 
+    /**
+     * reading the room config file and creating each room.
+     * @param roomConfigPath
+     */
     void initRooms(const std::string& roomConfigPath);
 
 public:
+
+    /**
+     * constructor for the room container class that mange all the rooms.
+     * @param roomConfigPath - path to the room config.
+     */
     explicit RoomsContainer(const std::string& roomConfigPath);
+
+    /**
+     * destructor for all the rooms.
+     */
     ~RoomsContainer();
 
+    /**
+     * return the room that is associate with the room-id or null if didn't find.
+     * @param roomId - int
+     * @return
+     */
     Room* getRoomById(int roomId);
+
+    /**
+     * adding a new room to the database.
+     * @param room - Room*
+     */
     void addRoom(Room* room);
 };
 

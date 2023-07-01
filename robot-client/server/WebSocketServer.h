@@ -40,18 +40,48 @@ public:
     WebSocketServer(std::string ip, int port);
     ~WebSocketServer();
 
+    /**
+     * starting the websocket server
+     */
     void start();
+
+    /**
+     * stopping the websocket server.
+     */
     void stop();
 
+    /**
+     * the callback function when an message is received.
+     * @param hdl - hdl connection format about the sender
+     * @param msg - the content
+     */
     void onMessage(websocketpp::connection_hdl hdl, server::message_ptr msg);
+
+    /**
+     * the callback function when a new connection is connected.
+     * @param hdl - hdl connection format about the sender
+     */
     void onOpen(websocketpp::connection_hdl hdl);
+
+    /**
+     * the callback function when a connection is off.
+     * @param hdl
+     */
     void onClose(websocketpp::connection_hdl hdl);
 
+    /**
+     * starting the stage process
+     * @param hdl
+     * @return
+     */
     bool startStageProcess(websocketpp::connection_hdl hdl);
+
+    /**
+     * starting the robot-navigation control program in a different process
+     * @param hdl
+     * @return
+     */
     bool startRobotControllerProcess(websocketpp::connection_hdl hdl);
-
-
-
 
 };
 

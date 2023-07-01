@@ -11,7 +11,11 @@
 
 
 
+using Point = std::pair<double, double>;
 
+/**
+ * enum class for the mission type.
+ */
 enum class MissionType {
     NAVIGATION,
     INFORM
@@ -22,8 +26,9 @@ enum class MissionType {
  */
 class Mission {
 
-
-
+protected:
+    Room* currentRoom;
+    Room* nextRoom;
 public:
 
     /**

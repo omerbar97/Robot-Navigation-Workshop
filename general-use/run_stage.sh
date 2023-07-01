@@ -21,7 +21,7 @@ function run_stage() {
   }
 
   echo "Running 'player rooms.cfg' in $stage_worlds_path"
-  player rooms.cfg
+  player fromServer.cfg
 }
 
 function change_path() {

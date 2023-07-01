@@ -7,19 +7,19 @@
 #include "RobotBehavior.h"
 #include "../behaviour-functors/LinearNavigation.h"
 #include "../../Resources/Room.h"
-#include "RotationBehavior.h"
 #include "../behaviour-functors/RotateRobot.h"
 
 
 using namespace std;
 using Point = std::pair<double, double>;
 
+/**
+ * this class responsible for navigating the robot into a room.
+ */
 class EnterRoomBehavior : public RobotBehavior {
 
-
-
 protected:
-    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
+    // the room the robot is in
     Room* goalRoom;
 
 public:
@@ -33,7 +33,10 @@ public:
     ~EnterRoomBehavior() override;
 
 
-    /// Command methods
+    /**
+     * this function navigates the robot to the point.
+     * @return 0 if the robot reached the point.
+     */
     int execute() override;
 };
 

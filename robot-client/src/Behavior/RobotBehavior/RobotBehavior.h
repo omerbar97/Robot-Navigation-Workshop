@@ -10,21 +10,28 @@
 
 
 /**
- * this is a middleware class between the behavior to the actual robotBehaviors,
- * each class the implements this behavior needs to implement the logic part in the execute.
+ * RobotBehavior is an interface for all the robot behaviors.
+ * It extern the method execute() which is the main method for the behavior.
  */
 class RobotBehavior : public Behavior {
 protected:
     RobotWrapper* robot;
     std::pair<double, double> goalPoint;
-    virtual bool avoidObstacles(double &forwardSpeed, double &turnSpeed) = 0;
 
 public:
 
-    // the virtual method is still virtual
+    /**
+     * this is the function that needs to be implemented by the robot behavior.
+     * @return
+     */
     virtual int execute() = 0;
-    RobotBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
 
+    /**
+     * constructor
+     * @param robot the robot wrapper
+     * @param goalPoint the point to navigate to
+     */
+    RobotBehavior(RobotWrapper* robot, std::pair<double, double> goalPoint);
     virtual ~RobotBehavior() = default;
 
 };

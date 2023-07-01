@@ -13,21 +13,36 @@
 #include "../../Resources/MapGenerator.h"
 #include <boost/bind/bind.hpp>
 #include "../../PathPlanning/Route.h"
+#include "../../Robot/Colors.h"
+#include "R2Exit.h"
+#include <thread>
+
 using namespace boost::placeholders;
 
 
 using namespace std;
-using Point = std::pair<double, double>;
 class R2R : public Mission {
 private:
+
+    Route* route;
     RobotWrapper* robot;
     vector<Behavior*> tasks;
+    Algorithm* algorithm;
+    std::vector<std::pair<double, double>> path;
+    bool withExit;
+    bool succed;
 
 
 public:
-    R2R(Room* roomSource, Room* roomDest, RobotWrapper* robot, Algorithm* algorithm, MapGenerator* mapGenerator);
+
+    R2R(Room* roomSource, Room* roomDest, RobotWrapper* robot, Algorithm* algorithm, MapGenerator* mapGenerator, bool withExit);
+    ~R2R();
+
+    std::vector<std::pair<double, double>> getPath();
 
     int doMission() override;
+
+
 
 };
 

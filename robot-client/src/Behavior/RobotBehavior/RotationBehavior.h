@@ -10,8 +10,6 @@
 class RotationBehavior : public RobotBehavior {
 protected:
 
-    bool avoidObstacles(double &forwardSpeed, double &turnSpeed) override;
-
 public:
 
     /**

@@ -6,36 +6,51 @@
 
 
 void LinearNavigation::
-operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance ) {
+operator ()(RobotWrapper* robot, Point dest, double fSpeed, const double minDistance, std::pair<int, int> angles, int depth) {
+//    std::cout << "depth: " << depth << "\n";
+    if(depth >= 10) {
+        // to many attempts
+        // backing off a little bit
+        robot->setSpeed(-robot->getGroundSpeed() / 2, 0);
+        usleep(700000);
+        robot->setSpeed(0, 0);
+        throw std::exception();
+    }
 
     PlayerCc::Position2dProxy& pos = *robot->getPos();
+    PlayerCc::RangerProxy& laser = *robot->getLaser();
     robot->update();
-
-    double distance = sqrt(pow(dest.first - pos.GetXPos(), 2) + pow(dest.second - pos.GetYPos(), 2));
-    double groundSpeed = robot->getGroundSpeed();
-    double turnSpeed = 0;
+    auto currentPosition = robot->getCurrentPosition();
+    double distance = sqrt(pow(dest.first - currentPosition.first, 2) + pow(dest.second - currentPosition.second, 2));
+    double groundSpeed = 0.05;
+    double turnSpeed = 0, lastDistance = distance;
     robot->setSpeed(groundSpeed, turnSpeed);
     // debug
-    std::cout << "minDistance: " << minDistance << std::endl;
+    AvoidObstacle avoidObstacle;
     while(distance > minDistance) {
-
-        // debug
-        std::cout << "distance: " << distance << std::endl;
 
 
         // sense
         robot->update();
 
         // think
-        // TODO: implement obstacle avoidance
+        avoidObstacle(robot, dest, groundSpeed, 0.5, angles, depth);
+
 
         // act
         robot->setSpeed(fSpeed, turnSpeed);
 
         // calculating the distance
-        distance = sqrt(pow(dest.first - pos.GetXPos(), 2) + pow(dest.second - pos.GetYPos(), 2));
+        currentPosition = robot->getCurrentPosition();
+        distance = sqrt(pow(dest.first - currentPosition.first, 2) + pow(dest.second - currentPosition.second, 2));
+        if(lastDistance < distance) {
+            break;
+        } else {
+            lastDistance = distance;
+        }
         usleep(10);
     }
 
+//    std::cout << "Reached to point: " << dest.first << " , " << dest.second << " \n";
     pos.SetSpeed(0, 0);
 }

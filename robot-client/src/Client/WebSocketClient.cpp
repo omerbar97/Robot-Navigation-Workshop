@@ -4,21 +4,20 @@
 
 #include "WebSocketClient.h"
 
+
+
 WebSocketClient::WebSocketClient(RobotPlanner *planner, std::string ws) {
     // init the robot websocket connection
     this->threads = std::vector<std::thread*>();
     this->robot = planner->getRobotWrapper();
     this->planner = planner;
-    this->ws = ws;
+    this->ws = std::move(ws);
     this->wsClient.init_asio();
     this->wsClient.set_access_channels(websocketpp::log::alevel::all);
     this->wsClient.set_error_channels(websocketpp::log::elevel::all);
     this->wsClient.set_open_handler(bind(&WebSocketClient::on_open, this, ::_1));
     this->wsClient.set_close_handler(bind(&WebSocketClient::on_close, this, ::_1));
     this->wsClient.set_message_handler(bind(&WebSocketClient::on_message, this, ::_1, ::_2));
-//    this->client.set_fail_handler(bind(&WebSocketClient::on_fail, this, ::_1));
-//    this->client.set_pong_handler(bind(&WebSocketClient::on_pong, this, ::_1, ::_2));
-//    this->client.set_interrupt_handler(bind(&WebSocketClient::on_interrupt, this, ::_1));
     websocketpp::lib::error_code ec;
     auto con = this->wsClient.get_connection(this->ws, ec);
     if (ec) {
@@ -108,36 +107,5 @@ void WebSocketClient::on_close(websocketpp::connection_hdl hdl) {
 
 }
 
-void WebSocketClient::sendRobotPath() {
-    // sending the robot path to the server as a json
-//    std::unique_lock<std::mutex> lock(mutex);
-//    while (this->isOnline())
-//    {
-//        nlohmann::json jsonData;
-//        auto path = this->robot->getRobotCurrentPath();
-//        jsonData["type"] = "robotPath";
-//        jsonData["path"] = path;
-//        jsonData["size"] = path.size();
-//
-//        this->wsClient.send(this->connection, jsonData.dump(), websocketpp::frame::opcode::text);
-//
-//        // Wait for the value to change before continuing
-//        cv.wait(lock, [] { return valueChanged; });
-//
-//        // Reset the valueChanged flag
-//        valueChanged = false;
-//
-//        sleep(3);
-//    }
-}
-
-void WebSocketClient::waitForThread() {
-    // waiting for the thread to finish
-    for(auto t : this->threads) {
-        t->join();
-    }
-    // when finish executing the plan
-
-}
 
 

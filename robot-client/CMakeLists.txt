@@ -4,12 +4,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-dev")
 
 # Add the cmake directory to the module path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-
-
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/include/player-3.0)
 
 # Find playerc++ library and headers
 find_package(playerc++ REQUIRED)
-include_directories(${PLAYERCXX_INCLUDE_DIRS})
+include_directories(${PLAYERCXX_INCLUDE_DIRS} /usr/local/include/player-3.0)
 
 # Find OpenCV library
 set(OpenCV_DIR /usr/local/lib)
@@ -66,12 +65,19 @@ add_executable(Robot-Navigation
         src/Robot/RobotPlanner.h src/Robot/RobotPlanner.cpp
         src/Robot/RobotCLI.cpp
         src/Robot/RobotCLI.h
+        src/Resources/ChronoTime.cpp
+        src/Resources/ChronoTime.h
         src/Missions/navigation-missions/R2R.cpp
         src/Behavior/behaviour-functors/RotateRobot.cpp
         src/Behavior/behaviour-functors/RotateRobot.h
-        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.cpp
-        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h
-        src/Missions/factories/nav-mission-factory/NavigationMissionsFactory.h src/Missions/factories/MissionFactory.h)
+        src/Behavior/behaviour-functors/AvoidObstacle.h
+        src/Behavior/behaviour-functors/AvoidObstacle.cpp
+        src/Robot/Colors.h src/Missions/CalculateTime.h
+        src/Missions/CalculateTime.cpp
+        src/Missions/navigation-missions/R2Exit.h
+        src/Missions/navigation-missions/R2Exit.cpp
+        src/Missions/Inform-Missions/Inform.h
+        src/Missions/Inform-Missions/Inform.cpp)
 
 add_executable(Server
         server/main.cpp
@@ -83,8 +89,9 @@ add_executable(Server
 
 # Link the playerc++, OpenCV, and OMPL libraries
 find_package(OpenCV CONFIG REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp} ${jsoncpp_INCLUDE_DIRS})
-target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY} OpenSSL::SSL OpenSSL::Crypto)
+include_directories(${PLAYERCXX_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${jsoncpp_INCLUDE_DIRS})
+target_include_directories(Robot-Navigation PRIVATE ${OpenCV_INCLUDE_DIRS} ${jsoncpp_INCLUDE_DIRS})
+target_link_libraries(Robot-Navigation ${PLAYERCXX_LIBRARIES} ${OpenCV_LIBS} ${OMPL_LIBRARY} OpenSSL::SSL OpenSSL::Crypto ${PLAYERCXX_LIBRARIES})
 target_link_libraries(Server PRIVATE curl ssl crypto)
+
 

@@ -8,6 +8,10 @@
 #include "../behaviour-functors/LinearNavigation.h"
 using namespace std;
 using Point = std::pair<double, double>;
+
+/**
+ * this class responsible for navigating the robot inside the hall.
+ */
 class HallNavigateBehavior : public RobotBehavior {
 protected:
     vector<Point> path;

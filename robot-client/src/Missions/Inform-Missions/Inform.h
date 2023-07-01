@@ -8,7 +8,10 @@
 #include "../CalculateTime.h"
 #include "../../Behavior/MessageBehavior/VoiceMessageBehavior.h"
 
-
+/**
+ * This class is responsible for informing the person in the room about the meeting it's part of, and the time left
+ * for the meeting.
+ */
 class Inform : public Mission {
 private:
 
@@ -18,7 +21,13 @@ private:
 
 
 public:
+    /**
+     * constructor
+     * @param chronoTime the chronoTime object
+     * @param currentRoom the room the robot is in
+     */
     Inform(ChronoTime* chronoTime, Room* currentRoom);
+    //destructor
     ~Inform();
 
     int doMission() override;

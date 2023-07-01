@@ -11,14 +11,19 @@ RobotPlanner::RobotPlanner(const string &roomConfigPath, RobotWrapper *robotWrap
     this->map = map;
     this->isInPlan = false;
     this->chronoTime = new ChronoTime();
+    this->robotTimeoutThread == nullptr;
 }
 
 RobotPlanner::~RobotPlanner() {
     // deleting the rooms container
     delete (this->roomsContainer);
     this->robotWrapper->setOnline(false);
-    this->robotTimeoutThread->join();
+    if(this->robotTimeoutThread != nullptr) {
+        this->robotTimeoutThread->join();
+    }
+    delete (this->map);
     delete (this->chronoTime);
+    delete (this->robotWrapper);
 }
 
 /**

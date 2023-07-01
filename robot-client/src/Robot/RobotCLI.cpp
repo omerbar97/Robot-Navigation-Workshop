@@ -105,6 +105,7 @@ void RobotCLI::run() {
             if(this->robotPlanner->isRobotOnline()) {
                 // robot already online
                 cout << CYNB << "robot already online" << RESET_COLOR << endl;
+                cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
             } else {
                 this->robotPlanner->initRobot();
                 cout << RED << "trying to connect to the robot interface... " ;
@@ -124,13 +125,12 @@ void RobotCLI::run() {
                     this->robotPlanner->getRobotWrapper()->setRobotTurnSpeed(this->robotInfo.rotationSpeed);
                     this->robotPlanner->getRobotWrapper()->setFastTravel(this->robotInfo.optimizedPath);
                     this->robotPlanner->getRobotWrapper()->setStartingDegree(this->robotInfo.robotCurrentYawInDegree);
-
+                    cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
                 }
-                else{
+                else {
                     cout << REDB << "FAILED! check if the stage is running and that you are trying to connect to the correct robot ip + port" << RESET_COLOR << endl;
                 }
             }
-            cout << YEL << "new time meeting was set!" << RESET_COLOR << endl;
 
         } else if(input == "info") {
             printShowRobotInfo();
@@ -246,4 +246,15 @@ void RobotCLI::setSettings(const string &settings) {
         cout << RED << "setting not found" << RESET_COLOR << endl;
     }
 
+}
+
+void RobotCLI::exitCLI() {
+    // deleting the CLI
+
+}
+
+RobotCLI::~RobotCLI() {
+    // deleting the memory of the CLI
+    delete(this->robotPlanner);
+    // killing the thread
 }

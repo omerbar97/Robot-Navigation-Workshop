@@ -76,6 +76,7 @@ void launch_robotCLI(std::thread *stageThread) {
     auto *robotCLI = new RobotCLI(robotPlanner);
     robotCLI->setStageThread(stageThread);
     robotCLI->run();
+    delete(robotCLI);
 }
 
 void start_program() {

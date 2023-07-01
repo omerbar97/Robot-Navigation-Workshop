@@ -45,6 +45,25 @@ make                                        // compiling the program
 ./Server 'ip' 'port'
 ```
 
+### Alternative (simple version)
+if you wish to install this program without the unnecessary depandances you will need to install only 4 thing:
+<ul>
+  <li>Player + Stage</li>
+  <li>cmake</li>
+  <li>OMPL (for path planning)</li>
+  <li>Espeak (for text to speach)</li>
+  <li>OpenCv (for img handle)</li>
+</ul>
+
+Inside the project folder go to robot-client-simple and do:
+```
+mkdir build                                 // creating a new folder
+cd build                                    
+cmake ../                                   // creating the makefile
+make                                        // compiling the program
+./Robot-Navigation                         // starting the robot CLI
+```
+
 ## Dependances
 ##### You Must Have Linux Machine
 Make sure to install all the dependances to be able to run our program

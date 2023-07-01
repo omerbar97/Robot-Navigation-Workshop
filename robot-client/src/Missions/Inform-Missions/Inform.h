@@ -13,13 +13,11 @@ class Inform : public Mission {
 private:
 
     Behavior* informBehavior;
-    CalculateTime* time;
     Room* currentRoom;
     ChronoTime* chronoTime;
 
 
 public:
-    Inform(CalculateTime* time, Room* currentRoom);
     Inform(ChronoTime* chronoTime, Room* currentRoom);
     ~Inform();
 

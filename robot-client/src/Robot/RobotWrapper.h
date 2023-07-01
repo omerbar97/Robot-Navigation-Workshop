@@ -63,10 +63,11 @@ public:
 
     void update();
     bool isOnline();
+    void setOnline(bool flag);
     bool isFastTravelEnable();
 
     void setStartingDegree(int degree);
-    void getStartingDegree();
+    int getStartingDegree();
 
 };
 

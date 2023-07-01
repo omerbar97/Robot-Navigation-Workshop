@@ -103,7 +103,7 @@ void RobotCLI::run() {
 
             //init robot planner
             this->robotPlanner->initRobot();
-            cout << RED << "trying to connect to the robot interface..." << RESET_COLOR << "\n";
+            cout << RED << "trying to connect to the robot interface... " ;
             std::cout << '-' << std::flush;
             usleep(300000);
             std::cout << "\b\\" << std::flush;
@@ -113,7 +113,7 @@ void RobotCLI::run() {
             std::cout << "\b/" << std::flush;
             usleep(300000);
             std::cout << "\b-" << std::flush;
-            std::cout << std::endl;
+            std::cout << RESET_COLOR << std::endl;
             if(this->robotPlanner->isRobotOnline()) {
                 cout << GRNB << "CONNECTED!" << RESET_COLOR << endl;
                 this->robotPlanner->getRobotWrapper()->setRobotSpeed(this->robotInfo.groundSpeed);
@@ -128,9 +128,8 @@ void RobotCLI::run() {
 
         } else if(input == "info") {
             printShowRobotInfo();
-        } else if(input == "set") {
-            // setting for the default value.
-            // TODO:
+        }  else if (input == "set yaw" || input == "set ground" || input == "set rotation" || input == "set opt") {
+            setSettings(input);
         }
         else {
             MissionType commandName;
@@ -174,5 +173,88 @@ void RobotCLI::printShowRobotInfo() {
         cout << YEL << "Optimized path enable: " << RESET_COLOR << GRN << "True" << RESET_COLOR << endl;
     } else {
         cout << YEL << "Optimized path enable: " << RESET_COLOR << GRN << "False" << RESET_COLOR << endl;
+    }
+}
+
+void RobotCLI::setSettings(const string &settings) {
+
+    if (settings == "set yaw") {
+        cout << "enter the starting yaw in degree: ";
+        string input;
+        getline(cin, input);
+        int yaw;
+        try {
+            yaw = stoi(input);
+        } catch (exception &e) {
+            cout << RED << "invalid input, setting to default: 0" << RESET_COLOR << endl;
+            this->robotInfo.robotCurrentYawInDegree = 0;
+            this->robotPlanner->getRobotWrapper()->setStartingDegree(0);
+            return;
+        }
+        yaw = yaw % 360;
+        this->robotInfo.robotCurrentYawInDegree = yaw;
+        this->robotPlanner->getRobotWrapper()->setStartingDegree(yaw);
+        cout << YEL << "starting yaw set to: " << yaw <<  RESET_COLOR << endl;
+    } else if (settings == "set ground") {
+        // setting the ground speed
+        cout << "enter the ground speed (default 0.1, 1 meter per second): ";
+        string input;
+        getline(cin, input);
+        double groundSpeed;
+        try {
+            groundSpeed = stod(input);
+        } catch (exception &e) {
+            cout << RED << "invalid input, setting to default: 0.1" << RESET_COLOR << endl;
+            this->robotInfo.groundSpeed = 0.1;
+            this->robotPlanner->getRobotWrapper()->setRobotSpeed(0.1);
+            return;
+        }
+        this->robotInfo.groundSpeed = groundSpeed;
+        this->robotPlanner->getRobotWrapper()->setRobotSpeed(groundSpeed);
+        cout << YEL << "ground speed set to: " << groundSpeed << RESET_COLOR << endl;
+
+    } else if (settings == "set rotation") {
+        // setting the rotation speed
+        cout << "enter the rotation speed (default 0.03, 0.03 radian per second): ";
+        string input;
+        getline(cin, input);
+        double rotationSpeed;
+        try {
+            rotationSpeed = stod(input);
+        } catch (exception &e) {
+            cout << RED << "invalid input, setting to default: 0.03" << RESET_COLOR << endl;
+            this->robotInfo.rotationSpeed = 0.03;
+            this->robotPlanner->getRobotWrapper()->setRobotTurnSpeed(0.03);
+            return;
+        }
+        this->robotInfo.rotationSpeed = rotationSpeed;
+        this->robotPlanner->getRobotWrapper()->setRobotTurnSpeed(rotationSpeed);
+        cout << YEL << "rotation speed set to: " << rotationSpeed << RESET_COLOR << endl;
+
+    } else if (settings == "set opt") {
+        // setting the rotation speed
+        cout << "enter the optimized path (default true): ";
+        string input;
+        getline(cin, input);
+        bool opt;
+        if(input == "true") {
+            opt = true;
+        } else if(input == "false") {
+            opt = false;
+        } else {
+            cout << RED << "invalid input, setting to default: true" << RESET_COLOR << endl;
+            this->robotInfo.optimizedPath = true;
+            this->robotPlanner->getRobotWrapper()->setFastTravel(true);
+            return;
+        }
+        this->robotInfo.optimizedPath = opt;
+        this->robotPlanner->getRobotWrapper()->setFastTravel(opt);
+        if(opt) {
+            cout << YEL << "optimized path set to: " << RESET_COLOR << GRNB << "True" << RESET_COLOR << endl;
+        } else {
+            cout << YEL << "optimized path set to: " << RESET_COLOR << REDB << "False" << RESET_COLOR << endl;
+        }
+    } else {
+        cout << RED << "setting not found" << RESET_COLOR << endl;
     }
 }

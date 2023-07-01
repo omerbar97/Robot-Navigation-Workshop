@@ -3,7 +3,7 @@
 //
 
 #include "RobotPlanner.h"
-#include "../Missions/Inform-Missions/Inform.h"
+
 
 RobotPlanner::RobotPlanner(const string &roomConfigPath, RobotWrapper *robotWrapper, MapGenerator *map) {
     this->robotWrapper = robotWrapper;
@@ -13,7 +13,13 @@ RobotPlanner::RobotPlanner(const string &roomConfigPath, RobotWrapper *robotWrap
     this->chronoTime = new ChronoTime();
 }
 
-RobotPlanner::~RobotPlanner() = default;
+RobotPlanner::~RobotPlanner() {
+    // deleting the rooms container
+    delete (this->roomsContainer);
+    this->robotWrapper->setOnline(false);
+    this->robotTimeoutThread->join();
+    delete (this->chronoTime);
+}
 
 /**
  * plan the inform mission
@@ -37,39 +43,13 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
     Room *currentLocation = this->roomsContainer->getRoomById(stoi(roomsIDs.at(0)));
     if (currentLocation == nullptr) {
         // the current location must be a valid room
-        std::cout << RED << "the current location must be a valid room (the first room you enter)." << RESET_COLOR
+        std::cout << RED << "the current robot location must be a valid room (the first room you enter)." << RESET_COLOR
                   << endl;
         return;
     }
-//
-//    std::vector<CalculateTime*> timeVector;
-//    std::vector<std::vector<Point>*> allPathVector;
-
-    // first mission is to get out of the room, doing it in a different thread
-    Mission *m = new R2Exit(currentLocation, this->robotWrapper);
-    std::thread* exitRoomThread = new std::thread([m, ptr = this]() -> void {
-        std::lock_guard<std::mutex> lock(ptr->robotLock);
-        int counter = 0;
-        while(counter < 3) {
-            try{
-                ptr->isInPlan = true;
-                m->doMission();
-                break;
-            } catch (std::exception &e) {
-                counter++;
-                std::cout << "failed to navigate out of the room id: " << e.what() << " attempt: " << counter << std::endl;
-            }
-        }
-        delete(m);
-        ptr->isInPlan = false;
-        ptr->cv.notify_all();
-    });
-
-    exitRoomThread->detach();
 
     // assumes that the robot starts inside a room
-    Mission *mission;
-    R2R * r2r;
+    R2R *r2r;
     std::vector<string> rooms = removeDuplicates(roomsIDs);
     if (robotWrapper->isFastTravelEnable()) {
         // recalculating the rooms by sales man problem
@@ -78,8 +58,8 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
 
     // shifting the rooms one to left
     auto prev = rooms[0];
-    for(int j = 1; j <= rooms.size(); j++) {
-        if(j != rooms.size()) {
+    for (int j = 1; j <= rooms.size(); j++) {
+        if (j != rooms.size()) {
             auto r = rooms[j];
             rooms[j] = prev;
             prev = r;
@@ -91,15 +71,14 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
     rooms[0] = to_string(currentLocation->getRoomId());
 
     std::cout << BMAG << "creating path: ";
-    for(int j = 0; j < rooms.size(); j++) {
-        if(j != rooms.size() - 1) {
+    for (int j = 0; j < rooms.size(); j++) {
+        if (j != rooms.size() - 1) {
             std::cout << rooms[j] << "->";
         } else {
             std::cout << rooms[j];
         }
     }
     std::cout << RESET_COLOR << std::endl;
-
 
 
     for (int i = 0; i < rooms.size() - 1; i++) {
@@ -120,16 +99,8 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
             nextRoom = this->roomsContainer->getRoomById(stoi(rooms.at(i + 1)));
         }
         try {
-            if (i == 0) {
-                // the current room, exiting via a new thread
-                r2r = new R2R(currentRoom, nextRoom, this->robotWrapper,
-                                  new RRTStarAlgorithm(), this->map, false);
-            } else {
-                // all the other room need to add exit behavior
-                r2r = new R2R(currentRoom, nextRoom, this->robotWrapper,
-                                  new RRTStarAlgorithm(), this->map, true);
-            }
-
+            r2r = new R2R(currentRoom, nextRoom, this->robotWrapper,
+                          new RRTStarAlgorithm(), this->map, true);
         } catch (std::exception &e) {
             // tried 3 time to calculate route and failed skipping the room and putting it on the last
             // shifting all the rooms to the right
@@ -152,25 +123,8 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         //add the path to the vector
         std::vector<Point> points;
 
-
-
-
-//        // getting the path
-//        auto points = r2r->getPath();
-//        auto* currentVec = new std::vector<Point>();
-//        allPathVector.push_back(currentVec);
-//        // creating calculation time
-//        for(auto p : points) {
-//            for(auto v : allPathVector) {
-//                v->push_back(p);
-//            }
-//        }
-
-//        // creating the time calculation
-//        auto* timeCalculation = new CalculateTime(currentVec, this->robotWrapper->getGroundSpeed());
-        auto* timeCalculation = new CalculateTime(this->chronoTime);
-//        auto* inform = new Inform(timeCalculation, nextRoom);
-        auto* inform = new Inform(this->chronoTime, nextRoom);
+        auto *timeCalculation = new CalculateTime(this->chronoTime);
+        auto *inform = new Inform(this->chronoTime, nextRoom);
         // lock the mutex
         this->missionLock.lock();
         this->currentPlan.push(timeCalculation);
@@ -179,20 +133,7 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         // unlock the mutex
         this->missionLock.unlock();
 
-//        if(!this->isInPlan) {
-//            std::unique_lock<std::mutex> uniqueLock(this->robotLock);
-//            cv.wait(uniqueLock);
-//            // the thread finished the job, executing the already mission queue
-//            exitRoomThread = new thread([ptr = this]() -> void {
-//                ptr->executePlan();
-//            });
-//        }
-
     }
-//    if(exitRoomThread->joinable()) {
-//        // the thread didn't finished yet detaching it.
-//        exitRoomThread->detach();
-//    }
 }
 
 void RobotPlanner::plan(const MissionType &mission, vector<std::string> &parameters) {
@@ -221,10 +162,7 @@ int RobotPlanner::executePlan() {
     queue<Mission *> tempQueue = this->currentPlan;
     this->currentPlan = queue<Mission *>();
     this->missionLock.unlock();
-//    if(!this->robotLock.try_lock()) {
-//        // cannot get lock
-//        std::cout << YEL << "cannot receive robot-lock, waiting for the thread to finish executing the current robot plan" << RESET_COLOR << endl;
-//    }
+
     this->robotLock.lock();
     while (tempQueue.size() > 0) {
         // get the next mission
@@ -233,23 +171,22 @@ int RobotPlanner::executePlan() {
         tempQueue.pop();
         // do the mission
         try {
-
             mission->doMission();
         } catch (std::exception &e) {
             // printing the room id that failed
-            std::cout << "error " << e.what();
+            std::cout << "while doing a mission failed in room_id: " << e.what();
         }
         // delete the mission
-//        delete mission;
+        delete mission;
     }
     this->isInPlan = false;
     this->robotLock.unlock();
-    cv.notify_all();
     return 0;
 }
 
 void RobotPlanner::initRobot() {
     this->robotWrapper->initRobot();
+    this->robotTimeoutThread = new std::thread(&RobotPlanner::robotTimeout, this);
 }
 
 bool RobotPlanner::isRobotOnline() {
@@ -284,7 +221,7 @@ bool RobotPlanner::isRobotInPlan() {
 std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roomsIDs, Point currentLocation) {
     // re-arrange the rooms faster
     std::cout << BGRN << "creating optimized path on: " << RESET_COLOR;
-    for(auto s : roomsIDs) {
+    for (auto s: roomsIDs) {
         std::cout << GRN << s << " , ";
     }
     std::cout << RESET_COLOR << std::endl;
@@ -304,7 +241,7 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
 
     // re arrange the rooms
     for (int i = 0; i < roomsIDs.size() - 1; i++) {
-        // calculating the distances from all the rooms
+        // calculating the linear distances from all the rooms
         std::vector<arrangedRoom> distances;
         for (Room *r: rooms) {
             Point dest = r->getCenterPoint();
@@ -316,7 +253,7 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
             distances.push_back(tempRoom);
         }
 
-        if(distances.size() == 0) {
+        if (distances.size() == 0) {
             break;
         }
 
@@ -344,7 +281,7 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
     }
 
     std::vector<std::string> stringsId;
-    for(auto r : arranged) {
+    for (auto r: arranged) {
         stringsId.push_back(to_string(r->getRoomId()));
     }
     return stringsId;
@@ -354,7 +291,7 @@ std::vector<std::string> RobotPlanner::removeDuplicates(std::vector<std::string>
     std::unordered_set<std::string> uniqueElements;
     std::vector<std::string> result;
 
-    for (const auto& str : vec) {
+    for (const auto &str: vec) {
         if (uniqueElements.insert(str).second) {
             result.push_back(str);
         }
@@ -369,6 +306,17 @@ ChronoTime *RobotPlanner::getChronoTime() const {
 
 void RobotPlanner::setChronoTime(ChronoTime *chronoTime) {
     RobotPlanner::chronoTime = chronoTime;
+}
+
+void RobotPlanner::robotTimeout() {
+    // sending data to the robot every 8 sec to avoid timeout
+    while (this->isRobotOnline()) {
+        std::this_thread::sleep_for(std::chrono::seconds(8));
+        this->robotWrapper->update();
+    }
+
+    // deleting the robotWrapper
+    delete this->robotWrapper;
 }
 
 

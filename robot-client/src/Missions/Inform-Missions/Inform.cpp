@@ -4,10 +4,6 @@
 
 #include "Inform.h"
 
-Inform::Inform(CalculateTime* time, Room* currentRoom) {
-    this->time = time;
-    this->currentRoom = currentRoom;
-}
 Inform::Inform(ChronoTime *chronoTime, Room* currentRoom) {
     this->chronoTime = chronoTime;
     this->currentRoom = currentRoom;
@@ -27,9 +23,9 @@ int Inform::doMission() {
     std::string message;
     // Compare the two time points
     if (this->chronoTime->getMeetingTime() < this->chronoTime->getCurrentTime()) {
-        message = "You lost a meeting.";
+        message = "Hello, " + lowerLettersName + "there was a meeting at the robotic lab and you missed it";
     } else if (this->chronoTime->getMeetingTime() == this->chronoTime->getCurrentTime()) {
-        message = "Meeting is right now.";
+        message = "Hello, " + lowerLettersName +  "there is a meeting right now at the robotic lab";
         std::cout << "Meeting is right now." << std::endl;
     } else {
         std::chrono::duration<double> duration=  (this->chronoTime->getMeetingTime() - this->chronoTime->getCurrentTime());
@@ -38,16 +34,14 @@ int Inform::doMission() {
         // Convert duration to integral representation
         std::chrono::duration<long long> integralDuration = std::chrono::duration_cast<std::chrono::duration<long long>>(duration);
 
-
-
         // Convert integral duration to hours, minutes, and seconds
         int hours = std::chrono::duration_cast<std::chrono::hours>(integralDuration).count();
         int minutes = std::chrono::duration_cast<std::chrono::minutes>(integralDuration % std::chrono::hours(1)).count();
         int seconds = std::chrono::duration_cast<std::chrono::seconds>(integralDuration % std::chrono::minutes(1)).count();
 
-        message = "Hello " + lowerLettersName + ", please be at the robotic lab at " + this->chronoTime->stringCurrentTime() + "(" +std::to_string(hours)
+        message = "Hello " + lowerLettersName + ", please be at the robotic lab in: " +std::to_string(hours)
                 + " hours, " + std::to_string(minutes) +
-                " minutes, and " + std::to_string(seconds) + " seconds)." ;
+                " minutes, and " + std::to_string(seconds) + " seconds" ;
     }
 
 

@@ -27,6 +27,7 @@
 #include <condition_variable>
 #include <unordered_set>
 #include "../Resources/ChronoTime.h"
+#include "../Missions/Inform-Missions/Inform.h"
 
 using namespace boost::placeholders;
 
@@ -43,6 +44,7 @@ private:
     RobotWrapper *robotWrapper;
     queue<Mission*> currentPlan;
     MapGenerator* map;
+    std::thread *robotTimeoutThread;
     std::mutex robotLock;
     std::mutex missionLock;
     void planInformMission(const vector<string>& roomsIDs);
@@ -66,7 +68,7 @@ public:
     void initRobot();
     bool isRobotInPlan();
     condition_variable cv;
-
+    void robotTimeout();
     ChronoTime *getChronoTime() const;
 
     void setChronoTime(ChronoTime *chronoTime);

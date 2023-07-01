@@ -153,23 +153,7 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         std::vector<Point> points;
 
 
-
-
-//        // getting the path
-//        auto points = r2r->getPath();
-//        auto* currentVec = new std::vector<Point>();
-//        allPathVector.push_back(currentVec);
-//        // creating calculation time
-//        for(auto p : points) {
-//            for(auto v : allPathVector) {
-//                v->push_back(p);
-//            }
-//        }
-
-//        // creating the time calculation
-//        auto* timeCalculation = new CalculateTime(currentVec, this->robotWrapper->getGroundSpeed());
         auto* timeCalculation = new CalculateTime(this->chronoTime);
-//        auto* inform = new Inform(timeCalculation, nextRoom);
         auto* inform = new Inform(this->chronoTime, nextRoom);
         // lock the mutex
         this->missionLock.lock();
@@ -226,7 +210,7 @@ int RobotPlanner::executePlan() {
 //        std::cout << YEL << "cannot receive robot-lock, waiting for the thread to finish executing the current robot plan" << RESET_COLOR << endl;
 //    }
     this->robotLock.lock();
-    while (tempQueue.size() > 0) {
+    while (!tempQueue.empty()) {
         // get the next mission
         Mission *mission = tempQueue.front();
         // delete the mission from the queue
@@ -277,14 +261,14 @@ void RobotPlanner::setPlanFromString(const string &plan) {
     planNavigationMission(rooms);
 }
 
-bool RobotPlanner::isRobotInPlan() {
+bool RobotPlanner::isRobotInPlan() const {
     return this->isInPlan;
 }
 
 std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roomsIDs, Point currentLocation) {
     // re-arrange the rooms faster
     std::cout << BGRN << "creating optimized path on: " << RESET_COLOR;
-    for(auto s : roomsIDs) {
+    for(const auto& s : roomsIDs) {
         std::cout << GRN << s << " , ";
     }
     std::cout << RESET_COLOR << std::endl;
@@ -302,7 +286,7 @@ std::vector<std::string> RobotPlanner::salesManProblem(const vector<string> &roo
 
     // all rooms now in the vector rooms
 
-    // re arrange the rooms
+    // re-arrange the rooms
     for (int i = 0; i < roomsIDs.size() - 1; i++) {
         // calculating the distances from all the rooms
         std::vector<arrangedRoom> distances;

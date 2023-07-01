@@ -5,7 +5,6 @@
 #ifndef ROBOT_NAVIGATION_WORKSHOP_PATHCREATOR_H
 #define ROBOT_NAVIGATION_WORKSHOP_PATHCREATOR_H
 
-
 #include "../../Resources/RoomsContainer.h"
 #include "../../Resources/MapGenerator.h"
 

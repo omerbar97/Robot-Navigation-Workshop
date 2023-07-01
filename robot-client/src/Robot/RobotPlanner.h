@@ -64,7 +64,7 @@ public:
     bool isRobotOnline();
     RobotWrapper* getRobotWrapper();
     void initRobot();
-    bool isRobotInPlan();
+    bool isRobotInPlan() const;
     condition_variable cv;
 
     ChronoTime *getChronoTime() const;

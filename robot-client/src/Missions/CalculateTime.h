@@ -10,7 +10,6 @@
 class CalculateTime : public Mission {
 private:
     std::vector<std::pair<double, double>>* path;
-    double robotSpeed;
     double time;
     ChronoTime* chronoTime;
 
@@ -20,7 +19,6 @@ public:
 
     void setChronoTime(ChronoTime *chronoTime);
 
-    CalculateTime(std::vector<std::pair<double, double>>* path, double robotSpeed);
     CalculateTime(ChronoTime *chronoTime);
     ~CalculateTime();
 

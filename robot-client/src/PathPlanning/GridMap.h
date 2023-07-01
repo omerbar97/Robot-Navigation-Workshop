@@ -32,12 +32,6 @@ private:
      */
     int scale;
 
-    /**
-     * creating the gridMap by different scale if needed.
-     * @param gridMatrix - the matrix of the grid map
-     * @param scale default value is 1
-     */
-    void initGridMap(const cv::Mat* gridMatrix, int scale);
 
 public:
 
@@ -63,12 +57,9 @@ public:
     // getters
     int getWidth() const;
     int getHeight() const;
-    int getScale() const;
     ompl::base::RealVectorBounds *getBounds();
     cv::Mat* getGridMatrix() const;
 
-    // setters, cannot set the width and height it is given by the gridMatrix Mat*
-    void setScale(int scale);
 
     /**
      * setter for a new gridMatrix, the gridMatrix is the matrix of the grid map. need to delete the old ones and basically

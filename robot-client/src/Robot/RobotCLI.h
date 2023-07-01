@@ -20,6 +20,8 @@ struct robotInformation {
     double groundSpeed;
     double rotationSpeed;
     double robotCurrentYawInDegree;
+    std::string ip;
+    int port;
     bool optimizedPath;
 
 };
@@ -33,11 +35,15 @@ private:
     void printHelp();
     bool parseCommand(string& input, MissionType& command, vector<string>& args);
     void printShowRobotInfo();
+    void setSettings(const string& settings);
+    void exitCLI();
+
 
 public:
 
     void setStageThread(std::thread* stageThread);
     explicit RobotCLI(RobotPlanner *robotPlanner);
+    ~RobotCLI();
     void run();
 
 };

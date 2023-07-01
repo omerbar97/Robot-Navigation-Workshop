@@ -4,7 +4,6 @@
 
 #include "RobotWrapper.h"
 
-#include <utility>
 
 
 RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dProxy* positionProxy,
@@ -23,22 +22,22 @@ RobotWrapper::RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dPr
 }
 
 
-
 RobotWrapper::~RobotWrapper() {
-//    if (this->positionProxy != nullptr) {
-//        delete this->positionProxy;
-//        this->positionProxy = nullptr;  // Set the pointer to null after deleting.
-//    }
-//    if (this->laserProxy != nullptr) {
-//        delete this->laserProxy;
-//        this->laserProxy = nullptr;  // Set the pointer to null after deleting.
-//    }
-//    this->getClient().Disconnect();
+    if (this->positionProxy != nullptr) {
+        delete this->positionProxy;
+        this->positionProxy = nullptr;  // Set the pointer to null after deleting.
+    }
+    if (this->laserProxy != nullptr) {
+        delete this->laserProxy;
+        this->laserProxy = nullptr;  // Set the pointer to null after deleting.
+    }
+    if (this->robot != nullptr) {
+        delete this->robot;
+        this->robot = nullptr;  // Set the pointer to null after deleting.
+    }
 }
 
-//void RobotWrapper::setRobotPath(std::pair<double, double> path) {
-//    this->robotCurrentPath = path;
-//}
+
 
 void RobotWrapper::setRobotSpeed(double speed) {
     this->robotGroundSpeed = speed;
@@ -76,9 +75,6 @@ void RobotWrapper::initRobot() {
         this->positionProxy = new PlayerCc::Position2dProxy(this->robot, 0);
         this->laserProxy = new PlayerCc::RangerProxy(this->robot, 1);
         this->laserProxy->RequestConfigure();
-
-//        this->robot->SetDataMode(PLAYER_DATAMODE_PULL);
-//        this->robot->SetReplaceRule(true, PLAYER_MSGTYPE_DATA, -1);
         this->isRobotOnline = true;
     } catch (PlayerCc::PlayerError &e) {
         std::cerr << e << std::endl;
@@ -108,77 +104,10 @@ void RobotWrapper::update() {
             this->robot->Read();
         }
     } catch (PlayerCc::PlayerError &e) {
-//        std::cerr << e << std::endl;
     }
 }
 
-bool RobotWrapper::isObstacleOnLeft() {
-    // using the ranger proxy to check if there is an obstacle on the left
-    // if there is an obstacle on the left, return true
-    // else return false
-    this->update();
-    PlayerCc::RangerProxy& ranger = *this->getLaser();
-    // Get the total number of range readings
-    int numReadings = ranger.GetRangeCount();
-    // Calculate the number of readings on the left side
-    int numReadingsOnLeft = numReadings / 2;
-    // Define a threshold value for obstacle detection
-    double obstacleThreshold = 0.5; // Adjust this value as needed
-    // Check for obstacles on the left side
-    for (int i = 0; i < numReadingsOnLeft; i++) {
-        double range = ranger[i];
-        if (range < obstacleThreshold) {
-            // An obstacle is detected on the left side
-            return true;
-        }
-    }
-    // No obstacles found on the left side
-    return false;
-}
 
-bool RobotWrapper::isObstacleOnRight() {
-    // using the rangerproxy to check if there is an obstacle on the right
-    // if there is an obstacle on the right, return true
-    // else return false
-    this->update();
-    PlayerCc::RangerProxy& ranger = *this->getLaser();
-    // Get the total number of range readings
-    int numReadings = ranger.GetRangeCount();
-    // Calculate the number of readings on the left side
-    int numReadingsOnLeft = numReadings / 2;
-    // Define a threshold value for obstacle detection
-    double obstacleThreshold = 0.5; // Adjust this value as needed
-    // Check for obstacles on the right side
-    for (int i = numReadingsOnLeft; i < numReadings; i++) {
-        double range = ranger[i];
-        if (range < obstacleThreshold) {
-            // An obstacle is detected on the right side
-            return true;
-        }
-    }
-    // No obstacles found on the right side
-    return false;
-}
-
-bool RobotWrapper::hasObstaclesOnSides() {
-    // Get the total number of range readings
-    this->update();
-    PlayerCc::RangerProxy &ranger = *this->getLaser();
-    int numReadings = ranger.GetRangeCount();
-    // Define a threshold value for obstacle detection
-    double obstacleThreshold = 0.5; // Adjust this value as needed
-    // Check for obstacles on both sides
-    for (int i = 0; i < numReadings; i++) {
-        double range = ranger[i];
-        if (range < obstacleThreshold) {
-            // An obstacle is detected on either side
-            std::cout << "obstacle detected on side" << std::endl;
-            return true;
-        }
-    }
-    // No obstacles found on either side
-    return false;
-}
 
 bool RobotWrapper::isOnline() {
     return this->isRobotOnline;
@@ -191,10 +120,6 @@ void RobotWrapper::setSpeed(double speed, double turnSpeed) {
 
 void RobotWrapper::setCurrentPath(std::vector<std::pair<double, double>>  path) {
     this->robotCurrentPath = path;
-}
-
-std::vector<std::pair<double, double>>  RobotWrapper::getRobotCurrentPath() {
-    return this->robotCurrentPath;
 }
 
 RobotWrapper::RobotWrapper(std::string ip, int port, std::string ws) {
@@ -228,6 +153,6 @@ void RobotWrapper::setStartingDegree(int degree) {
     this->startingRobotDegree = degree;
 }
 
-void RobotWrapper::getStartingDegree() {
-    return; this->startingRobotDegree;
+void RobotWrapper::setOnline(bool flag) {
+    this->isRobotOnline = flag;
 }

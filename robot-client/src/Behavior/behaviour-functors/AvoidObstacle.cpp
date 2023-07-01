@@ -66,7 +66,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             if(sideC > 0.4) {
                 // robot can pass
                 auto point = getPointToTravel(secondAngle, temp, ranger[secondAngle], ranger[temp], robot->getCurrentPosition(), sideC, robot->getYaw());
-//                std::cout << "need to turn right with given point (" << point.first << " , " << point.second << ")\n";
 
                 // navigate to the point, rotate
                 RotateRobot rotate;
@@ -80,12 +79,10 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             else {
                 // flag that indicates if the robot need to try the right side
                 flag = true;
-//                std::cout << "trying left side\n";
             }
         } else {
             // rotating the robot 30 degree
             auto point = pointToTravel(-20, ranger[secondAngle], robot->getCurrentPosition(), robot->getYaw());
-//            std::cout << "need to turn right by 20 degree (" << point.first << " , " << point.second << ")\n";
             RotateRobot rotate;
             rotate(robot, point);
 
@@ -93,8 +90,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             linear(robot, point, robot->getGroundSpeed() / 2, 0.1, angle, ++depth);
             rotate(robot, dest);
             return;
-
-
         }
     } if((f2 > f1 && f2 != 0) || flag) {
         // scanning left
@@ -117,7 +112,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
                 // robot can pass
                 auto point = getPointToTravel(temp, firstAngle, ranger[temp], ranger[firstAngle], robot->getCurrentPosition(), sideC, robot
                 ->getYaw());
-//                std::cout << "need to turn left with given point (" << point.first << " , " << point.second << ")\n";
 
 
                 // navigate to the point, rotate
@@ -132,7 +126,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             } else {
                 auto point = pointToTravel(10, ranger[firstAngle], robot->getCurrentPosition(), robot->getYaw());
                 RotateRobot rotate;
-//                std::cout << "(2)need to turn left with given point (" << point.first << " , " << point.second << ")\n";
 
                 rotate(robot, point);
 
@@ -146,7 +139,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
             // turning left with 30 degree angle
             auto point = pointToTravel(20, ranger[firstAngle], robot->getCurrentPosition(), robot->getYaw());
             RotateRobot rotate;
-//            std::cout << "need to turn left with given point (" << point.first << " , " << point.second << ")\n";
 
             rotate(robot, point);
 
@@ -160,7 +152,6 @@ void AvoidObstacle::operator()(RobotWrapper *robot, Point dest, double fSpeed, c
     else {
         auto point = pointToTravel(-10, ranger[firstAngle], robot->getCurrentPosition(), robot->getYaw());
         RotateRobot rotate;
-//        std::cout << "(3)need to turn right with given point (" << point.first << " , " << point.second << ")\n";
 
         rotate(robot, point);
 

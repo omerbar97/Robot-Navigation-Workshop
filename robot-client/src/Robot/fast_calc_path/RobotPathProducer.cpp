@@ -30,7 +30,9 @@ MissionPathList* RobotPathProducer::createPaths() {
     for (auto & thread : threads) {
         thread.join();
     }
+
     return this->path;
+
 }
 
 

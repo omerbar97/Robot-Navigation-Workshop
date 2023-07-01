@@ -7,8 +7,8 @@ Route::Route(Algorithm *algorithm, MapGenerator *mapGenerator) {
     this->gridMap = new GridMap(cvMap, 1);
     this->matrixWidth = gridMap->getWidth();
     this->matrixHeight = gridMap->getHeight();
-    this->numOfBlocksWidth = 16.8*2;
-    this->numOfBlocksHeight = 26.7*2;
+    this->numOfBlocksWidth = 16.8*2; // based on the stage blocks
+    this->numOfBlocksHeight = 26.7*2; // based on the stage blocks
     initGridMapToAlgorithm();
 }
 
@@ -19,8 +19,8 @@ Route::Route(MapGenerator *mapGenerator) {
     this->gridMap = new GridMap(cvMap, 1);
     this->matrixWidth = gridMap->getWidth();
     this->matrixHeight = gridMap->getHeight();
-    this->numOfBlocksWidth = 16.8*2;
-    this->numOfBlocksHeight = 26.7*2;
+    this->numOfBlocksWidth = 16.8*2; // based on the stage blocks
+    this->numOfBlocksHeight = 26.7*2; // based on the stage blocks
 }
 
 void Route::initGridMapToAlgorithm() {
@@ -160,14 +160,6 @@ void Route::createPath() {
 
     this->algorithm->calculate();
 
-    // getting the path from the algorithm
-//    if(this->cvMap != nullptr) {
-//        delete(this->cvMap);
-//    }
-//    if(this->gridMap != nullptr) {
-//        delete(this->gridMap);
-//    }
-
     this->cvMap = new cv::Mat(this->mapGenerator->getBinaryMatrix());
     this->gridMap = new GridMap(cvMap, 1);
 
@@ -191,9 +183,4 @@ std::pair<double, double> Route::getGoalPoint() {
 }
 
 Route::~Route() {
-    // deleting all memory
-//    if(this->gridMap != nullptr)
-//        delete(this->gridMap);
-//    if(this->cvMap != nullptr)
-//        delete(this->cvMap);
 }

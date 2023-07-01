@@ -13,12 +13,7 @@ R2R::R2R(Room *roomSource, Room *roomDest, RobotWrapper *robot, Algorithm *algor
     this->algorithm = algorithm;
     robot->update();
     this->tasks = vector<Behavior *>();
-    Behavior *exit;
-    if (withExit) {
-        exit = new ExitRoomBehavior(this->robot, roomSource);
-        this->tasks.push_back(exit);
-    }
-
+    this->withExit = withExit;
     route = new Route(algorithm, mapGenerator);
     route->setStartingPoint(roomSource->getEntryPoint());
     route->setGoalPoint(roomDest->getEntryPoint());
@@ -30,10 +25,10 @@ std::vector<std::pair<double, double>> R2R::getPath() {
 
 int R2R::doMission() {
     std::thread* t = nullptr;
+    R2Exit *r2Exit = nullptr;
     if(this->withExit) {
-        R2Exit r2e = R2Exit(this->currentRoom, this->robot);
-        t = new std::thread(&R2Exit::doMission, &r2e);
-        t->detach();
+        r2Exit = new R2Exit(this->currentRoom, this->robot);
+        t = new std::thread(&R2Exit::doMission, r2Exit);
     }
     try {
         route->createPath();
@@ -44,13 +39,20 @@ int R2R::doMission() {
 
         throw std::exception();
     }
+
     path = route->getLatestPath();
     if (!path.empty()) {
+        // deleting the first point (the current point)
         path.erase(path.begin());
     }
     this->tasks.push_back(new HallNavigateBehavior(this->robot, path));
     this->tasks.push_back(new EnterRoomBehavior(robot, this->nextRoom));
     int k;
+    if(t != nullptr) {
+        t->join();
+        delete(r2Exit);
+        delete(t);
+    }
     for (Behavior *task: tasks) {
         try {
             k = task->execute();

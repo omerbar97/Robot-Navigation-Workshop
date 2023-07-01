@@ -9,6 +9,8 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include <mutex>
+#include <utility>
+
 using namespace boost::placeholders;
 
 class RobotWrapper {
@@ -32,12 +34,10 @@ private:
 
 public:
 
-//    RobotWrapper(std::string robotIp = "localhost", int robotPort = 6665, int groundSpeed = 0.5, int turnSpeed = 0.1);
     RobotWrapper(PlayerCc::PlayerClient* robot, PlayerCc::Position2dProxy* positionProxy, PlayerCc::RangerProxy* laserProxy, std::string ws = nullptr);
     RobotWrapper(std::string ip, int port, std::string ws = nullptr);
 
     ~RobotWrapper();
-    void setRobotPath(std::pair<double, double> path);
 
     void setRobotSpeed(double speed);
     void setRobotTurnSpeed(double speed);
@@ -51,10 +51,6 @@ public:
     double getGroundSpeed();
     double getTurnSpeed();
     std::pair<double, double> getCurrentPosition();
-    bool isObstacleOnLeft();
-    bool isObstacleOnRight();
-    bool hasObstaclesOnSides();
-    std::vector<std::pair<double, double>>  getRobotCurrentPath();
 
     // getRobot Extensions
     PlayerCc::Position2dProxy* getPos();
@@ -63,10 +59,10 @@ public:
 
     void update();
     bool isOnline();
+    void setOnline(bool flag);
     bool isFastTravelEnable();
 
     void setStartingDegree(int degree);
-    void getStartingDegree();
 
 };
 

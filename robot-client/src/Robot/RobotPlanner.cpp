@@ -113,11 +113,9 @@ void RobotPlanner::planNavigationMission(vector<string> &roomsIDs) {
         //add the path to the vector
         std::vector<Point> points;
 
-        auto *timeCalculation = new CalculateTime(this->chronoTime);
         auto *inform = new Inform(this->chronoTime, nextRoom);
         // lock the mutex
         this->missionLock.lock();
-        this->currentPlan.push(timeCalculation);
         this->currentPlan.push(r2r);
         this->currentPlan.push(inform);
         // unlock the mutex
@@ -319,12 +317,11 @@ void RobotPlanner::setChronoTime(ChronoTime *chronoTime) {
 }
 
 void RobotPlanner::robotTimeout() {
-    // sending data to the robot every 8 sec to avoid timeout
+    // sending data to the robot every 5 sec to avoid timeout
     while (this->isRobotOnline()) {
-        std::this_thread::sleep_for(std::chrono::seconds(8));
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         this->robotWrapper->update();
     }
-
     // deleting the robotWrapper
     delete this->robotWrapper;
 }

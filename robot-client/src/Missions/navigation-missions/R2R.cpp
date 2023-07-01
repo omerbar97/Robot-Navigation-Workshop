@@ -8,6 +8,7 @@
 R2R::R2R(Room *roomSource, Room *roomDest, RobotWrapper *robot, Algorithm *algorithm, MapGenerator *mapGenerator,
          bool withExit) {
     this->robot = robot;
+    this->succed = true;
     this->currentRoom = roomSource;
     this->nextRoom = roomDest;
     this->algorithm = algorithm;
